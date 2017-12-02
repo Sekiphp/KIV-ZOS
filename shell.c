@@ -4,6 +4,9 @@
 
 #include "shell.h"
 #include "shell_functions.h"
+#include "mft_item.h"
+#include "mft_fragment.h"
+
 #define MAX 200
 
 /* Posloucha prikazy pro ovladani virtualniho operacniho systemu */

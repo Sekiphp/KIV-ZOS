@@ -6,6 +6,8 @@
 #include "loader.h"
 #include "shell.h"
 
+const int32_t UID_ITEM_FREE = 0;
+
 typedef struct param{
     pthread_mutex_t *mutex;
 } PARAM;
