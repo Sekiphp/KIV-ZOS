@@ -16,7 +16,7 @@ struct mft_item {
     int8_t item_order_total;                            //celkovy pocet polozek v MFT
     char item_name[12];                                 //8+3 + /0 C/C++ ukoncovaci string znak
     int32_t item_size;                                  //velikost souboru v bytech
-    struct mft_fragment fragmentskk[32]; 		//fragmenty souboru - MFT fragments count
+    struct mft_fragment fragments[32]; 			//fragmenty souboru - MFT fragments count
 };
 
 #endif

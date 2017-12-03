@@ -1,36 +1,19 @@
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/time.h>
-#include <string.h>
-#include <sys/un.h>
-#include <unistd.h>
-#include <netinet/in.h>
 #include <stdlib.h>
-#include <pthread.h>
-#include <assert.h>
-#include <errno.h>
+#include <string.h>
 
 #include "loader.h"
 #include "boot_record.h"
 #include "mft.h"
-#include "parametr.h"
 
 /* Nacte NTFS ze souboru */
-void * loader(void * arg){
-    printf("LOADER starting...\n");
+void *create_example(void *arg){
+    printf("CREATE EXAMPLE starting...\n");
 int a[10];
 int i;
 char str[5], pomocny[11];
-sdilenaPamet *param = (sdilenaPamet *) arg;
 
 
-pthread_mutex_lock(param->mutex);
-pthread_mutex_unlock(param->mutex);
-
-//i =param->pokus;
-printf("pokus %d\n", param->pokus);
-printf("louda %s\n", param->soubor);
 FILE *file = fopen("output", "wb");
 if(file != NULL){
 
