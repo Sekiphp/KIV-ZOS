@@ -12,7 +12,7 @@ void *create_example(void *arg){
     printf("EXAMPLER starting...\n");
 
     int bitmapa[10], bitmapa2[10];
-    int i;
+    int i, sizeof_mft_item;
     char str[5], pomocny[11], obsah_clusteru[1024];
     struct boot_record *br, *br2;
     struct mft_fragment mftf;
@@ -111,17 +111,18 @@ void *create_example(void *arg){
         printf("\t\tPocet clusteru: %d\n", br2->cluster_count);
 
         printf("\t\tAdresa pocatku mft: %d\n", br2->mft_start_address);
+            sizeof_mft_item = sizeof(struct mft_item);
             int sirka_mft = br2->bitmap_start_address - br2->mft_start_address;
-            int pocet_mft_bloku = sirka_mft / sizeof(struct mft_item);
+            int pocet_mft_bloku = sirka_mft / sizeof_mft_item;
             printf("\t\t\tpocet mft bloku je: %d", pocet_mft_bloku);
 
-            struct mft_item *mft_table = malloc(sizeof(struct mft_item));
+            struct mft_item *mft_table = malloc(sizeof_mft_item);
             for(i = 0; i < pocet_mft_bloku; i++){
-                fseek(file2, br2->mft_start_address + i * sirka_mft, SEEK_SET);
-                fread(mft_table, sizeof(struct mft_item), 1, file2);
+                fseek(file2, br2->mft_start_address + i *sizeof_mft_item, SEEK_SET);
+                fread(mft_table, sizeof_mft_item, 1, file2);
 
                 printf("\t\t\t--------------------------\n");
-                printf("\t\t\tfread cte z pozice %d \n", (br2->mft_start_address + i * sirka_mft));
+                printf("\t\t\tfread cte z pozice %d \n", (br2->mft_start_address + i * sizeof_mft_item));
                 printf("\t\t\tUID: %d\n", mft_table->uid);
                 printf("\t\t\tIsDirectory: %d\n", mft_table->isDirectory);
                 printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
