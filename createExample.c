@@ -47,7 +47,7 @@ void *create_example(void *arg){
            mftf.fragment_start_address = 288 + 2840 + 40;
            mftf.fragment_count = 1;
 
-           mfti->uid = 1;
+           mfti->uid = i;
            mfti->isDirectory = 0;
            mfti->item_order = 1;
            mfti->item_order_total = 1;
