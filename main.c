@@ -18,6 +18,7 @@ int main(int argc, char *argv[]){
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
     sdilenaPamet pamet;
     int i, rc;
+boot = malloc(sizeof(struct boot_record));
 
     // kontrola poctu parametru
     if (argc != 2){

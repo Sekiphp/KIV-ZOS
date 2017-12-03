@@ -25,7 +25,7 @@ void * loader(void * arg){
 
 
 
-    boot = malloc(sizeof(struct boot_record));
+//    boot = malloc(sizeof(struct boot_record));
     fr = fopen(param->soubor, "rb");
     if (fr != NULL) {
         fread(boot, sizeof(struct boot_record), 1, fr);

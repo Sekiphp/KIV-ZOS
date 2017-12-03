@@ -6,3 +6,5 @@
 #include <string.h>
 
 #include "parametr.h"
+
+struct boot_record *boot; 

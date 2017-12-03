@@ -5,6 +5,7 @@
 #include "shell.h"
 #include "shell_functions.h"
 #include "mft.h"
+#include "parametr.h"
 
 #define MAX 200
 
@@ -14,6 +15,7 @@ void *shell(void *arg){
     char *p_c;
 
     printf("SHELL /bin/ash booting...\n");
+	printf("boot shell: %s\n",boot->signature);
 
     /* infinite loop - cekam na prikazy */
     while(1){
