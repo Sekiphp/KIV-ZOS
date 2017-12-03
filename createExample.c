@@ -11,7 +11,7 @@
 void *create_example(void *arg){
     printf("EXAMPLER starting...\n");
 
-    int bitmapa[10];
+    int bitmapa[10], bitmapa2[10];
     int i;
     char str[5], pomocny[11];
     struct boot_record *br, *br2;
@@ -70,7 +70,7 @@ void *create_example(void *arg){
             if (i % 2 == 0){
                 bitmapa[i] = 1;
             }
-	}
+        }
         fwrite(bitmapa, sizeof(bitmapa[i]), br->cluster_count, file);
 
         // zapisu init VFS
@@ -102,16 +102,23 @@ void *create_example(void *arg){
     if (file2 != NULL) {
         fread(br2, sizeof(struct boot_record), 1, file2);
 
-        printf("BOOT RECORD:\n");
-        printf("\tsignature: %s\n", br2->signature);
-        printf("\tdesc: %s\n", br2->volume_descriptor);
-        printf("\tCelkova velikost VFS: %d\n", br2->disk_size);
-        printf("\tVelikost jednoho clusteru: %d\n", br2->cluster_size);
-        printf("\tPocet clusteru: %d\n", br2->cluster_count);
-        printf("\tAdresa pocatku mft: %d\n", br2->mft_start_address);
-        printf("\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
-        printf("\tAdresa pocatku datovych bloku: %d\n", br2->data_start_address);
-        printf("\tMAX frag count: %d\n", br2->mft_max_fragment_count);
+        printf("\tBOOT RECORD:\n");
+        printf("\t\tsignature: %s\n", br2->signature);
+        printf("\t\tdesc: %s\n", br2->volume_descriptor);
+        printf("\t\tCelkova velikost VFS: %d\n", br2->disk_size);
+        printf("\t\tVelikost jednoho clusteru: %d\n", br2->cluster_size);
+        printf("\t\tPocet clusteru: %d\n", br2->cluster_count);
+        printf("\t\tAdresa pocatku mft: %d\n", br2->mft_start_address);
+
+        printf("\t\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
+            fseek(file2, br->bitmap_start_address, SEEK_SET);
+            fread(bitmapa2, sizeof(bitmapa2[i]), br->cluster_count, file2);
+            for(i = 0; i < br->cluster_count; i++){
+                printf("\t\t\t[%d]: %d\n", i, bitmapa2[i]);
+            }
+
+        printf("\t\tAdresa pocatku datovych bloku: %d\n", br2->data_start_address);
+        printf("\t\tMAX frag count: %d\n", br2->mft_max_fragment_count);
 
         // uvolnim pamet
         free((void *) br2);
