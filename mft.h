@@ -8,7 +8,6 @@ struct mft_fragment {
     int32_t fragment_count;             //pocet clusteru ve fragmentu
 };
 
-
 struct mft_item {
     int32_t uid;                                        //UID polozky, pokud UID = UID_ITEM_FREE, je polozka volna
     int isDirectory;                                    //soubor, nebo adresar (1=adresar, 0=soubor)
