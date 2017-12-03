@@ -4,8 +4,7 @@
 
 #include "shell.h"
 #include "shell_functions.h"
-#include "mft_item.h"
-#include "mft_fragment.h"
+#include "mft.h"
 
 #define MAX 200
 
