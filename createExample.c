@@ -17,6 +17,7 @@ void *create_example(void *arg){
     struct boot_record *br, *br2;
     struct mft_fragment mftf;
     struct mft_item *mfti;
+
     FILE *file, *file2;
     sdilenaPamet *param = (sdilenaPamet *) arg;
 
@@ -116,32 +117,19 @@ void *create_example(void *arg){
             int pocet_mft_bloku = sirka_mft / sizeof(struct mft_item);
             printf("\t\t\tpocet mft bloku je: %d", pocet_mft_bloku);
 
-            // zapisu mft
-            /*
-            for(i = 0; i < 10; i++){
-               sprintf(str, "%d", i);
+            struct mft_item *mft_table[pocet_mft_bloku];
+            fread(mft_table, sizeof(struct mft_item), pocet_mft_bloku, file2);
 
-               mfti = malloc(sizeof(struct mft_item));
-
-               mftf.fragment_start_address = 288 + 2840 + 40;
-               mftf.fragment_count = 1;
-
-               mfti->uid = 1;
-               mfti->isDirectory = 0;
-               mfti->item_order = 1;
-               mfti->item_order_total = 1;
-               strcpy(pomocny, "");
-               strcat(pomocny, "soubor");
-               strcat(pomocny, str);
-               strcat(pomocny, ".txt\0");
-               strcpy(mfti->item_name, pomocny);
-               mfti->item_size = 100;
-               mfti->fragments[0] = mftf;
-
-               fwrite(mfti, sizeof(struct mft_item), 1, file);
-               free((void *) mfti);
+            for(i = 0; i < pocet_mft_bloku; i++){
+                printf("\t\t\t--------------------------\n");
+                printf("t\t\tUID: %d\n", mft_table->uid);
+                printf("t\t\tIsDirectory: %d\n", mft_table->isDirectory);
+                printf("t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
+                printf("t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
+                printf("t\t\tJmeno polozky: %s\n", mft_table->item_name);
+                printf("t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
+                printf("t\t\tVelikost pole s itemy: %d\n", sizeof(mft_table->fragments));
             }
-            */
 
         printf("\t\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
             fseek(file2, br2->bitmap_start_address, SEEK_SET);
