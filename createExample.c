@@ -117,18 +117,18 @@ void *create_example(void *arg){
             int pocet_mft_bloku = sirka_mft / sizeof(struct mft_item);
             printf("\t\t\tpocet mft bloku je: %d", pocet_mft_bloku);
 
-            struct mft_item *mft_table[pocet_mft_bloku];
+            struct mft_item mft_table[pocet_mft_bloku];
             fread(mft_table, sizeof(struct mft_item), pocet_mft_bloku, file2);
 
             for(i = 0; i < pocet_mft_bloku; i++){
                 printf("\t\t\t--------------------------\n");
-                printf("t\t\tUID: %d\n", mft_table->uid);
-                printf("t\t\tIsDirectory: %d\n", mft_table->isDirectory);
-                printf("t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
-                printf("t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
-                printf("t\t\tJmeno polozky: %s\n", mft_table->item_name);
-                printf("t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
-                printf("t\t\tVelikost pole s itemy: %d\n", sizeof(mft_table->fragments));
+                printf("\t\t\tUID: %d\n", mft_table[i]->uid);
+                printf("\t\t\tIsDirectory: %d\n", mft_table[i]->isDirectory);
+                printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table[i]->item_order);
+                printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table[i]->item_order_total);
+                printf("\t\t\tJmeno polozky: %s\n", mft_table[i]->item_name);
+                printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table[i]->item_size);
+                printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table[i]->fragments));
             }
 
         printf("\t\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
