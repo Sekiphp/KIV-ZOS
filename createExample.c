@@ -16,7 +16,7 @@ void *create_example(void *arg){
     char str[5], pomocny[11];
     struct boot_record *br, *br2;
     struct mft_fragment mftf;
-    struct mft_item *mfti
+    struct mft_item *mfti;
     FILE *file, *file2;
     sdilenaPamet *param = (sdilenaPamet *) arg;
 
@@ -64,18 +64,17 @@ void *create_example(void *arg){
 
         // zapisu bitmapu - posunu se na zacatek oblasti pro bitmapu
         fseek(file, br->bitmap_start_address, SEEK_SET);
-        for (int i=0; i < br->cluster_count; ++i){
+        for (i=0; i < br->cluster_count; i++){
 
             bitmapa[i] = 0;
             if (i % 2 == 0){
                 bitmapa[i] = 1;
             }
-
-            fwrite(bitmapa[i], sizeof(bitmapa[i][0]), br->cluster_count, file);
-        }
+	}
+        fwrite(bitmapa, sizeof(bitmapa[i]), br->cluster_count, file);
 
         // zapisu init VFS
-        for (int i=0; i < br->cluster_count; ++i){
+        for (i=0; i < br->cluster_count; ++i){
             fseek(file, br->data_start_address + i * br->cluster_size, SEEK_SET);
 
             sprintf(str, "%d", i);
@@ -91,8 +90,6 @@ void *create_example(void *arg){
     }
     printf("\t\t -> Zapsano %lu bajtu (boot record)\n", sizeof(struct boot_record));
     printf("\t\t -> Zaviram soubor %s\n", param->soubor);
-
-
 
 
     // ted to zkusime precist reverznim inzenyrstvim

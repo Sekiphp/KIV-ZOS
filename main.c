@@ -9,6 +9,7 @@
 #include "shell.h"
 #include "parametr.h"
 #include "boot_record.h"
+#include "createExample.h"
 
 const int32_t UID_ITEM_FREE = 0;
 
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]){
     // NTFS loader from file
     rc = pthread_create(&pt[0], NULL, create_example, (void *) &pamet);
     assert(0 == rc);
-
+sleep(1);
     printf("boot main: %s\n",boot->signature);
 
     // prikazovy interpret
