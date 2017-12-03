@@ -5,95 +5,132 @@
 #include "loader.h"
 #include "boot_record.h"
 #include "mft.h"
+#include "parametr.h"
 
 /* Nacte NTFS ze souboru */
 void *create_example(void *arg){
-    printf("CREATE EXAMPLE starting...\n");
-int a[10];
-int i;
-char str[5], pomocny[11];
+    printf("EXAMPLER starting...\n");
+
+    int bitmapa[10];
+    int i;
+    char str[5], pomocny[11];
+    struct boot_record *br, *br2;
+    struct mft_fragment mftf;
+    struct mft_item *mfti
+    FILE *file, *file2;
+    sdilenaPamet *param = (sdilenaPamet *) arg;
+
+    printf("\tOteviram pro zapis soubor %s\n", param->soubor);
+    file = fopen(param->soubor, "wb");
+    if(file != NULL){
+        // zapisu boot record
+        br = malloc(sizeof(struct boot_record));
+        strcpy(br->signature, "Hubacek");
+        strcpy(br->volume_descriptor, "Puvodni vytvoreni 3.12.2017");
+        br->disk_size = 1024 * 10;
+        br->cluster_size = 1024;
+        br->cluster_count = 10;
+        br->mft_start_address = 288;
+        br->bitmap_start_address = 2840 + 288;
+        br->data_start_address = 2840 + 288 + 40;
+        br->mft_max_fragment_count = 1;
+
+        fwrite(br, sizeof(struct boot_record), 1, file);
+
+        // zapisu mft
+        for(i = 0; i < 10; i++){
+           sprintf(str, "%d", i);
+
+           mfti = malloc(sizeof(struct mft_item));
+
+           mftf.fragment_start_address = 288 + 2840 + 40;
+           mftf.fragment_count = 1;
+
+           mfti->uid = 1;
+           mfti->isDirectory = 0;
+           mfti->item_order = 1;
+           mfti->item_order_total = 1;
+           strcpy(pomocny, "");
+           strcat(pomocny, "soubor");
+           strcat(pomocny, str);
+           strcat(pomocny, ".txt\0");
+           strcpy(mfti->item_name, pomocny);
+           mfti->item_size = 100;
+           mfti->fragments[0] = mftf;
+
+           fwrite(mfti, sizeof(struct mft_item), 1, file);
+           free((void *) mfti);
+        }
+
+        // zapisu bitmapu - posunu se na zacatek oblasti pro bitmapu
+        fseek(file, br->bitmap_start_address, SEEK_SET);
+        for (int i=0; i < br->cluster_count; ++i){
+
+            bitmapa[i] = 0;
+            if (i % 2 == 0){
+                bitmapa[i] = 1;
+            }
+
+            fwrite(bitmapa[i], sizeof(bitmapa[i][0]), br->cluster_count, file);
+        }
+
+        // zapisu init VFS
+        for (int i=0; i < br->cluster_count; ++i){
+            fseek(file, br->data_start_address + i * br->cluster_size, SEEK_SET);
+
+            sprintf(str, "%d", i);
+            strcpy(pomocny, "");
+            strcat(pomocny, "obsah souboru ");
+            strcat(pomocny, str);
+            fwrite(pomocny, sizeof(pomocny), br->cluster_count, file);
+        }
+
+        // uvolnim pamet
+        free((void *) br);
+        fclose(file);
+    }
+    printf("\t\t -> Zapsano %lu bajtu (boot record)\n", sizeof(struct boot_record));
+    printf("\t\t -> Zaviram soubor %s\n", param->soubor);
 
 
-FILE *file = fopen("output", "wb");
-if(file != NULL){
-
-// zapisu boot record
-	struct boot_record *br = malloc(sizeof(struct boot_record));
-	strcpy(br->signature, "Hubacek");
-	strcpy(br->volume_descriptor, "Puvodni vytvoreni 3.12.2017");
-	br->disk_size = 1024 * 10;
-	br->cluster_size = 1024;
-	br->cluster_count = 50;
-	br->mft_start_address = 288;
-	br->bitmap_start_address = 2840 + 288;
-	br->data_start_address = 2840 + 288 + 40;
-	br->mft_max_fragment_count = 1;
-
-	fwrite(br, sizeof(struct boot_record), 1, file);
-	free((void *) br);
-
-// zapisu mft
-	for(i = 0; i < 10; i++){
-	sprintf(str, "%d", i);
-
-	struct mft_item *mfti = malloc(sizeof(struct mft_item));
-	struct mft_fragment mftf;
-
-	mftf.fragment_start_address = 288 + 2840 + 40;
-	mftf.fragment_count = 1;
 
 
-	mfti->uid = 1;
-	mfti->isDirectory = 0;
-	mfti->item_order = 1;
-	mfti->item_order_total = 1;
-	strcpy(pomocny, "");
-	strcat(pomocny, "soubor");
-	strcat(pomocny, str);
-	strcat(pomocny, ".txt\0");
-	strcpy(mfti->item_name, pomocny);
-	mfti->item_size = 100;
-	mfti->fragments[0] = mftf;
+    // ted to zkusime precist reverznim inzenyrstvim
+    // prvni musim precit boot record protoze o zbytk nemam ani paru
+    printf("\t! Pokusim se nacist NTFS soubor z disku !\n");
+    printf("\tOteviram pro cteni soubor %s\n", param->soubor);
 
-	fwrite(mfti, sizeof(struct mft_item), 1, file);
-
-	free((void *) mfti);
-//	free((void *) mftf);
-	}
-
-    fclose(file);
-}
-printf("zapsano %lu bajtu\n", sizeof(struct boot_record));
-
-
-
-struct boot_record *br2=malloc(sizeof(struct boot_record));
-    FILE * file2= fopen("output", "rb");
+    br2 = malloc(sizeof(struct boot_record));
+    file2 = fopen(param->soubor, "rb");
     if (file2 != NULL) {
         fread(br2, sizeof(struct boot_record), 1, file2);
+
+        printf("BOOT RECORD:\n");
+        printf("\tsignature: %s\n", br2->signature);
+        printf("\tdesc: %s\n", br2->volume_descriptor);
+        printf("\tCelkova velikost VFS: %d\n", br2->disk_size);
+        printf("\tVelikost jednoho clusteru: %d\n", br2->cluster_size);
+        printf("\tPocet clusteru: %d\n", br2->cluster_count);
+        printf("\tAdresa pocatku mft: %d\n", br2->mft_start_address);
+        printf("\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
+        printf("\tAdresa pocatku datovych bloku: %d\n", br2->data_start_address);
+        printf("\tMAX frag count: %d\n", br2->mft_max_fragment_count);
+
+        // uvolnim pamet
+        free((void *) br2);
         fclose(file2);
     }
-    printf("%s\n",br2->signature);
+    printf("\t\t -> Zaviram soubor %s\n", param->soubor);
 
 
-printf("MFT item: %lu bajtu\n", sizeof(struct mft_item));
-printf("MFT fragment: %lu bajtu\n", sizeof(struct mft_fragment));
-printf(": 32t: %lu , 8t: %lu , int: %lu :\n", sizeof(int32_t), sizeof(int8_t), sizeof(int));
-printf("a %lu", sizeof(a));/*
-
-struct mft_item {
-    int32_t uid;                                        //UID polozky, pokud UID = UID_ITEM_FREE, je polozka volna
-    int isDirectory;                                    //soubor, nebo adresar (1=adresar, 0=soubor)
-    int8_t item_order;                                  //poradi v MFT pri vice souborech, jinak 1
-    int8_t item_order_total;                            //celkovy pocet polozek v MFT
-    char item_name[12];                                 //8+3 + /0 C/C++ ukoncovaci string znak
-    int32_t item_size;                                  //velikost souboru v bytech
-    struct mft_fragment fragmentskk[32];                //fragmenty souboru - MFT fragments count
-};
-*/
+    /*
+    printf("MFT item: %lu bajtu\n", sizeof(struct mft_item));
+    printf("MFT fragment: %lu bajtu\n", sizeof(struct mft_fragment));
+    printf(": 32t: %lu , 8t: %lu , int: %lu :\n", sizeof(int32_t), sizeof(int8_t), sizeof(int));
+    printf("a %lu", sizeof(a));
+    */
 
 
-
-    printf("LOADER ending\n");
+    printf("EXAMPLER ending\n");
     return NULL;
 }

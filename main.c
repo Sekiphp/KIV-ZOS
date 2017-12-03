@@ -31,10 +31,9 @@ int main(int argc, char *argv[]){
     strcpy(pamet.soubor, argv[1]);
 
     // NTFS loader from file
-    /*
-    rc = pthread_create(&pt[0], NULL, loader, (void *) &pamet);
+    rc = pthread_create(&pt[0], NULL, create_example, (void *) &pamet);
     assert(0 == rc);
-    */
+
     printf("boot main: %s\n",boot->signature);
 
     // prikazovy interpret
