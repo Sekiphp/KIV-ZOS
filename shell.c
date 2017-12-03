@@ -8,6 +8,7 @@
 #include "shell_functions.h"
 #include "mft.h"
 #include "parametr.h"
+#include "boot_record.h"
 
 #define MAX 200
 
