@@ -13,7 +13,7 @@ void *create_example(void *arg){
 
     int bitmapa[10], bitmapa2[10];
     int i;
-    char str[5], pomocny[11];
+    char str[5], pomocny[11], obsah_clusteru[1024];
     struct boot_record *br, *br2;
     struct mft_fragment mftf;
     struct mft_item *mfti;
@@ -111,13 +111,19 @@ void *create_example(void *arg){
         printf("\t\tAdresa pocatku mft: %d\n", br2->mft_start_address);
 
         printf("\t\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
-            fseek(file2, br->bitmap_start_address, SEEK_SET);
-            fread(bitmapa2, sizeof(bitmapa2[i]), br->cluster_count, file2);
+            fseek(file2, br2->bitmap_start_address, SEEK_SET);
+            fread(bitmapa2, sizeof(bitmapa2[i]), br2->cluster_count, file2);
             for(i = 0; i < br->cluster_count; i++){
                 printf("\t\t\t[%d]: %d\n", i, bitmapa2[i]);
             }
 
         printf("\t\tAdresa pocatku datovych bloku: %d\n", br2->data_start_address);
+            for (i=0; i < br->cluster_count; ++i){
+                fseek(file2, br2->data_start_address + i * br2->cluster_size, SEEK_SET);
+                fread(obsah_clusteru, sizeof(obsah_clusteru), 1, file2);
+                printf("\t\t\t[%d]: %s\n", i, obsah_clusteru);
+            }
+
         printf("\t\tMAX frag count: %d\n", br2->mft_max_fragment_count);
 
         // uvolnim pamet
