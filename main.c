@@ -11,7 +11,6 @@
 #include "boot_record.h"
 
 const int32_t UID_ITEM_FREE = 0;
-struct boot_record *boot;
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){

@@ -1,7 +1,9 @@
 #ifndef PARAM_H
 #define PARAM_H
 
-    /* Hlavicky funkci ze souboru loader.c -> komentare jsou tam */
+/* Globalni promenne */
+extern struct boot_record *boot;
+
 typedef struct {
     pthread_mutex_t * mutex;
     int pokus;
