@@ -8,8 +8,10 @@
 #include "loader.h"
 #include "shell.h"
 #include "parametr.h"
+#include "boot_record.h"
 
 const int32_t UID_ITEM_FREE = 0;
+struct boot_record *boot;
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
@@ -31,6 +33,8 @@ int main(int argc, char *argv[]){
     // NTFS loader from file
     rc = pthread_create(&pt[0], NULL, loader, (void *) &pamet);
     assert(0 == rc);
+
+    printf("boot main: %s\n",boot->signature);
 
     // prikazovy interpret
     rc = pthread_create(&pt[1], NULL, shell, (void *) &pamet);
