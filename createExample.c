@@ -108,7 +108,40 @@ void *create_example(void *arg){
         printf("\t\tCelkova velikost VFS: %d\n", br2->disk_size);
         printf("\t\tVelikost jednoho clusteru: %d\n", br2->cluster_size);
         printf("\t\tPocet clusteru: %d\n", br2->cluster_count);
+
         printf("\t\tAdresa pocatku mft: %d\n", br2->mft_start_address);
+            fseek(file2, br2->mft_start_address, SEEK_SET);
+
+            int sirka_mft = br2->bitmap_start_address - br2->mft_start_address;
+            int pocet_mft_bloku = sirka_mft / sizeof(struct mft_item);
+            printf("\t\t\tpocet mft bloku je: %d", pocet_mft_bloku);
+
+            // zapisu mft
+            /*
+            for(i = 0; i < 10; i++){
+               sprintf(str, "%d", i);
+
+               mfti = malloc(sizeof(struct mft_item));
+
+               mftf.fragment_start_address = 288 + 2840 + 40;
+               mftf.fragment_count = 1;
+
+               mfti->uid = 1;
+               mfti->isDirectory = 0;
+               mfti->item_order = 1;
+               mfti->item_order_total = 1;
+               strcpy(pomocny, "");
+               strcat(pomocny, "soubor");
+               strcat(pomocny, str);
+               strcat(pomocny, ".txt\0");
+               strcpy(mfti->item_name, pomocny);
+               mfti->item_size = 100;
+               mfti->fragments[0] = mftf;
+
+               fwrite(mfti, sizeof(struct mft_item), 1, file);
+               free((void *) mfti);
+            }
+            */
 
         printf("\t\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
             fseek(file2, br2->bitmap_start_address, SEEK_SET);
