@@ -32,6 +32,7 @@ void * loader(void * arg){
         fread(br2, sizeof(struct boot_record), 1, fr);
         fclose(fr);
     }
+
     printf("%s\n",br2->signature);
 
 
