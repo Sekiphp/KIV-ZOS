@@ -16,7 +16,6 @@
 
 /* Nacte NTFS ze souboru */
 void * loader(void * arg){
-    char str[5], pomocny[11];
     sdilenaPamet *param = (sdilenaPamet *) arg;
 
     printf("LOADER starting...\n");
@@ -25,7 +24,7 @@ void * loader(void * arg){
 
 
 
-    struct boot_record *br2=malloc(sizeof(struct boot_record));
+    struct boot_record *br2 = malloc(sizeof(struct boot_record));
     FILE * file2= fopen("output", "rb");
     if (file2 != NULL) {
         fread(br2, sizeof(struct boot_record), 1, file2);

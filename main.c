@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
     pthread_t pt[2];
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
     sdilenaPamet pamet;
-    int rc;
+    int i, rc;
 
     // kontrola poctu parametru
     if (argc != 2){
