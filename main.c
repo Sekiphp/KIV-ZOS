@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
     sdilenaPamet pamet;
     int i, rc;
-boot = malloc(sizeof(struct boot_record));
+    boot = malloc(sizeof(struct boot_record));
 
     // kontrola poctu parametru
     if (argc != 2){
@@ -31,9 +31,10 @@ boot = malloc(sizeof(struct boot_record));
     strcpy(pamet.soubor, argv[1]);
 
     // NTFS loader from file
+    /*
     rc = pthread_create(&pt[0], NULL, loader, (void *) &pamet);
     assert(0 == rc);
-
+    */
     printf("boot main: %s\n",boot->signature);
 
     // prikazovy interpret

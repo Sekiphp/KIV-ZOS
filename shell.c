@@ -11,11 +11,21 @@
 
 /* Posloucha prikazy pro ovladani virtualniho operacniho systemu */
 void *shell(void *arg){
+    sdilenaPamet *param = (sdilenaPamet *) arg;
+    FILE *fr;
     char command[MAX];
     char *p_c;
 
-    printf("SHELL /bin/ash booting...\n");
-	printf("boot shell: %s\n",boot->signature);
+    printf("SHELL booting...\n");
+
+    pthread_mutex_lock(param->mutex);
+        fr = fopen(param->soubor, "rb");
+        if (fr != NULL) {
+            fread(boot, sizeof(struct boot_record), 1, fr);
+            fclose(fr);
+        }
+    	printf("boot shell: %s\n", boot->signature);
+    pthread_mutex_unlock(param->mutex);
 
     /* infinite loop - cekam na prikazy */
     while(1){
