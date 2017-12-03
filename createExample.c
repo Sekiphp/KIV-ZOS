@@ -130,7 +130,7 @@ void *create_example(void *arg){
                 printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
                 printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table->fragments));
             }
-            free((void *) mft_item);
+            free((void *) mft_table);
 
         printf("\t\tAdresa pocatku bitmapy: %d\n", br2->bitmap_start_address);
             fseek(file2, br2->bitmap_start_address, SEEK_SET);
