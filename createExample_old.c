@@ -21,6 +21,11 @@ void *create_example(void *arg){
     FILE *file, *file2;
     sdilenaPamet *param = (sdilenaPamet *) arg;
 
+    int cluster_pocet = 10;
+    int cluster_velikost = 1024;
+    int max_pocet_fragmentu = cluster_pocet * sizeof(struct mft_fragment); // pri spatnem scenari
+    int max_pocet_clusteru = cluster_pocet * sizeof(struct mft_item); // pri spatnem scenari
+
     printf("\tOteviram pro zapis soubor %s\n", param->soubor);
     file = fopen(param->soubor, "wb");
     if(file != NULL){
@@ -28,15 +33,34 @@ void *create_example(void *arg){
         br = malloc(sizeof(struct boot_record));
         strcpy(br->signature, "Hubacek");
         strcpy(br->volume_descriptor, "Puvodni vytvoreni 3.12.2017");
-        br->disk_size = 1024 * 10;
-        br->cluster_size = 1024;
-        br->cluster_count = 10;
-        br->mft_start_address = 288;
-        br->bitmap_start_address = 2840 + 288;
-        br->data_start_address = 2840 + 288 + 40;
+        br->disk_size = cluster_velikost * cluster_pocet; // 10 * 1024
+        br->cluster_size = cluster_velikost; // 1024
+        br->cluster_count = cluster_pocet; // 10
+        br->mft_start_address = sizeof(struct boot_record); // 288b
+        br->bitmap_start_address = max_pocet_clusteru + maximalni_pocet_fragmentu + sizeof(struct boot_record); // odrazim se od 288b
+        br->data_start_address = max_pocet_clusteru + maximalni_pocet_fragmentu + sizeof(struct boot_record) + 4 * cluster_pocet; // 4b ma jedna polozka, polozek je jako cluster_pocet
         br->mft_max_fragment_count = 1;
 
         fwrite(br, sizeof(struct boot_record), 1, file);
+
+        // zapisu si ROOT_DIR
+        mfti = malloc(sizeof(struct mft_item));
+
+           // ROOT_DIR ma jeden fragment
+           mftf.fragment_start_address = max_pocet_clusteru + maximalni_pocet_fragmentu + sizeof(struct boot_record) + 4 * cluster_pocet; // toto je adresa kde jsou data daneho fragmentu v VFS
+           mftf.fragment_count = 1;
+
+           mfti->uid = 1;
+           mfti->isDirectory = 1;
+           mfti->item_order = 1;
+           mfti->item_order_total = 1;
+           strcpy(mfti->item_name, "ROOT_DIR");
+           mfti->item_size = cluster_velikost;
+           mfti->fragments[0] = mftf;
+
+           fwrite(mfti, sizeof(struct mft_item), 1, file);
+
+        free((void *) mfti);
 
         // zapisu mft
         for(i = 0; i < 10; i++){
