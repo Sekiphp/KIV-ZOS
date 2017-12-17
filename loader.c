@@ -63,7 +63,7 @@ int zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
     FILE *file;
     struct boot_record *bootr;
     struct mft_item *mfti;
-    struct mft_fragment *mftf;
+    struct mft_fragment mftf;
     int i, bitmapa[cluster_count];
 
     /* Provedeme si nejake (pomocne) vypocty, vse s dostatecnou rezervou */
