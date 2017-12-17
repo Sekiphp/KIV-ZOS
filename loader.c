@@ -25,14 +25,7 @@ void loader(char filename[]){
 
     bootr = malloc(sizeof(struct boot_record));
     fr = fopen(filename, "rb");
-    if (fr != NULL) {
-        fread(bootr, sizeof(struct boot_record), 1, fr);
-
-        printf("\tPopis NTFS: %s\n", bootr->signature);
-
-        fclose(fr);
-    }
-    else {
+    if (fr == NULL) {
         printf("\tNepodarilo se otevrit soubor %s\n", filename);
 
         cluster_size = 1024;
