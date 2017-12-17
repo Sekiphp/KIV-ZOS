@@ -30,16 +30,15 @@ int main(int argc, char *argv[]){
     pamet.mutex = &mutex;
     strcpy(pamet.soubor, argv[1]);
 
-    // NTFS loader from file
-    rc = pthread_create(&pt[0], NULL, loader, (void *) &pamet);
-    assert(0 == rc);
+    // checker - pokud soubor neexistuje, tak ho vytvorim
+    loader(argv[1]);
 
     // prikazovy interpret
     rc = pthread_create(&pt[1], NULL, shell, (void *) &pamet);
     assert(0 == rc);
 
     // Cekam na dokonceni vsech vlaken
-    for(i = 0; i < 2; i++){
+    for(i = 1; i < 2; i++){
         rc = pthread_join(pt[i], NULL);
         assert(0 == rc);
     }

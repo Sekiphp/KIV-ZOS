@@ -15,45 +15,39 @@
 #include "parametr.h"
 
 /* Nacte NTFS ze souboru */
-void * loader(void * arg){
-    sdilenaPamet *param = (sdilenaPamet *) arg;
+void loader(char filename[]){
     FILE *fr;
     struct boot_record *bootr;
     int cluster_size, cluster_count;
 
     printf("LOADER starting...\n");
-    printf("\tZkousim otevrit soubor: %s\n", param->soubor);
+    printf("\tZkousim otevrit soubor: %s\n", filename);
 
     bootr = malloc(sizeof(struct boot_record));
-    fr = fopen(param->soubor, "rb");
+    fr = fopen(filename, "rb");
     if (fr != NULL) {
         fread(bootr, sizeof(struct boot_record), 1, fr);
 
-        printf("boot loader: %s\n",boot->signature);
+        printf("\tPopis NTFS: %s\n", bootr->signature);
 
         fclose(fr);
     }
     else {
-        printf("\tNepodarilo se otevrit soubor %s\n", param->soubor);
+        printf("\tNepodarilo se otevrit soubor %s\n", filename);
 
         cluster_size = 1024;
         cluster_count = 10;
 
-        printf("\tZakladam soubor %s\n", param->soubor);
+        printf("\tZakladam soubor %s\n", filename);
         printf("\t\tPocet clusteru je %d\n",cluster_count);
         printf("\t\tVelikost clusteru je %d\n", cluster_size);
 
-        zaloz_soubor(cluster_size, cluster_count, param->soubor);
+        zaloz_soubor(cluster_size, cluster_count, filename);
     }
-
-
-
-
 
 
     free((void *) bootr);
     printf("LOADER ending\n");
-    return NULL;
 }
 
 /* Zalozi pseudoNFTS soubor obsahujici ROOT_DIR */
@@ -130,4 +124,5 @@ int zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         fclose(file);
     }
 
+    return 1;
 }
