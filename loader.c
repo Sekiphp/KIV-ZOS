@@ -14,6 +14,7 @@
 #include "parametr.h"
 
 extern MFT_LIST *mft_list[]; // v mft.h
+extern int pwd;
 
 /* Nacte NTFS ze souboru */
 void loader(char filename[]){

@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "loader.h"
+
+extern int pwd;
+
 void func_cp(char *cmd){
     printf("func cp");
 
@@ -78,12 +82,18 @@ void func_cd(char *cmd){
 }
 
 
-
+/*
+print working directory
+return: PATH
+*/
 void func_pwd(char *cmd){
-    printf("func pwd");
-
-    while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+    if (pwd > 0) {
+        if (pwd == 1) {
+            printf("/\n");
+        }
+        else {
+            printf("Jsi ve slozce %d\n", pwd);
+        }
     }
 }
 

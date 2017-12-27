@@ -13,6 +13,7 @@
 
 extern int ntfs_bitmap[]; // v loader.c
 extern MFT_LIST *mft_list[]; // v mft.h
+extern int pwd; // v loader.h
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
