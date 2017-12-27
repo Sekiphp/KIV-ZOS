@@ -6,7 +6,7 @@
 #include "mft.h"
 
 /* Alokuje prvek mft listu - vcetne testovani na dostatek pameti */
-MFT_LIST *alokuj_prvek(struct mft_item mfti) {
+MFT_LIST *alokuj_prvek(int cluster_id, struct mft_item mfti) {
     MFT_LIST *ml;
     if ((ml = (MFT_LIST *) malloc(sizeof(MFT_LIST))) == NULL) {
         printf("Out of memory - MFT_LIST\n");
@@ -18,14 +18,14 @@ MFT_LIST *alokuj_prvek(struct mft_item mfti) {
     return ml;
 }
 
-void pridej_prvek(struct mft_item mfti) {
-    if(mft_list == NULL){
-        mft_list = alokuj_prvek(mfti);
+void pridej_prvek(int cluster_id, struct mft_item mfti) {
+    if(mft_list[cluster_id] == NULL){
+        mft_list[cluster_id] = alokuj_prvek(mfti);
     }
     else {
         MFT_LIST *mpom;
-        mpom = mft_list;
-        mft_list = alokuj_prvek(mfti);
-        mft_list->dalsi = mpom;
+        mpom = mft_list[cluster_id];
+        mft_list[cluster_id] = alokuj_prvek(mfti);
+        mft_list[cluster_id]->dalsi = mpom;
     }
 }

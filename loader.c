@@ -13,7 +13,7 @@
 #include "mft.h"
 #include "parametr.h"
 
-extern MFT_LIST *mft_list; // v mft.h
+extern MFT_LIST *mft_list[]; // v mft.h
 
 /* Nacte NTFS ze souboru */
 void loader(char filename[]){
@@ -55,12 +55,15 @@ void loader(char filename[]){
         printf("\t\t\tVelikost jednoho clusteru: %d\n", bootr->cluster_size);
         printf("\t\t\tPocet clusteru: %d\n", bootr->cluster_count);
         printf("\t\t\tAdresa pocatku mft: %d\n", bootr->mft_start_address);
+            // zde si nactu mft_itemy do pole, ktere obsahuje struktury
+
         printf("\t\t\tAdresa pocatku bitmapy: %d\n", bootr->bitmap_start_address);
             // nactu si bitmapu do globalni promenne
             fseek(fr, bootr->bitmap_start_address, SEEK_SET);
             fread(ntfs_bitmap, 4, bootr->cluster_count, fr);
 
         printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
+            // tady data cist nebudu, v tomto souboru zjistuji jen strukturu
 
             int sizeof_mft_item = sizeof(struct mft_item);
             int sirka_mft = bootr->bitmap_start_address - bootr->mft_start_address;
