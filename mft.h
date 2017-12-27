@@ -1,8 +1,8 @@
 #ifndef MFT_H
 #define MFT_H
 
-#define MFT_FRAG_COUNT = 32;
-#define UID_ITEM_FREE = 0;
+#define MFT_FRAG_COUNT 32
+#define UID_ITEM_FREE 0
 
 // item muze mit 1 az X techto fragmentu
 // +---+---+---+---+---+---+---+---+
@@ -33,7 +33,7 @@ typedef struct mft_list {
 MFT_LIST *mft_list;
 
 /* hlavicky funkci ze souboru mft.c (komentare se nachazi tam) */
-MFT_LIST *alokuj_prvek(struct mft_item);
-void pridej_prvek(struct mft_item);
+MFT_LIST *alokuj_prvek(struct mft_item mfti);
+void pridej_prvek(struct mft_item mfti);
 
 #endif

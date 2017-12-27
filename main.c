@@ -9,8 +9,8 @@
 #include "shell.h"
 #include "parametr.h"
 #include "boot_record.h"
+#include "mft.h"
 
-const int32_t UID_ITEM_FREE = 0;
 extern int ntfs_bitmap[]; // v loader.c
 extern MFT_LIST *mft_list; // v mft.h
 
