@@ -34,9 +34,7 @@ void loader(char filename[]){
         printf("\t\tPocet clusteru je %d\n",CLUSTER_COUNT);
         printf("\t\tVelikost clusteru je %d\n", CLUSTER_SIZE);
 
-        if (zaloz_soubor(CLUSTER_SIZE, CLUSTER_COUNT, filename) != 1){
-            printf("\t\tChyba zalozeni souboru");
-        }
+        zaloz_soubor(CLUSTER_SIZE, CLUSTER_COUNT, filename);
     }
     fclose(fr);
 
@@ -59,10 +57,7 @@ void loader(char filename[]){
         printf("\t\t\tAdresa pocatku mft: %d\n", bootr->mft_start_address);
         printf("\t\t\tAdresa pocatku bitmapy: %d\n", bootr->bitmap_start_address);
             // nactu si bitmapu do globalni promenne
-            for(i = 0; i < bootr->cluster_count; i ++){
-                fseek(fr, bootr->bitmap_start_address, SEEK_SET);
-                fread(ntfs_bitmap[i], sizeof(int), 1, fr);
-            }
+            fread(ntfs_bitmap, sizeof(ntfs_bitmap[0]), bootr->cluster_count, fr);
 
         printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
 
@@ -88,8 +83,8 @@ void loader(char filename[]){
             }
             free((void *) mft_table);
 
+    	fclose(fr);
     }
-    fclose(fr);
 
     free((void *) bootr);
     printf("LOADER ending\n");
@@ -98,8 +93,9 @@ void loader(char filename[]){
 /* Zalozi pseudoNFTS soubor obsahujici ROOT_DIR */
 /* int cluster_size = Velikost clusteru (default = 1024) */
 /* int clutser_count = Pocet clusteru (default = 10) */
-int zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
-    FILE *file;
+void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
+printf("cc=%d\ncs=%d\n", cluster_count, cluster_size);
+FILE *file;
     struct boot_record *bootr;
     struct mft_item *mfti;
     struct mft_fragment mftf;
@@ -139,7 +135,9 @@ int zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         bitmapa[0] = 1;
         for (i = 1; i < cluster_count; i++){
             bitmapa[i] = 0;
+printf("bitmapa[%d]=%d\n", i, bitmapa[i]);
         }
+printf("cc=%d", cluster_count);
         fwrite(bitmapa, sizeof(bitmapa[i]), cluster_count, file);
 
         /* Zapiseme ROOT_DIR do MFT tabulky, ROOT_DIR bude vzdy prvni v MFT tabulce*/
@@ -168,9 +166,4 @@ int zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
 
         fclose(file);
     }
-    else {
-        return 0;
-    }
-
-    return 1;
 }
