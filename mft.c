@@ -19,13 +19,13 @@ MFT_LIST *alokuj_prvek(struct mft_item mfti) {
 }
 
 void pridej_prvek(int cluster_id, struct mft_item *mfti) {
-    if(mft_list[cluster_id] == NULL){
-        mft_list[cluster_id] = mfti;
+    if(mft_seznam[cluster_id] == NULL){
+        mft_seznam[cluster_id] = mfti;
     }
     else {
         MFT_LIST *mpom;
-        mpom = mft_list[cluster_id];
-        mft_list[cluster_id] = mfti;
-        mft_list[cluster_id]->dalsi = mpom;
+        mpom = mft_seznam[cluster_id];
+        mft_seznam[cluster_id] = mfti;
+        mft_seznam[cluster_id]->dalsi = mpom;
     }
 }
