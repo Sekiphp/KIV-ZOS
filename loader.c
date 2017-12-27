@@ -34,7 +34,7 @@ void loader(char filename[]){
         printf("\t\tPocet clusteru je %d\n",CLUSTER_COUNT);
         printf("\t\tVelikost clusteru je %d\n", CLUSTER_SIZE);
 
-        zaloz_soubor(CLUSTER_SIZE, CLUSTER_COUNT, filename);
+        zaloz_soubor(1024, 10, filename);
     }
     fclose(fr);
 
@@ -95,7 +95,7 @@ void loader(char filename[]){
 /* int clutser_count = Pocet clusteru (default = 10) */
 void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
 printf("cc=%d\ncs=%d\n", cluster_count, cluster_size);
-FILE *file;
+    FILE *fw;
     struct boot_record *bootr;
     struct mft_item *mfti;
     struct mft_fragment mftf;
@@ -111,8 +111,8 @@ FILE *file;
 
 
     /* Zacneme zapisovat do souboru */
-    file = fopen(filename, "wb");
-    if(file != NULL){
+    fw = fopen(filename, "wb");
+    if(fw != NULL){
         /* Zapiseme boot record */
         bootr = malloc(sizeof(struct boot_record));
 
@@ -126,24 +126,24 @@ FILE *file;
         bootr->data_start_address = data_start; // 4b ma jedna polozka, polozek je jako cluster_pocet
         bootr->mft_max_fragment_count = 1;
 
-        fwrite(bootr, sizeof(struct boot_record), 1, file);
+        fwrite(bootr, sizeof(struct boot_record), 1, fw);
         free((void *) bootr);
 
         /* Zapiseme startovaci bitmapu - vse volne krome 1 (ROOT_DIR) */
         /* Posunu se na zacatek oblasti pro bitmapu */
-        fseek(file, bitmap_start, SEEK_SET);
+        fseek(fw, bitmap_start, SEEK_SET);
         bitmapa[0] = 1;
         for (i = 1; i < cluster_count; i++){
             bitmapa[i] = 0;
-printf("bitmapa[%d]=%d\n", i, bitmapa[i]);
+            printf("bitmapa[%d]=%d\n", i, bitmapa[i]);
         }
-printf("cc=%d", cluster_count);
-        fwrite(bitmapa, sizeof(bitmapa[i]), cluster_count, file);
+
+        fwrite(bitmapa, sizeof(bitmapa[i]), cluster_count, fw);
 
         /* Zapiseme ROOT_DIR do MFT tabulky, ROOT_DIR bude vzdy prvni v MFT tabulce*/
         /* ROOT_DIR se sklada z jdnoho itemu a jednoho fragmentu */
         /* Posunu se na zacatek oblasti MFT */
-        fseek(file, sizeof(struct boot_record), SEEK_SET);
+        fseek(fw, sizeof(struct boot_record), SEEK_SET);
 
         mfti = malloc(sizeof(struct mft_item));
 
@@ -158,12 +158,12 @@ printf("cc=%d", cluster_count);
         mfti->item_size = 0; // zatim tam nic neni, takze nula
         mfti->fragments[0] = mftf;
 
-        fwrite(mfti, sizeof(struct mft_item), 1, file);
+        fwrite(mfti, sizeof(struct mft_item), 1, fw);
         free((void *) mfti);
 
         /* Tady bychom meli zapsat obceh ROOT_DIRU */
         /* Jelikoz v nem ale pri prvnim spusteni nic neni, tak nic nezapisujeme :) */
 
-        fclose(file);
+        fclose(fw);
     }
 }
