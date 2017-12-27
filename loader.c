@@ -19,7 +19,9 @@ extern MFT_LIST *mft_list[]; // v mft.h
 void loader(char filename[]){
     FILE *fr;
     struct boot_record *bootr;
-    int i;
+    int i, sirka_mft, pocet_mft_bloku;
+    int sizeof_mft_item = sizeof(struct mft_item);
+    struct mft_item *mft_table = malloc(sizeof_mft_item);
 
     printf("LOADER starting...\n");
     printf("\tZkousim otevrit soubor: %s\n", filename);
@@ -54,39 +56,47 @@ void loader(char filename[]){
         printf("\t\t\tCelkova velikost VFS: %d\n", bootr->disk_size);
         printf("\t\t\tVelikost jednoho clusteru: %d\n", bootr->cluster_size);
         printf("\t\t\tPocet clusteru: %d\n", bootr->cluster_count);
-        printf("\t\t\tAdresa pocatku mft: %d\n", bootr->mft_start_address);
-            // zde si nactu mft_itemy do pole, ktere obsahuje struktury
-
         printf("\t\t\tAdresa pocatku bitmapy: %d\n", bootr->bitmap_start_address);
             // nactu si bitmapu do globalni promenne
             fseek(fr, bootr->bitmap_start_address, SEEK_SET);
             fread(ntfs_bitmap, 4, bootr->cluster_count, fr);
 
-        printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
-            // tady data cist nebudu, v tomto souboru zjistuji jen strukturu
+        printf("\t\t\tAdresa pocatku mft: %d\n", bootr->mft_start_address);
+            // zde si nactu mft_itemy do pole, ktere obsahuje struktury
+            // nactitam jen takova mft, ktera maji uid != 0 (tj. neni pro ne v bitmape 0)
 
-            int sizeof_mft_item = sizeof(struct mft_item);
-            int sirka_mft = bootr->bitmap_start_address - bootr->mft_start_address;
-            int pocet_mft_bloku = sirka_mft / sizeof_mft_item;
+            sirka_mft = bootr->bitmap_start_address - bootr->mft_start_address;
+            pocet_mft_bloku = sirka_mft / sizeof_mft_item;
             printf("\t\t\tpocet mft bloku je: %d\n", pocet_mft_bloku);
 
-            struct mft_item *mft_table = malloc(sizeof_mft_item);
             for(i = 0; i < pocet_mft_bloku; i++){
                 fseek(fr, bootr->mft_start_address + i *sizeof_mft_item, SEEK_SET);
                 fread(mft_table, sizeof_mft_item, 1, fr);
 
                 printf("\t\t\t--------------------------\n");
                 printf("\t\t\tfread cte z pozice %d \n", (bootr->mft_start_address + i * sizeof_mft_item));
-                printf("\t\t\tUID: %d\n", mft_table->uid);
-                printf("\t\t\tIsDirectory: %d\n", mft_table->isDirectory);
-                printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
-                printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
-                printf("\t\t\tJmeno polozky: %s\n", mft_table->item_name);
-                printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
-                printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table->fragments));
-            }
-            free((void *) mft_table);
 
+                if (ntfs_bitmap[i] == UID_ITEM_FREE || mft_table->uid == UID_ITEM_FREE){
+                    printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table->uid);
+                }
+                else{
+                    pridej_prvek(i, mft_table);
+
+                    printf("\t\t\tUID: %d\n", mft_table->uid);
+                    printf("\t\t\tIsDirectory: %d\n", mft_table->isDirectory);
+                    printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
+                    printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
+                    printf("\t\t\tJmeno polozky: %s\n", mft_table->item_name);
+                    printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
+                    printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table->fragments));
+                }
+            }
+
+
+        printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
+            // tady data cist nebudu, v tomto souboru zjistuji jen strukturu
+
+        free((void *) mft_table);
     	fclose(fr);
     }
 
