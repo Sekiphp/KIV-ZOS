@@ -35,6 +35,6 @@ MFT_LIST *mft_list[CLUSTER_COUNT];
 
 /* hlavicky funkci ze souboru mft.c (komentare se nachazi tam) */
 MFT_LIST *alokuj_prvek(struct mft_item mfti);
-void pridej_prvek(int cluster_id, struct mft_item mfti);
+void pridej_prvek(int cluster_id, struct mft_item *mfti);
 
 #endif
