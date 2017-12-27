@@ -56,10 +56,8 @@ void loader(char filename[]){
         printf("\t\t\tAdresa pocatku mft: %d\n", bootr->mft_start_address);
         printf("\t\t\tAdresa pocatku bitmapy: %d\n", bootr->bitmap_start_address);
             // nactu si bitmapu do globalni promenne
-            fread(ntfs_bitmap, sizeof(ntfs_bitmap[0]), bootr->cluster_count, fr);
-                for(i = 0; i < 10; i++){
-        printf("ntfs_bitmap[%d]=%d\n", i, ntfs_bitmap[i]);
-    }
+            fseek(fr, bootr->bitmap_start_address, SEEK_SET);
+            fread(ntfs_bitmap, 4, bootr->cluster_count, fr);
 
         printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
 
@@ -136,10 +134,9 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         bitmapa[0] = 1;
         for (i = 1; i < cluster_count; i++){
             bitmapa[i] = 0;
-            printf("bitmapa[%d]=%d\n", i, bitmapa[i]);
         }
 
-        fwrite(bitmapa, sizeof(bitmapa[i]), cluster_count, fw);
+        fwrite(bitmapa, 4, cluster_count, fw);
 
         /* Zapiseme ROOT_DIR do MFT tabulky, ROOT_DIR bude vzdy prvni v MFT tabulce*/
         /* ROOT_DIR se sklada z jdnoho itemu a jednoho fragmentu */
