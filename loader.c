@@ -18,7 +18,7 @@
 void loader(char filename[]){
     FILE *fr;
     struct boot_record *bootr;
-    int cluster_size, cluster_count, i;
+    int i;
 
     printf("LOADER starting...\n");
     printf("\tZkousim otevrit soubor: %s\n", filename);
@@ -30,14 +30,11 @@ void loader(char filename[]){
 
         printf("\tNepodarilo se otevrit soubor %s\n", filename);
 
-        cluster_size = 1024;
-        cluster_count = 10;
-
         printf("\tZakladam soubor %s\n", filename);
-        printf("\t\tPocet clusteru je %d\n",cluster_count);
-        printf("\t\tVelikost clusteru je %d\n", cluster_size);
+        printf("\t\tPocet clusteru je %d\n",CLUSTER_COUNT);
+        printf("\t\tVelikost clusteru je %d\n", CLUSTER_SIZE);
 
-        if (zaloz_soubor(cluster_size, cluster_count, filename) != 1){
+        if (zaloz_soubor(CLUSTER_SIZE, CLUSTER_COUNT, filename) != 1){
             printf("\t\tChyba zalozeni souboru");
         }
     }

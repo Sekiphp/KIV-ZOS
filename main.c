@@ -11,7 +11,7 @@
 #include "boot_record.h"
 
 const int32_t UID_ITEM_FREE = 0;
-extern int ntfs_bitmap[10]; // pri zmene změnit i v loader.c
+extern int ntfs_bitmap[]; // v loader.c
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
