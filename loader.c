@@ -26,6 +26,8 @@ void loader(char filename[]){
     bootr = malloc(sizeof(struct boot_record));
     fr = fopen(filename, "rb");
     if (fr == NULL) {
+        // nepodarilo se otevrit soubory, tak jej zalozim
+
         printf("\tNepodarilo se otevrit soubor %s\n", filename);
 
         cluster_size = 1024;
@@ -35,8 +37,59 @@ void loader(char filename[]){
         printf("\t\tPocet clusteru je %d\n",cluster_count);
         printf("\t\tVelikost clusteru je %d\n", cluster_size);
 
-        zaloz_soubor(cluster_size, cluster_count, filename);
+        if (zaloz_soubor(cluster_size, cluster_count, filename) != 1){
+            printf("\t\tChyba zalozeni souboru");
+        }
     }
+    fclose(fr);
+
+    // nactu data ze souboru - ted uz mam jistotu, ze existuje
+    fr = fopen(filename, "rb");
+    if (fr != NULL) {
+        // nactu data ze souboru
+
+        printf("\tSoubor %s byl uspesne otevren\n", filename);
+
+        // prvni musim precit boot record protoze o zbytku nemam ani paru
+        fread(bootr, sizeof(struct boot_record), 1, fr);
+
+        printf("\t\tBOOT RECORD:\n");
+        printf("\t\t\tsignature: %s\n", bootr->signature);
+        printf("\t\t\tdesc: %s\n", bootr->volume_descriptor);
+        printf("\t\t\tCelkova velikost VFS: %d\n", bootr->disk_size);
+        printf("\t\t\tVelikost jednoho clusteru: %d\n", bootr->cluster_size);
+        printf("\t\t\tPocet clusteru: %d\n", bootr->cluster_count);
+        printf("\t\t\tAdresa pocatku mft: %d\n", bootr->mft_start_address);
+        printf("\t\t\tAdresa pocatku bitmapy: %d\n", bootr->bitmap_start_address);
+        printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
+
+    }
+    fclose(fr);
+
+/*
+            sizeof_mft_item = sizeof(struct mft_item);
+            int sirka_mft = br2->bitmap_start_address - br2->mft_start_address;
+            int pocet_mft_bloku = sirka_mft / sizeof_mft_item;
+            printf("\t\t\tpocet mft bloku je: %d", pocet_mft_bloku);
+
+            struct mft_item *mft_table = malloc(sizeof_mft_item);
+            for(i = 0; i < pocet_mft_bloku; i++){
+                fseek(file2, br2->mft_start_address + i *sizeof_mft_item, SEEK_SET);
+                fread(mft_table, sizeof_mft_item, 1, file2);
+
+                printf("\t\t\t--------------------------\n");
+                printf("\t\t\tfread cte z pozice %d \n", (br2->mft_start_address + i * sizeof_mft_item));
+                printf("\t\t\tUID: %d\n", mft_table->uid);
+                printf("\t\t\tIsDirectory: %d\n", mft_table->isDirectory);
+                printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
+                printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
+                printf("\t\t\tJmeno polozky: %s\n", mft_table->item_name);
+                printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
+                printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table->fragments));
+            }
+            free((void *) mft_table);
+*/
+
 
 
     free((void *) bootr);
@@ -115,6 +168,9 @@ int zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         /* Jelikoz v nem ale pri prvnim spusteni nic neni, tak nic nezapisujeme :) */
 
         fclose(file);
+    }
+    else {
+        return 0;
     }
 
     return 1;
