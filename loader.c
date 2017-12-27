@@ -63,6 +63,28 @@ void loader(char filename[]){
         printf("\t\t\tAdresa pocatku bitmapy: %d\n", bootr->bitmap_start_address);
         printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
 
+            int sizeof_mft_item = sizeof(struct mft_item);
+            int sirka_mft = bootr->bitmap_start_address - bootr->mft_start_address;
+            int pocet_mft_bloku = sirka_mft / sizeof_mft_item;
+            printf("\t\t\tpocet mft bloku je: %d", pocet_mft_bloku);
+
+            struct mft_item *mft_table = malloc(sizeof_mft_item);
+            for(i = 0; i < pocet_mft_bloku; i++){
+                fseek(fr, bootr->mft_start_address + i *sizeof_mft_item, SEEK_SET);
+                fread(mft_table, sizeof_mft_item, 1, fr);
+
+                printf("\t\t\t--------------------------\n");
+                printf("\t\t\tfread cte z pozice %d \n", (bootr->mft_start_address + i * sizeof_mft_item));
+                printf("\t\t\tUID: %d\n", mft_table->uid);
+                printf("\t\t\tIsDirectory: %d\n", mft_table->isDirectory);
+                printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
+                printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
+                printf("\t\t\tJmeno polozky: %s\n", mft_table->item_name);
+                printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
+                printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table->fragments));
+            }
+            free((void *) mft_table);
+
     }
     fclose(fr);
 
