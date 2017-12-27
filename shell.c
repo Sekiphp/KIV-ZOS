@@ -40,43 +40,43 @@ void *shell(void *arg){
             printf("Prvni: %s\n", p_c);
         }
 
-        if(strcmp(p_c, "cp") == 0){
+        if(strncmp(p_c, "cp", 2) == 0){
             func_cp(p_c);
         }
-        if(strcmp(p_c, "mv") == 0){
+        if(strncmp(p_c, "mv", 2) == 0){
             func_mv(p_c);
         }
-        if(strcmp(p_c, "rm") == 0){
+        if(strncmp(p_c, "rm", 2) == 0){
             func_rm(p_c);
         }
-        if(strcmp(p_c, "mkdir") == 0){
+        if(strncmp(p_c, "mkdir", 5) == 0){
             func_mkdir(p_c);
         }
-        if(strcmp(p_c, "rmdir") == 0){
+        if(strncmp(p_c, "rmdir", 5) == 0){
             func_rmdir(p_c);
         }
-        if(strcmp(p_c, "ls") == 0){
+        if(strncmp(p_c, "ls", 2) == 0){
             func_ls(p_c);
         }
-        if(strcmp(p_c, "cat") == 0){
+        if(strncmp(p_c, "cat", 3) == 0){
             func_cat(p_c);
         }
-        if(strcmp(p_c, "cd") == 0){
+        if(strncmp(p_c, "cd", 2) == 0){
             func_cd(p_c);
         }
-        if(strcmp(p_c, "pwd") == 0){
+        if(strncmp(p_c, "pwd", 3) == 0){
             func_pwd(p_c);
         }
-        if(strcmp(p_c, "info") == 0){
+        if(strncmp(p_c, "info", 4) == 0){
             func_info(p_c);
         }
-        if(strcmp(p_c, "incp") == 0){
+        if(strncmp(p_c, "incp", 4) == 0){
             func_incp(p_c);
         }
-        if(strcmp(p_c, "outcp") == 0){
+        if(strncmp(p_c, "outcp", 5) == 0){
             func_outcp(p_c);
         }
-        if(strcmp(p_c, "load") == 0){
+        if(strncmp(p_c, "load", 4) == 0){
             func_load(p_c);
         }
     }

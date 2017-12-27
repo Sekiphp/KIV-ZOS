@@ -5,7 +5,7 @@
     #define CLUSTER_SIZE 1024
 
     int ntfs_bitmap[CLUSTER_COUNT];
-    int pwd = -1;
+    int pwd;
 
     /* Hlavicky funkci ze souboru loader.c -> komentare jsou tam */
     void loader(char filename[]);
