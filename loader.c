@@ -34,9 +34,8 @@ void loader(char filename[]){
         printf("\t\tPocet clusteru je %d\n",CLUSTER_COUNT);
         printf("\t\tVelikost clusteru je %d\n", CLUSTER_SIZE);
 
-        zaloz_soubor(1024, 10, filename);
+        zaloz_soubor(CLUSTER_SIZE, CLUSTER_COUNT, filename);
     }
-    fclose(fr);
 
     // nactu data ze souboru - ted uz mam jistotu, ze existuje
     fr = fopen(filename, "rb");
