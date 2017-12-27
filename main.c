@@ -11,6 +11,7 @@
 #include "boot_record.h"
 
 const int32_t UID_ITEM_FREE = 0;
+extern int ntfs_bitmap[10]; // pri zmene změnit i v loader.c
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
@@ -32,6 +33,11 @@ int main(int argc, char *argv[]){
 
     // checker - pokud soubor neexistuje, tak ho vytvorim
     loader(argv[1]);
+
+    // kontrola nacteni
+    for(i = 0; i < 10; i++){
+        printf("ntfs_bitmap[%d]=%d\n", i, ntfs_bitmap[i]);
+    }
 
     // prikazovy interpret
     rc = pthread_create(&pt[1], NULL, shell, (void *) &pamet);
