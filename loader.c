@@ -57,13 +57,16 @@ void loader(char filename[]){
         printf("\t\t\tAdresa pocatku bitmapy: %d\n", bootr->bitmap_start_address);
             // nactu si bitmapu do globalni promenne
             fread(ntfs_bitmap, sizeof(ntfs_bitmap[0]), bootr->cluster_count, fr);
+                for(i = 0; i < 10; i++){
+        printf("ntfs_bitmap[%d]=%d\n", i, ntfs_bitmap[i]);
+    }
 
         printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
 
             int sizeof_mft_item = sizeof(struct mft_item);
             int sirka_mft = bootr->bitmap_start_address - bootr->mft_start_address;
             int pocet_mft_bloku = sirka_mft / sizeof_mft_item;
-            printf("\t\t\tpocet mft bloku je: %d", pocet_mft_bloku);
+            printf("\t\t\tpocet mft bloku je: %d\n", pocet_mft_bloku);
 
             struct mft_item *mft_table = malloc(sizeof_mft_item);
             for(i = 0; i < pocet_mft_bloku; i++){
@@ -93,7 +96,6 @@ void loader(char filename[]){
 /* int cluster_size = Velikost clusteru (default = 1024) */
 /* int clutser_count = Pocet clusteru (default = 10) */
 void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
-printf("cc=%d\ncs=%d\n", cluster_count, cluster_size);
     FILE *fw;
     struct boot_record *bootr;
     struct mft_item *mfti;
