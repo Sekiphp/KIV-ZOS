@@ -21,7 +21,19 @@ struct mft_item {
     int8_t item_order_total;                            //celkovy pocet polozek v MFT
     char item_name[12];                                 //8+3 + /0 C/C++ ukoncovaci string znak
     int32_t item_size;                                  //velikost souboru v bytech
-    struct mft_fragment fragments[32]; 			        //fragmenty souboru - MFT fragments count
+    struct mft_fragment fragments[MFT_FRAG_COUNT]; 		//fragmenty souboru - MFT fragments count
 };
+
+// itemy jsou ulozene ve spojovem seznamu, aby se jeden soubor mohl skladat z vice itemu (2 itemy po 25 frag = 50 fragmentu)
+typedef struct mft_list {
+    struct mft_item *item;
+    struct mft_list *dalsi;
+} MFT_LIST;
+
+MFT_LIST *mft_list;
+
+/* hlavicky funkci ze souboru mft.c (komentare se nachazi tam) */
+MFT_LIST *alokuj_prvek(struct mft_item);
+void pridej_prvek(struct mft_item);
 
 #endif

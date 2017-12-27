@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/time.h>
 #include <string.h>
 #include <sys/un.h>
 #include <unistd.h>
@@ -13,6 +12,8 @@
 #include "boot_record.h"
 #include "mft.h"
 #include "parametr.h"
+
+extern MFT_LIST *mft_list; // v mft.h
 
 /* Nacte NTFS ze souboru */
 void loader(char filename[]){

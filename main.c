@@ -12,6 +12,7 @@
 
 const int32_t UID_ITEM_FREE = 0;
 extern int ntfs_bitmap[]; // v loader.c
+extern MFT_LIST *mft_list; // v mft.h
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
