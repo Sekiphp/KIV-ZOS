@@ -23,7 +23,7 @@ void loader(char filename[]){
     struct mft_item mft_table, *mff;
 
     sizeof_mft_item = sizeof(struct mft_item);
-	mff = malloc(sizeof_mft_item);
+    mff = malloc(sizeof_mft_item);
 
     printf("LOADER starting...\n");
     printf("\tZkousim otevrit soubor: %s\n", filename);
@@ -95,7 +95,7 @@ void loader(char filename[]){
                     printf("\t\t\tJmeno polozky: %s\n", mft_table.item_name);
                     printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table.item_size);
                     printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table.fragments));
-                    if(mft_table->uid == 1) {
+                    if(mft_table.uid == 1) {
                         pwd = 1;
                     }
                 }

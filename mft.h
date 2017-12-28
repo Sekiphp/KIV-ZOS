@@ -35,7 +35,7 @@ typedef struct mft_list {
 MFT_LIST *mft_seznam[CLUSTER_COUNT];
 
 /* hlavicky funkci ze souboru mft.c (komentare se nachazi tam) */
-MFT_LIST alokuj_prvek(struct mft_item mfti);
+MFT_LIST *alokuj_prvek(struct mft_item mfti);
 void pridej_prvek(int uid, struct mft_item mfti);
 
 #endif

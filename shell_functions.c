@@ -28,7 +28,6 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 
 /* Ziska obsah vsech fragmentu pro soubor nebo slozku daneho UID */
 char* get_mft_item_content(int32_t uid){
-printf("jsem %d", uid);
 //    struct mft_item *mfti_pom;
 //    struct mft_fragment mftf_pom;
     int i, j;
