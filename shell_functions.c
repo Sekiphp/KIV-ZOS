@@ -28,36 +28,42 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 
 /* Ziska obsah vsech fragmentu pro soubor nebo slozku daneho UID */
 char* get_mft_item_content(int32_t uid){
-//    struct mft_item *mfti_pom;
-//    struct mft_fragment mftf_pom;
     int i, j;
-    char *ret = malloc(10);
-MFT_LIST* mft_item_chceme;
-    i = 0;
+    char *ret = malloc(CLUSTER_SIZE);
+    MFT_LIST* mft_item_chceme;
+
     if (mft_seznam[uid] != NULL){
-	mft_item_chceme = mft_seznam[uid];
-	//MFT_LIST *mft_item_chceme = mft_seznam[uid];
-//	mfti_pom = mft_seznam[uid]->item;
-	
-	printf("je tu alespon jeden item co stoji za zminku %d\n", mft_item_chceme->ij);
+        mft_item_chceme = mft_seznam[uid];
+
+        printf("je tu alespon jeden item co stoji za zminku %d\n", mft_item_chceme->ij);
 
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
         // zacneme iterovar pres ->dalsi
-        while(mft_item_chceme != NULL){
+        i = 0;
+        while (mft_item_chceme != NULL){
             i++;
-	printf("pocet iteraci=%d\n", i);
-            // precteme vsechny fragmenty (je jich: MFT_FRAG_COUNT)
-                //mfti_pom = *mft_item_chceme->item;
-                printf("Nacteny item s UID=%d ma nazev %s\n", mft_item_chceme->item.uid, mft_item_chceme->item.item_name);
+            printf("pocet iteraci=%d\n", i);
+            printf("Nacteny item s UID=%d ma nazev %s\n", mft_item_chceme->item.uid, mft_item_chceme->item.item_name);
 
-            for(j = 0; j < MFT_FRAG_COUNT; j++){}
+            // precteme vsechny fragmenty z daneho mft itemu (je jich: MFT_FRAG_COUNT)
+            for (j = 0; j < MFT_FRAG_COUNT; j++){
+                if (mft_item_chceme->item.fragments[i] != NULL) {
+                    printf("Zpracovavam fragment %d ze souboru s UID %d\n", i, mft_item_chceme->item.uid);
+
+                    // prubezne je potreba realokovat oblast tak, aby se mi podarailo nacist cely soubor
+                    if (i != 1){
+                        realloc(ret, i * CLUSTER_SIZE);
+                    }
+
+                    strcpy(ret, get_cluster_content(mft_item_chceme->item.fragments[i].fragment_start_address, mft_item_chceme->item.fragments[i].fragment_count));
+                }
+            }
 
             // prehodim se na dalsi prvek
             mft_item_chceme = mft_item_chceme->dalsi;
         }
-
-  }
+    }
 
     return ret;
 }
@@ -165,8 +171,9 @@ void func_info(char *cmd){
     }
 
     printf("NAME - UID - SIZE - FRAGMENTY - CLUSTERY\n");
+    printf("NAME %s", );
 
-    get_mft_item_content(1);
+    printf("Data z clusteru s UID=1: %s\n", get_mft_item_content(1));
 }
 
 
