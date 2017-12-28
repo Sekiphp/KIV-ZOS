@@ -23,18 +23,19 @@ struct mft_item {
     char item_name[12];                                 //8+3 + /0 C/C++ ukoncovaci string znak
     int32_t item_size;                                  //velikost souboru v bytech
     struct mft_fragment fragments[MFT_FRAG_COUNT]; 		//fragmenty souboru - MFT fragments count
-};
+} MFT_ITEM;
 
 // itemy jsou ulozene ve spojovem seznamu, aby se jeden soubor mohl skladat z vice itemu (2 itemy po 25 frag = 50 fragmentu)
 typedef struct mft_list {
-    struct mft_item *item;
+    struct mft_item item; // k nested prvkum pristupuji pres tecky
     struct mft_list *dalsi;
+    int ij;
 } MFT_LIST;
 
-MFT_LIST *mft_seznam[CLUSTER_COUNT];
+MFT_LIST *mft_seznam[10];
 
 /* hlavicky funkci ze souboru mft.c (komentare se nachazi tam) */
 MFT_LIST *alokuj_prvek(struct mft_item mfti);
-void pridej_prvek(int cluster_id, struct mft_item *mfti);
+void pridej_prvek(int uid, struct mft_item mfti);
 
 #endif

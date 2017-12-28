@@ -6,7 +6,7 @@
 #include "mft.h"
 
 extern int pwd;
-extern MFT_LIST *mft_list[];
+//extern MFT_LIST *mft_seznam[];
 
 /* Ziska obsah danych clusteru, ktere nalezi stejnemu fragmentu - Jeden mfti muze mit vsak mnoho fragmentu */
 char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
@@ -28,37 +28,37 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 
 /* Ziska obsah vsech fragmentu pro soubor nebo slozku daneho UID */
 char* get_mft_item_content(int32_t uid){
-    MFT_LIST *mft_item_chceme = mft_seznam[uid];
-    struct mft_item mfti_pom;
-    struct mft_fragment mftf_pom;
+printf("jsem %d", uid);
+    struct mft_item *mfti_pom;
+//    struct mft_fragment mftf_pom;
     int i, j;
     char *ret = malloc(10);
 
     i = 0;
-    if (mft_item_chceme != NULL){
+//    if (mft_seznam[uid] != NULL){
+//	MFT_LIST *mft_item_chceme = mft_seznam[uid];
+//	mfti_pom = mft_seznam[uid]->item;
+	MFT_LIST* mpom;
+mpom = mft_seznam[uid];
+	printf("je tu alespon jeden item co stoji za zminku %d\n", mpom->ij);
+/*
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
         // zacneme iterovar pres ->dalsi
-        while(1){
+        while(mft_item_chceme != NULL){
             i++;
-
+	printf("pocet iteraci=%d\n", i);
             // precteme vsechny fragmenty (je jich: MFT_FRAG_COUNT)
-            for(j = 0; j < MFT_FRAG_COUNT; j++){
-                mfti_pom = *mft_item_chceme->item;
-                printf("Nacteny item s UID=%d ma nazev %s\n", mfti_pom->uid, mfti_pom->item_name);
-            }
+                //mfti_pom = *mft_item_chceme->item;
+                printf("Nacteny item s UID=%d ma nazev \n", mft_item_chceme->item->uid);//, &mft_item_chceme->item->item_name);
+
+            for(j = 0; j < MFT_FRAG_COUNT; j++){}
 
             // prehodim se na dalsi prvek
             mft_item_chceme = mft_item_chceme->dalsi;
-
-            // ukonceni cyklu pokud uz dalsi polozka nenasleduje
-            if(mft_item_chceme->dalsi == NULL){
-                printf("Koncim pruchod cyklu po %d iteracich\n", i);
-                break;
-            }
         }
-
-    }
+*/
+  //  }
 
     return ret;
 }
@@ -167,7 +167,6 @@ void func_info(char *cmd){
 
     printf("NAME - UID - SIZE - FRAGMENTY - CLUSTERY\n");
 
-    get_mft_item_content(0);
     get_mft_item_content(1);
 }
 

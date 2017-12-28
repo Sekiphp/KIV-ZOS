@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <string.h>
@@ -11,9 +12,8 @@
 #include "loader.h"
 #include "boot_record.h"
 #include "mft.h"
-#include "parametr.h"
 
-extern MFT_LIST *mft_list[]; // v mft.h
+//extern MFT_LIST *mft_list[]; // v mft.h
 extern int pwd;
 
 /* Nacte NTFS ze souboru */
@@ -22,7 +22,10 @@ void loader(char filename[]){
     struct boot_record *bootr;
     int i, sirka_mft, pocet_mft_bloku;
     int sizeof_mft_item = sizeof(struct mft_item);
-    struct mft_item *mft_table = malloc(sizeof_mft_item);
+    struct mft_item mft_table;
+struct mft_item *mff;
+
+	mff = malloc(sizeof_mft_item);
 
     printf("LOADER starting...\n");
     printf("\tZkousim otevrit soubor: %s\n", filename);
@@ -39,6 +42,9 @@ void loader(char filename[]){
         printf("\t\tVelikost clusteru je %d\n", CLUSTER_SIZE);
 
         zaloz_soubor(CLUSTER_SIZE, CLUSTER_COUNT, filename);
+    }
+    else {
+        fclose(fr);
     }
 
     // nactu data ze souboru - ted uz mam jistotu, ze existuje
@@ -72,18 +78,18 @@ void loader(char filename[]){
 
             for(i = 0; i < pocet_mft_bloku; i++){
                 fseek(fr, bootr->mft_start_address + i *sizeof_mft_item, SEEK_SET);
-                fread(mft_table, sizeof_mft_item, 1, fr);
-
+                fread(mff, sizeof_mft_item, 1, fr);
+mft_table = *mff;
                 printf("\t\t\t--------------------------\n");
                 printf("\t\t\tfread cte z pozice %d \n", (bootr->mft_start_address + i * sizeof_mft_item));
 
-                if (ntfs_bitmap[i] == UID_ITEM_FREE || mft_table->uid == UID_ITEM_FREE){
-                    printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table->uid);
+                if (ntfs_bitmap[i] == UID_ITEM_FREE || mft_table.uid == UID_ITEM_FREE){
+                    printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table.uid);
                 }
                 else{
-                    pridej_prvek(i, mft_table);
+                    pridej_prvek(mft_table.uid, mft_table);
 
-                    printf("\t\t\tUID: %d\n", mft_table->uid);
+                    printf("\t\t\tUID: %d\n", mft_table.uid);/*
                     printf("\t\t\tIsDirectory: %d\n", mft_table->isDirectory);
                     printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
                     printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
@@ -92,7 +98,7 @@ void loader(char filename[]){
                     printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table->fragments));
                     if(mft_table->uid == 1) {
 		        pwd = 1;
-		    }
+		    }*/
 		}
             }
 
@@ -100,7 +106,7 @@ void loader(char filename[]){
         printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
             // tady data cist nebudu, v tomto souboru zjistuji jen strukturu
 
-        free((void *) mft_table);
+        //free((void *) mft_table);
     	fclose(fr);
     }
 
