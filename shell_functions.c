@@ -146,7 +146,7 @@ void func_load(char *cmd){
 
 
 /* Ziska obsah danych clusteru, ktere nalezi stejnemu fragmentu - Jeden mfti muze mit vsak mnoho fragmentu */
-char* get_fragment_content(int32_t fragment_start_addr, int32_t fragments_count){
+char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
     int sirka_bloku = CLUSTER_SIZE * fragments_count;
     char ret[sirka_bloku];
     FILE *fr;
@@ -180,7 +180,7 @@ char* get_mft_item_content(int32_t uid){
             // precteme vsechny fragmenty (je jich: MFT_FRAG_COUNT)
             for(j = 0; j < MFT_FRAG_COUNT; j++){
                 mfti_pom = mft_item_chceme->mft_item;
-                printf("Nacteny item s UID=%d ma nazev %s\n", mfti_pom->uid, mfti->item_name);
+                printf("Nacteny item s UID=%d ma nazev %s\n", mfti_pom->uid, mfti_pom->item_name);
             }
 
             // prehodim se na dalsi prvek
