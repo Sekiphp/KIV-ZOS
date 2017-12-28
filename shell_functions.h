@@ -3,6 +3,7 @@
 
     /* Hlavicky funkci ze souboru shell_functions.c -> komentare jsou tam */
     char* get_mft_item_content(int32_t uid);
+    char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count);
 
     void func_cp(char *cmd);
     void func_mv(char *cmd);
@@ -18,5 +19,4 @@
     void func_outcp(char *cmd);
     void func_load(char *cmd);
 
-    char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count);
 #endif
