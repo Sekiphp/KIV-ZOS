@@ -15,4 +15,7 @@
     void func_incp(char *cmd);
     void func_outcp(char *cmd);
     void func_load(char *cmd);
+
+    char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count);
+    char* get_mft_item_content(int32_t uid);
 #endif
