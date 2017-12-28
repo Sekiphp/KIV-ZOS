@@ -12,7 +12,7 @@
 struct mft_fragment {
     int32_t fragment_start_address;     //start adresa
     int32_t fragment_count;             //pocet clusteru ve fragmentu
-};
+} MFT_FRAGMENT;
 
 // jeden soubor muze byt slozen i z vice mft_itemu, ty ale pak maji stejna uid (lisi se item_orderem)
 struct mft_item {
@@ -32,10 +32,10 @@ typedef struct mft_list {
     int ij;
 } MFT_LIST;
 
-MFT_LIST *mft_seznam[10];
+MFT_LIST *mft_seznam[CLUSTER_COUNT];
 
 /* hlavicky funkci ze souboru mft.c (komentare se nachazi tam) */
-MFT_LIST *alokuj_prvek(struct mft_item mfti);
+MFT_LIST alokuj_prvek(struct mft_item mfti);
 void pridej_prvek(int uid, struct mft_item mfti);
 
 #endif

@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <string.h>
-#include <sys/un.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -19,12 +18,11 @@ extern int pwd;
 /* Nacte NTFS ze souboru */
 void loader(char filename[]){
     FILE *fr;
+    int i, sirka_mft, pocet_mft_bloku, sizeof_mft_item;
     struct boot_record *bootr;
-    int i, sirka_mft, pocet_mft_bloku;
-    int sizeof_mft_item = sizeof(struct mft_item);
-    struct mft_item mft_table;
-struct mft_item *mff;
+    struct mft_item mft_table, *mff;
 
+    sizeof_mft_item = sizeof(struct mft_item);
 	mff = malloc(sizeof_mft_item);
 
     printf("LOADER starting...\n");
@@ -79,7 +77,8 @@ struct mft_item *mff;
             for(i = 0; i < pocet_mft_bloku; i++){
                 fseek(fr, bootr->mft_start_address + i *sizeof_mft_item, SEEK_SET);
                 fread(mff, sizeof_mft_item, 1, fr);
-mft_table = *mff;
+                mft_table = *mff;
+
                 printf("\t\t\t--------------------------\n");
                 printf("\t\t\tfread cte z pozice %d \n", (bootr->mft_start_address + i * sizeof_mft_item));
 
@@ -89,17 +88,17 @@ mft_table = *mff;
                 else{
                     pridej_prvek(mft_table.uid, mft_table);
 
-                    printf("\t\t\tUID: %d\n", mft_table.uid);/*
-                    printf("\t\t\tIsDirectory: %d\n", mft_table->isDirectory);
-                    printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table->item_order);
-                    printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table->item_order_total);
-                    printf("\t\t\tJmeno polozky: %s\n", mft_table->item_name);
-                    printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table->item_size);
-                    printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table->fragments));
+                    printf("\t\t\tUID: %d\n", mft_table.uid);
+                    printf("\t\t\tIsDirectory: %d\n", mft_table.isDirectory);
+                    printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table.item_order);
+                    printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table.item_order_total);
+                    printf("\t\t\tJmeno polozky: %s\n", mft_table.item_name);
+                    printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table.item_size);
+                    printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table.fragments));
                     if(mft_table->uid == 1) {
-		        pwd = 1;
-		    }*/
-		}
+                        pwd = 1;
+                    }
+                }
             }
 
 
