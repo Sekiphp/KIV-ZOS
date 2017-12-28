@@ -148,7 +148,7 @@ void func_load(char *cmd){
 /* Ziska obsah danych clusteru, ktere nalezi stejnemu fragmentu - Jeden mfti muze mit vsak mnoho fragmentu */
 char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
     int sirka_bloku = CLUSTER_SIZE * fragments_count;
-    char ret[sirka_bloku];
+    char *ret = malloc(sirka_bloku * sizeof(char *));
     FILE *fr;
 
     // todo: filename udelat globalni
@@ -168,6 +168,7 @@ char* get_mft_item_content(int32_t uid){
     struct mft_item mfti_pom;
     struct mft_fragment mftf_pom;
     int i, j;
+    char *ret = malloc(10);
 
     i = 0;
     if (mft_item_chceme != NULL){
@@ -179,7 +180,7 @@ char* get_mft_item_content(int32_t uid){
 
             // precteme vsechny fragmenty (je jich: MFT_FRAG_COUNT)
             for(j = 0; j < MFT_FRAG_COUNT; j++){
-                mfti_pom = mft_item_chceme->mft_item;
+                mfti_pom = *mft_item_chceme->item;
                 printf("Nacteny item s UID=%d ma nazev %s\n", mfti_pom->uid, mfti_pom->item_name);
             }
 
@@ -195,7 +196,7 @@ char* get_mft_item_content(int32_t uid){
 
     }
 
-    return "";
+    return ret;
 }
 
 
