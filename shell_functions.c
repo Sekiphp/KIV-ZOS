@@ -29,19 +29,19 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 /* Ziska obsah vsech fragmentu pro soubor nebo slozku daneho UID */
 char* get_mft_item_content(int32_t uid){
 printf("jsem %d", uid);
-    struct mft_item *mfti_pom;
+//    struct mft_item *mfti_pom;
 //    struct mft_fragment mftf_pom;
     int i, j;
     char *ret = malloc(10);
-
+MFT_LIST* mft_item_chceme;
     i = 0;
-//    if (mft_seznam[uid] != NULL){
-//	MFT_LIST *mft_item_chceme = mft_seznam[uid];
+    if (mft_seznam[uid] != NULL){
+	mft_item_chceme = mft_seznam[uid];
+	//MFT_LIST *mft_item_chceme = mft_seznam[uid];
 //	mfti_pom = mft_seznam[uid]->item;
-	MFT_LIST* mpom;
-mpom = mft_seznam[uid];
-	printf("je tu alespon jeden item co stoji za zminku %d\n", mpom->ij);
-/*
+	
+	printf("je tu alespon jeden item co stoji za zminku %d\n", mft_item_chceme->ij);
+
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
         // zacneme iterovar pres ->dalsi
@@ -50,15 +50,15 @@ mpom = mft_seznam[uid];
 	printf("pocet iteraci=%d\n", i);
             // precteme vsechny fragmenty (je jich: MFT_FRAG_COUNT)
                 //mfti_pom = *mft_item_chceme->item;
-                printf("Nacteny item s UID=%d ma nazev \n", mft_item_chceme->item->uid);//, &mft_item_chceme->item->item_name);
+                printf("Nacteny item s UID=%d ma nazev %s\n", mft_item_chceme->item.uid, mft_item_chceme->item.item_name);
 
             for(j = 0; j < MFT_FRAG_COUNT; j++){}
 
             // prehodim se na dalsi prvek
             mft_item_chceme = mft_item_chceme->dalsi;
         }
-*/
-  //  }
+
+  }
 
     return ret;
 }
