@@ -130,21 +130,23 @@ int parsuj_pathu(char *patha){
     }
     printf("START DIR = %d\n", start_dir);
 
-    // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
-    p_c = strtok(path, "/");
-    if (p_c != NULL){
-        uid_pom = get_uid(p_c, start_dir);
+    if (strchr(patha, '/') != NULL){
+        // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
+        p_c = strtok(path, "/");
+        if (p_c != NULL){
+            uid_pom = get_uid(p_c, start_dir);
 
-        printf("get_uid(%s, %d) = %d\n", p_c, start_dir, uid_pom);
-        if (uid_pom == -1) return -1;
-        start_dir = uid_pom;
-    }
-    while((p_c = strtok(NULL, "/")) != NULL){
-        uid_pom = get_uid(p_c, start_dir);
+            printf("get_uid(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+            if (uid_pom == -1) return -1;
+            start_dir = uid_pom;
+        }
+        while((p_c = strtok(NULL, "/")) != NULL){
+            uid_pom = get_uid(p_c, start_dir);
 
-        printf("get_uid(%s, %d) = %d\n", p_c, start_dir, uid_pom);
-        if (uid_pom == -1) return -1;
-        start_dir = uid_pom;
+            printf("get_uid(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+            if (uid_pom == -1) return -1;
+            start_dir = uid_pom;
+        }
     }
 
     return start_dir;
