@@ -111,7 +111,7 @@ int get_uid(char *dir_name, int uid_pwd){
 
 int parsuj_pathu(char *patha){
     char *p_c;
-    int start_dir, uid;
+    int start_dir, uid, uid_pom;
     char path[100];
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
@@ -126,25 +126,24 @@ int parsuj_pathu(char *patha){
     }
     printf("START DIR = %d\n", start_dir);
 
+    // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
     p_c = strtok(path, "/");
     if (p_c != NULL){
-        printf("Prvni: %s\n", p_c);
-        printf("UID z get_uid %d\n", get_uid(p_c, start_dir));
+        uid_pom = get_uid(p_c, start_dir);
+
+        printf("get_uid(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+        if (uid_pom == -1) return -1;
+        start_dir = uid_pom;
     }
     while((p_c = strtok(NULL, "/")) != NULL){
-        printf("Ostatni: %s\n", p_c);
+        uid_pom = get_uid(p_c, start_dir);
+
+        printf("get_uid(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+        if (uid_pom == -1) return -1;
+        start_dir = uid_pom;
     }
 
-    uid = start_dir;
-
-    if (mft_seznam[uid]->item.isDirectory == 1) {
-        printf("UID %d je adresarem\n", uid);
-
-        return 0;
-    }
-    else {
-        return -1;
-    }
+    return start_dir;
 }
 
 
