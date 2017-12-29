@@ -77,23 +77,37 @@ char* get_mft_item_content(int32_t uid){
 }
 
 int get_uid(char *dir_name, int uid_pwd){
-    char obsah[CLUSTER_SIZE] = get_mft_item_content(uid_pwd);
-    printf("obsah %s\n", obsah);
+    char *obsah = get_mft_item_content(uid_pwd);
+    struct mft_item mfti;
+    int hledane;
+printf("obsah %s\n", obsah);
+printf("uid pwd = %d\n\n", uid_pwd);
 
     char * curLine = obsah;
     while (curLine){
         char * nextLine = strchr(curLine, '\n');
         if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
-        printf("curLine=[%s]\n", curLine);
-        printf("nactene UID z clusteru %s (int=%d)\n", curLine, atoi(curLine));
+        hledane = atoi(curLine);
+        printf("*** nactene UID z clusteru %s (int=%d)\n", curLine, hledane);
+
+        // tady si roparsuji MFT a zjistim jestli se shoduje nazev
+        if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
+            printf("hledane %d NOT NULL\n", hledane);
+            mfti = mft_seznam[atoi(curLine)]->item;
+            printf("mfti->item_name: %s\n", mfti.item_name);
+        if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
+printf("SHODA\n");
+            return mfti.uid;
+        }
+}
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
         curLine = nextLine ? (nextLine+1) : NULL;
     }
 
-    return 0;
+    return -1;
 }
 
-int parsuj_pathu(char *patha[]){
+int parsuj_pathu(char *patha){
     char *p_c;
     int start_dir, uid;
     char path[100];
