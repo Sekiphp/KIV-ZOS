@@ -76,7 +76,7 @@ char* get_mft_item_content(int32_t uid){
     return ret;
 }
 
-int get_uid(char *dir_name[], int uid_pwd){
+int get_uid(char *dir_name, int uid_pwd){
     char obsah[CLUSTER_SIZE] = get_mft_item_content(uid_pwd);
     printf("obsah %s\n", obsah);
 
