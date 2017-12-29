@@ -76,6 +76,10 @@ char* get_mft_item_content(int32_t uid){
     return ret;
 }
 
+/*
+Pokusi se v obsahu daneho adresare najit jiny adresar za pomoci jeho jmena
+@return UID hledaneho adresare nebo -1 pri chybe
+*/
 int get_uid(char *dir_name, int uid_pwd){
     char *obsah = get_mft_item_content(uid_pwd);
     char * curLine = obsah;
@@ -196,13 +200,21 @@ void func_rmdir(char *cmd){
 }
 
 
-
+/* ls /var/www/neco je validni prikaz */
 void func_ls(char *cmd){
+    int ret;
     printf("func ls");
 
-    while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+    // tady mam pozadovanou celou cestu
+    cmd = strtok(NULL, " ");
+    ret = parsuj_pathu(cmd);
+    if (ret == -1){
+        printf("PATH NOT FOUND\n");
+        return;
     }
+
+    printf("ls ret = %d\n", ret);
+
 }
 
 void func_cat(char *cmd){
