@@ -60,7 +60,7 @@ char* get_mft_item_content(int32_t uid){
                     // prubezne je potreba realokovat oblast tak, aby se mi podarailo nacist cely soubor
                     //if (j != 1){
                         int *tmp = realloc(ret, k * CLUSTER_SIZE);
-                        if (tmp == NULL) return;
+                        if (tmp == NULL) return "ERROR";
                     //}
 
                     strcat(ret, get_cluster_content(mftf.fragment_start_address, mftf.fragment_count));
@@ -77,10 +77,10 @@ char* get_mft_item_content(int32_t uid){
 
 int parsuj_pathu(char *path){
     char *p_c;
-    int start_dir;
+    int start_dir, uid;
 
     // zacinam v rootu ci nikoliv?
-    if (strcmp(path[0], "/") == 0){
+    if (strncmp(path, "/", 1) == 0){
         start_dir = 1;
     }
     else {
@@ -88,13 +88,15 @@ int parsuj_pathu(char *path){
     }
     printf("START DIR = %d\n", start_dir);
 
-    p_c = strtok(command, " ");
+    p_c = strtok(path, " ");
     if (p_c != NULL){
         printf("Prvni: %s\n", p_c);
     }
     while((p_c = strtok(NULL, " ")) != NULL){
         printf("Ostatni: %s\n", p_c);
     }
+
+    uid = start_dir;
 
     if (mft_seznam[uid]->item.isDirectory == 1) {
         printf("UID %d je adresarem\n", uid);
