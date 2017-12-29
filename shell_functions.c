@@ -180,13 +180,29 @@ void func_rm(char *cmd){
 }
 
 
-
+/* validni: mkdir neco, mkdir /var/www/neco */
 void func_mkdir(char *cmd){
-    printf("func mkdir");
+    int ret;
 
-    while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+    // tady mam pozadovanou celou cestu
+    cmd = strtok(NULL, " ");
+    if (cmd == NULL){
+        printf("PATH NOT FOUND\n");
+        return;
     }
+
+    // zkusim si tu cestu projit
+    ret = parsuj_pathu(cmd);
+    if (ret == -1){
+        printf("PATH NOT FOUND\n");
+        return;
+    }
+    else {
+        // zde vytvorime slozku
+
+    }
+
+    printf("ls ret = %d\n", ret);
 }
 
 
@@ -203,7 +219,6 @@ void func_rmdir(char *cmd){
 /* ls /var/www/neco je validni prikaz */
 void func_ls(char *cmd){
     int ret;
-    printf("func ls");
 
     // tady mam pozadovanou celou cestu
     cmd = strtok(NULL, " ");
