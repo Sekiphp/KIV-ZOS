@@ -11,14 +11,15 @@ extern int pwd;
 /* Ziska obsah danych clusteru, ktere nalezi stejnemu fragmentu - Jeden mfti muze mit vsak mnoho fragmentu */
 char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
     int sirka_bloku = CLUSTER_SIZE * fragments_count;
-    char *ret = malloc(sirka_bloku * sizeof(char *));
+    char *ret;
+    ret = (char*) malloc(sirka_bloku);
     FILE *fr;
 
     // todo: filename udelat globalni
     fr = fopen("ntfs.dat", "rb");
     if (fr != NULL) {
         fseek(fr, fragment_start_addr, SEEK_SET);
-        fread(ret, 1, sirka_bloku, fr);
+        fread(ret, sizeof(char), sirka_bloku, fr);
 
         fclose(fr);
     }
@@ -28,9 +29,10 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 
 /* Ziska obsah vsech fragmentu pro soubor nebo slozku daneho UID */
 char* get_mft_item_content(int32_t uid){
-    int i, j;
+    int i, j, k;
     char *ret = malloc(CLUSTER_SIZE);
     MFT_LIST* mft_item_chceme;
+    struct mft_fragment mftf;
 
     if (mft_seznam[uid] != NULL){
         mft_item_chceme = mft_seznam[uid];
@@ -41,6 +43,7 @@ char* get_mft_item_content(int32_t uid){
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
         // zacneme iterovar pres ->dalsi
         i = 0;
+        k = 0; // celkovy pocet zopracovanych fragmentu
         while (mft_item_chceme != NULL){
             i++;
             printf("pocet iteraci=%d\n", i);
@@ -48,15 +51,19 @@ char* get_mft_item_content(int32_t uid){
 
             // precteme vsechny fragmenty z daneho mft itemu (je jich: MFT_FRAG_COUNT)
             for (j = 0; j < MFT_FRAG_COUNT; j++){
-                if (mft_item_chceme->item.fragments[i] != NULL) {
-                    printf("Zpracovavam fragment %d ze souboru s UID %d\n", i, mft_item_chceme->item.uid);
+                k++;
+                mftf = mft_item_chceme->item.fragments[j];
+
+                if (mftf.fragment_start_address != 0) {
+                    printf("Zpracovavam fragment %d ze souboru s UID %d, start=%d, count=%d\n", j, mft_item_chceme->item.uid, mftf.fragment_start_address, mftf.fragment_count);
 
                     // prubezne je potreba realokovat oblast tak, aby se mi podarailo nacist cely soubor
-                    if (i != 1){
-                        realloc(ret, i * CLUSTER_SIZE);
-                    }
+                    //if (j != 1){
+                        int *tmp = realloc(ret, k * CLUSTER_SIZE);
+if (tmp == NULL) return;
+                    //}
 
-                    strcpy(ret, get_cluster_content(mft_item_chceme->item.fragments[i].fragment_start_address, mft_item_chceme->item.fragments[i].fragment_count));
+                    strcat(ret, get_cluster_content(mftf.fragment_start_address, mftf.fragment_count));
                 }
             }
 
@@ -171,7 +178,7 @@ void func_info(char *cmd){
     }
 
     printf("NAME - UID - SIZE - FRAGMENTY - CLUSTERY\n");
-    printf("NAME %s", );
+//    printf("NAME %s", );
 
     printf("Data z clusteru s UID=1: %s\n", get_mft_item_content(1));
 }

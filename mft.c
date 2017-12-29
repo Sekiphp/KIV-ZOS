@@ -20,7 +20,7 @@ MFT_LIST *alokuj_prvek(struct mft_item mfti) {
 
 /* Prida prvek mft na prislusny index do globalniho mft pole */
 void pridej_prvek(int uid, struct mft_item mfti) {
-    printf("Pridavam prvek do mft UID=%d\n", uid);
+    //printf("Pridavam prvek do mft UID=%d\n", uid);
 
     MFT_LIST *pom = alokuj_prvek(mfti);
 

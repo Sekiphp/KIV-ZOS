@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <string.h>
@@ -94,7 +93,7 @@ void loader(char filename[]){
                     printf("\t\t\tCelkovy pocet polozek v MFT: %d\n", mft_table.item_order_total);
                     printf("\t\t\tJmeno polozky: %s\n", mft_table.item_name);
                     printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table.item_size);
-                    printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table.fragments));
+                    printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table.fragments) / sizeof(struct mft_fragment));
                     if(mft_table.uid == 1) {
                         pwd = 1;
                     }
@@ -179,11 +178,24 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         mfti->item_size = 0; // zatim tam nic neni, takze nula
         mfti->fragments[0] = mftf;
 
+        // dalsi fragmenty z budou jen prazdne (pro poradek)
+        mftf.fragment_start_address = 0;
+        mftf.fragment_count = 0;
+
+        for (i = 1; i < MFT_FRAG_COUNT; i++){
+            mfti->fragments[i] = mftf;
+        }
+
+
         fwrite(mfti, sizeof(struct mft_item), 1, fw);
         free((void *) mfti);
 
         /* Tady bychom meli zapsat obceh ROOT_DIRU */
         /* Jelikoz v nem ale pri prvnim spusteni nic neni, tak nic nezapisujeme :) */
+fseek(fw, data_start, SEEK_SET);
+char neco[8];
+strcpy(neco, "nafrnena\0");
+        fwrite(neco, 1, 8, fw);
 
         fclose(fw);
     }
