@@ -6,6 +6,7 @@
 
     int ntfs_bitmap[CLUSTER_COUNT];
     int pwd;
+    struct boot_record *bootr;
 
     /* Hlavicky funkci ze souboru loader.c -> komentare jsou tam */
     void loader(char filename[]);

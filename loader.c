@@ -18,7 +18,6 @@ extern int pwd;
 void loader(char filename[]){
     FILE *fr;
     int i, sirka_mft, pocet_mft_bloku, sizeof_mft_item;
-    struct boot_record *bootr;
     struct mft_item mft_table, *mff;
 
     sizeof_mft_item = sizeof(struct mft_item);
@@ -108,7 +107,6 @@ void loader(char filename[]){
     	fclose(fr);
     }
 
-    free((void *) bootr);
     printf("LOADER ending\n");
 }
 

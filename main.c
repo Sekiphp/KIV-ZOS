@@ -55,6 +55,9 @@ int main(int argc, char *argv[]){
         assert(0 == rc);
     }
 
+    // uvolneni pameti
+    free((void *) bootr);
+
     printf("NTFS end\n");
     return 0;
 }

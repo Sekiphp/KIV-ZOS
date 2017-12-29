@@ -152,7 +152,72 @@ int parsuj_pathu(char *patha){
     return start_dir;
 }
 
+int zaloz_novou_slozku(int32_t pwd, char *name){
+    int i, bitmap_free_index. new_cluster_start;
+    FILE *fw;
 
+    // najdu volnou bitmapu
+    bitmap_free_index = -1;
+    for (i = 0; i < CLUSTER_COUNT; i++){
+        if (ntfs_bitmap[i] == 0){
+            bitmap_free_index = i;
+            break;
+        }
+    }
+
+    if (bitmap_free_index != -1){
+        new_cluster_start = bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE;
+
+        // ziskam prvni volny MFT LIST a dne nej zjistim volne UID, ktere pridelim nove slozce
+        for (i = 0; i < CLUSTER_COUNT; i++){
+            if (mft_seznam[i] == NULL){
+                // tento prvek je volny, vyuziji jej tedy
+                MFT_ITEM *mfti;
+                MFT_FRAGMENT *mftf;
+
+                mfti = malloc(sizeof(struct mft_item));
+                mftf = malloc(sizeof(struct mft_fragment));
+
+                mftf->fragment_start_address = new_cluster_start; // start adresa ve VFS
+                mftf->fragment_count = 1;
+
+                mfti->uid = bitmap_free_index;
+                mfti->isDirectory = 1;
+                mfti->item_order = 1;
+                mfti->item_order_total = 1;
+                strcpy(mfti->item_name, name);
+                mfti->item_size = 0; // zatim tam nic neni, takze nula
+                mfti->fragments[0] = mftf;
+
+                // prvek mam pripraveny
+                // zaktualizuji si globalni pole a bitmapu
+                ntfs_bitmap[bitmap_free_index] = 1;
+                pridej_prvek(bitmap_free_index, mfti);
+
+                // zapisu do souboru
+                // todo: filename
+                fw = fopen("ntfs.dat", "wb");
+                if(fw != NULL){
+                    // mfti
+                    fseek(fw, sizeof(struct boot_record) + bitmap_free_index * sizeof(struct mft_item), SEEK_SET);
+                    fwrite(mfti, sizeof(struct mft_item), 1, fw);
+
+                    // bitmap
+                    fseek(fw, bootr->bitmap_start_address, SEEK_SET);
+                    fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
+
+                    fclose(fw);
+                }
+
+                free((void *) mfti);
+                free((void *) mftf);
+                break;
+            }
+        }
+    }
+
+    return bitmap_free_index;
+}
 
 void func_cp(char *cmd){
     printf("func cp");
@@ -200,8 +265,9 @@ void func_mkdir(char *cmd){
         return;
     }
     else {
-        // zde vytvorime slozku
-
+        // --- zde vytvorime slozku ---
+        // dle bitmapy najdu prvni volny cluster a vypoctu si jeho adresu, fragment_count zvolim na 1
+        // do prvniho fragmentu polozky mft_seznam[ret]->item zapisu nakonec UID noveho adresare
     }
 
     printf("ls ret = %d\n", ret);
