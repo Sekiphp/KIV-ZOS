@@ -60,7 +60,7 @@ char* get_mft_item_content(int32_t uid){
                     // prubezne je potreba realokovat oblast tak, aby se mi podarailo nacist cely soubor
                     //if (j != 1){
                         int *tmp = realloc(ret, k * CLUSTER_SIZE);
-if (tmp == NULL) return;
+                        if (tmp == NULL) return;
                     //}
 
                     strcat(ret, get_cluster_content(mftf.fragment_start_address, mftf.fragment_count));
@@ -75,6 +75,36 @@ if (tmp == NULL) return;
     return ret;
 }
 
+int parsuj_pathu(char *path){
+    char *p_c;
+    int start_dir;
+
+    // zacinam v rootu ci nikoliv?
+    if (strcmp(path[0], "/") == 0){
+        start_dir = 1;
+    }
+    else {
+        start_dir = pwd;
+    }
+    printf("START DIR = %d\n", start_dir);
+
+    p_c = strtok(command, " ");
+    if (p_c != NULL){
+        printf("Prvni: %s\n", p_c);
+    }
+    while((p_c = strtok(NULL, " ")) != NULL){
+        printf("Ostatni: %s\n", p_c);
+    }
+
+    if (mft_seznam[uid]->item.isDirectory == 1) {
+        printf("UID %d je adresarem\n", uid);
+
+        return 0;
+    }
+    else {
+        return -1;
+    }
+}
 
 
 void func_cp(char *cmd){
@@ -181,6 +211,7 @@ void func_info(char *cmd){
 //    printf("NAME %s", );
 
     printf("Data z clusteru s UID=1: %s\n", get_mft_item_content(1));
+    printf("parsuj pathu = %d\n", parsuj_pathu("/var/www/diginex.cz"));
 }
 
 
