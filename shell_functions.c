@@ -207,10 +207,19 @@ void func_ls(char *cmd){
 
     // tady mam pozadovanou celou cestu
     cmd = strtok(NULL, " ");
+    if (cmd == NULL){
+        printf("PATH NOT FOUND\n");
+        return;
+    }
+
+    // zkusim si tu cestu projit
     ret = parsuj_pathu(cmd);
     if (ret == -1){
         printf("PATH NOT FOUND\n");
         return;
+    }
+    else {
+
     }
 
     printf("ls ret = %d\n", ret);
