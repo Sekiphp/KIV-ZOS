@@ -4,6 +4,7 @@
 
 #include "loader.h"
 #include "mft.h"
+#include "shell_functions.h"
 
 extern int pwd;
 //extern MFT_LIST *mft_seznam[];
@@ -75,10 +76,12 @@ char* get_mft_item_content(int32_t uid){
     return ret;
 }
 
-int parsuj_pathu(char *path){
+int parsuj_pathu(char *patha[]){
     char *p_c;
     int start_dir, uid;
-
+char path[100];
+strcpy(path, patha); //https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
+printf("%s\n", path);
     // zacinam v rootu ci nikoliv?
     if (strncmp(path, "/", 1) == 0){
         start_dir = 1;
@@ -88,11 +91,11 @@ int parsuj_pathu(char *path){
     }
     printf("START DIR = %d\n", start_dir);
 
-    p_c = strtok(path, " ");
+    p_c = strtok(path, "/");
     if (p_c != NULL){
         printf("Prvni: %s\n", p_c);
     }
-    while((p_c = strtok(NULL, " ")) != NULL){
+    while((p_c = strtok(NULL, "/")) != NULL){
         printf("Ostatni: %s\n", p_c);
     }
 
