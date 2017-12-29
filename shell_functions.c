@@ -76,12 +76,31 @@ char* get_mft_item_content(int32_t uid){
     return ret;
 }
 
+int get_uid(char *dir_name[], int uid_pwd){
+    char obsah[CLUSTER_SIZE] = get_mft_item_content(uid_pwd);
+    printf("obsah %s\n", obsah);
+
+    char * curLine = obsah;
+    while (curLine){
+        char * nextLine = strchr(curLine, '\n');
+        if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
+        printf("curLine=[%s]\n", curLine);
+        printf("nactene UID z clusteru %s (int=%d)\n", curLine, atoi(curLine));
+        if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
+        curLine = nextLine ? (nextLine+1) : NULL;
+    }
+
+    return 0;
+}
+
 int parsuj_pathu(char *patha[]){
     char *p_c;
     int start_dir, uid;
-char path[100];
-strcpy(path, patha); //https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
-printf("%s\n", path);
+    char path[100];
+
+    // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
+    strcpy(path, patha);
+
     // zacinam v rootu ci nikoliv?
     if (strncmp(path, "/", 1) == 0){
         start_dir = 1;
@@ -94,6 +113,7 @@ printf("%s\n", path);
     p_c = strtok(path, "/");
     if (p_c != NULL){
         printf("Prvni: %s\n", p_c);
+        get_uid(p_c, start_dir);
     }
     while((p_c = strtok(NULL, "/")) != NULL){
         printf("Ostatni: %s\n", p_c);
@@ -110,6 +130,7 @@ printf("%s\n", path);
         return -1;
     }
 }
+
 
 
 void func_cp(char *cmd){
