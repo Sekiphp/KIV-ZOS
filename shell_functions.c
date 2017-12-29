@@ -78,12 +78,12 @@ char* get_mft_item_content(int32_t uid){
 
 int get_uid(char *dir_name, int uid_pwd){
     char *obsah = get_mft_item_content(uid_pwd);
+    char * curLine = obsah;
     struct mft_item mfti;
     int hledane;
-printf("obsah %s\n", obsah);
-printf("uid pwd = %d\n\n", uid_pwd);
 
-    char * curLine = obsah;
+    printf("Spoustim metodu *get_uid* s dir_name = %s a uid_pwd = %d\n\tTato polozka ma obsah clusteru: %s \n----------\n", dir_name, uid_pwd, obsah);
+
     while (curLine){
         char * nextLine = strchr(curLine, '\n');
         if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
@@ -92,16 +92,18 @@ printf("uid pwd = %d\n\n", uid_pwd);
 
         // tady si roparsuji MFT a zjistim jestli se shoduje nazev
         if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
-            printf("hledane %d NOT NULL\n", hledane);
-            mfti = mft_seznam[atoi(curLine)]->item;
-            printf("mfti->item_name: %s\n", mfti.item_name);
-        if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
-printf("SHODA\n");
-            return mfti.uid;
+            mfti = mft_seznam[hledane]->item;
+
+            printf("\tHledane mfti s uid=%d (name=%s) NOT NULL\n", hledane, mfti.item_name);
+
+            if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
+                printf("\tSHODA\n");
+                return mfti.uid;
+            }
         }
-}
+
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
-        curLine = nextLine ? (nextLine+1) : NULL;
+        curLine = nextLine ? (nextLine + 1) : NULL;
     }
 
     return -1;
@@ -127,7 +129,7 @@ int parsuj_pathu(char *patha){
     p_c = strtok(path, "/");
     if (p_c != NULL){
         printf("Prvni: %s\n", p_c);
-        get_uid(p_c, start_dir);
+        printf("UID z get_uid %d\n", get_uid(p_c, start_dir));
     }
     while((p_c = strtok(NULL, "/")) != NULL){
         printf("Ostatni: %s\n", p_c);
