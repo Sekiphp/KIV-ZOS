@@ -5,6 +5,7 @@
 #include "loader.h"
 #include "mft.h"
 #include "shell_functions.h"
+#include "boot_record.h"
 
 extern int pwd;
 //extern MFT_LIST *mft_seznam[];
@@ -153,8 +154,10 @@ int parsuj_pathu(char *patha){
 }
 
 int zaloz_novou_slozku(int32_t pwd, char *name){
-    int i, bitmap_free_index. new_cluster_start;
+    int i, bitmap_free_index, new_cluster_start;
     FILE *fw;
+    MFT_ITEM *mfti;
+    MFT_FRAGMENT *mftf;
 
     // najdu volnou bitmapu
     bitmap_free_index = -1;
@@ -172,9 +175,6 @@ int zaloz_novou_slozku(int32_t pwd, char *name){
         for (i = 0; i < CLUSTER_COUNT; i++){
             if (mft_seznam[i] == NULL){
                 // tento prvek je volny, vyuziji jej tedy
-                MFT_ITEM *mfti;
-                MFT_FRAGMENT *mftf;
-
                 mfti = malloc(sizeof(struct mft_item));
                 mftf = malloc(sizeof(struct mft_fragment));
 
