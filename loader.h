@@ -5,7 +5,7 @@
     #define CLUSTER_SIZE 1024
 
     int ntfs_bitmap[CLUSTER_COUNT];
-    int pwd;
+    int32_t pwd;
     struct boot_record *bootr;
 
     /* Hlavicky funkci ze souboru loader.c -> komentare jsou tam */

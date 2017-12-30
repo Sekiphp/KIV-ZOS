@@ -2,7 +2,7 @@
 #define MFT_H
 
 #define MFT_FRAG_COUNT 32
-#define UID_ITEM_FREE 0
+#define UID_ITEM_FREE -1
 #define CLUSTER_COUNT 10
 
 // item muze mit 1 az X techto fragmentu
@@ -16,7 +16,7 @@ struct mft_fragment {
 
 // jeden soubor muze byt slozen i z vice mft_itemu, ty ale pak maji stejna uid (lisi se item_orderem)
 struct mft_item {
-    int32_t uid;                                        //UID polozky, pokud UID = UID_ITEM_FREE, je polozka volna
+    int uid;                                        //UID polozky, pokud UID = UID_ITEM_FREE, je polozka volna
     int isDirectory;                                    //soubor, nebo adresar (1=adresar, 0=soubor)
     int8_t item_order;                                  //poradi v MFT pri vice souborech, jinak 1
     int8_t item_order_total;                            //celkovy pocet polozek v MFT

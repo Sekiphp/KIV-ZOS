@@ -168,7 +168,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         mftf.fragment_start_address = data_start; // start adresa ve VFS
         mftf.fragment_count = 1; // pocet clusteru ve VFS od startovaci adresy
 
-        mfti->uid = 1;
+        mfti->uid = 0;
         mfti->isDirectory = 1;
         mfti->item_order = 1;
         mfti->item_order_total = 1;
