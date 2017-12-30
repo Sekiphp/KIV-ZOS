@@ -80,7 +80,7 @@ void loader(char filename[]){
                 printf("\t\t\t--------------------------\n");
                 printf("\t\t\tfread cte z pozice %d \n", (bootr->mft_start_address + i * sizeof_mft_item));
 
-                if (ntfs_bitmap[i] == UID_ITEM_FREE || mft_table.uid == UID_ITEM_FREE){
+                if (ntfs_bitmap[i] == 0 || mft_table.uid == UID_ITEM_FREE){
                     printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table.uid);
                 }
                 else{

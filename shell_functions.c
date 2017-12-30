@@ -40,16 +40,18 @@ void func_rm(char *cmd){
 
 /* validni: mkdir neco, mkdir /var/www/neco */
 void func_mkdir(char *cmd){
-    int ret;
+    int ret, max;
     char pom[12];
 
+printf("%s\n", cmd);
     // tady mam pozadovanou celou cestu
+/*
     cmd = strtok(NULL, " ");
     if (cmd == NULL){
         printf("PATH NOT FOUND\n");
         return;
     }
-
+*/
     // zkusim si tu cestu projit
     ret = parsuj_pathu(cmd);
     if (ret == -1){
@@ -61,8 +63,10 @@ void func_mkdir(char *cmd){
         // dle bitmapy najdu prvni volny cluster a vypoctu si jeho adresu, fragment_count zvolim na 1
         // do prvniho fragmentu polozky mft_seznam[ret]->item zapisu nakonec UID noveho adresare
         while((cmd = strtok(NULL, " ")) != NULL){
-            printf("Ostatni: %s\n", cmd);
-            strcpy(pom, cmd);
+            max = sizeof(cmd) - 1;
+            printf("Ostatni: %s, %d\n", cmd, max);
+
+            strncpy(pom, cmd, max);
         }
 
         zaloz_novou_slozku(ret, pom);

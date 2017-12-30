@@ -29,14 +29,14 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 }
 
 int append_obsah_souboru(int uid){
-    int i, j, k;
+    /*int i, j, k;
     char *ret = malloc(CLUSTER_SIZE);
     MFT_LIST* mft_item_chceme;
     struct mft_fragment mftf;
     char *soucasny_obsah = get_mft_item_content(uid);
 
     printf("Soucasny obsh souboru je: %s --- \n", soucasny_obsah);
-
+*/
     return -1;
 }
 
@@ -175,7 +175,9 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item mfti;
     struct mft_fragment mftf;
     struct mft_item *mpom;
-
+char pomocnik[100];
+strncpy(pomocnik, name, sizeof(name)-1);
+printf("NAME=%s\n", pomocnik);
     // najdu volnou bitmapu
     bitmap_free_index = -1;
     for (i = 0; i < CLUSTER_COUNT; i++){
@@ -218,7 +220,7 @@ int zaloz_novou_slozku(int pwd, char *name){
                     // mfti
                     mpom = &mfti;
                     printf("MFTI chci zapsat na adresu %d\n", sizeof(struct boot_record) + bitmap_free_index * sizeof(struct mft_item));
-                    fseek(fw, sizeof(struct boot_record) + (bitmap_free_index-1) * sizeof(struct mft_item), SEEK_SET);
+                    fseek(fw, sizeof(struct boot_record) + (bitmap_free_index) * sizeof(struct mft_item), SEEK_SET);
                     fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
                     // bitmap
