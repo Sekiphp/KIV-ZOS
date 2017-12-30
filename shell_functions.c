@@ -206,6 +206,8 @@ int zaloz_novou_slozku(int32_t pwd, char *name){
                     fseek(fw, bootr->bitmap_start_address, SEEK_SET);
                     fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
+                    // odkaz na slozku do nadrazeneho adresare
+
                     fclose(fw);
                 }
 
@@ -250,6 +252,7 @@ void func_rm(char *cmd){
 /* validni: mkdir neco, mkdir /var/www/neco */
 void func_mkdir(char *cmd){
     int ret;
+    char pom[12];
 
     // tady mam pozadovanou celou cestu
     cmd = strtok(NULL, " ");
@@ -268,6 +271,12 @@ void func_mkdir(char *cmd){
         // --- zde vytvorime slozku ---
         // dle bitmapy najdu prvni volny cluster a vypoctu si jeho adresu, fragment_count zvolim na 1
         // do prvniho fragmentu polozky mft_seznam[ret]->item zapisu nakonec UID noveho adresare
+        while((cmd = strtok(NULL, " ")) != NULL){
+            printf("Ostatni: %s\n", cmd);
+            strcpy(pom, cmd);
+        }
+
+        zaloz_novou_slozku(ret, pom)
     }
 
     printf("ls ret = %d\n", ret);
