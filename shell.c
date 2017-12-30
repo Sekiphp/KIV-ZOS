@@ -32,7 +32,7 @@ void *shell(void *arg){
 
     /* infinite loop - cekam na prikazy */
     while(1){
-        printf("Zadejte prikaz: ");
+        printf("$ Zadejte prikaz: ");
         fgets(command, MAX, stdin);
 
         p_c = strtok(command, " ");

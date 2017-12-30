@@ -116,7 +116,7 @@ int get_uid(char *dir_name, int uid_pwd){
 
 int parsuj_pathu(char *patha){
     char *p_c;
-    int start_dir, uid, uid_pom;
+    int start_dir, uid_pom;
     char path[100];
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
@@ -156,13 +156,15 @@ int parsuj_pathu(char *patha){
 int zaloz_novou_slozku(int32_t pwd, char *name){
     int i, bitmap_free_index, new_cluster_start;
     FILE *fw;
-    MFT_ITEM *mfti;
-    MFT_FRAGMENT *mftf;
+    struct mft_item mfti;
+    struct mft_fragment mftf;
+    struct mft_item *mpom;
 
     // najdu volnou bitmapu
     bitmap_free_index = -1;
-    for (i = 0; i < CLUSTER_COUNT; i++){
-        if (ntfs_bitmap[i] == 0){
+    for (i = 1; i < CLUSTER_COUNT; i++){
+        if (mft_seznam[i] == NULL){
+printf("MFT index je %d\n", i);
             bitmap_free_index = i;
             break;
         }
@@ -175,19 +177,18 @@ int zaloz_novou_slozku(int32_t pwd, char *name){
         for (i = 0; i < CLUSTER_COUNT; i++){
             if (mft_seznam[i] == NULL){
                 // tento prvek je volny, vyuziji jej tedy
-                mfti = malloc(sizeof(struct mft_item));
-                mftf = malloc(sizeof(struct mft_fragment));
+                mpom = malloc(sizeof(struct mft_item));
 
-                mftf->fragment_start_address = new_cluster_start; // start adresa ve VFS
-                mftf->fragment_count = 1;
+                mftf.fragment_start_address = new_cluster_start; // start adresa ve VFS
+                mftf.fragment_count = 1;
 
-                mfti->uid = bitmap_free_index;
-                mfti->isDirectory = 1;
-                mfti->item_order = 1;
-                mfti->item_order_total = 1;
-                strcpy(mfti->item_name, name);
-                mfti->item_size = 0; // zatim tam nic neni, takze nula
-                mfti->fragments[0] = mftf;
+                mfti.uid = bitmap_free_index;
+                mfti.isDirectory = 1;
+                mfti.item_order = 1;
+                mfti.item_order_total = 1;
+                strcpy(mfti.item_name, name);
+                mfti.item_size = 0; // zatim tam nic neni, takze nula
+                mfti.fragments[0] = mftf;
 
                 // prvek mam pripraveny
                 // zaktualizuji si globalni pole a bitmapu
@@ -196,13 +197,16 @@ int zaloz_novou_slozku(int32_t pwd, char *name){
 
                 // zapisu do souboru
                 // todo: filename
-                fw = fopen("ntfs.dat", "wb");
+                fw = fopen("ntfs.dat", "r+b");
                 if(fw != NULL){
                     // mfti
-                    fseek(fw, sizeof(struct boot_record) + bitmap_free_index * sizeof(struct mft_item), SEEK_SET);
-                    fwrite(mfti, sizeof(struct mft_item), 1, fw);
+                    mpom = &mfti;
+printf("MFTI chci zapsat na adresu %d\n", sizeof(struct boot_record) + bitmap_free_index * sizeof(struct mft_item));
+                    fseek(fw, sizeof(struct boot_record) + (bitmap_free_index-1) * sizeof(struct mft_item), SEEK_SET);
+                    fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
                     // bitmap
+printf("bitmapu chci zapisovat na adresu %d\n", bootr->bitmap_start_address);
                     fseek(fw, bootr->bitmap_start_address, SEEK_SET);
                     fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
@@ -211,8 +215,7 @@ int zaloz_novou_slozku(int32_t pwd, char *name){
                     fclose(fw);
                 }
 
-                free((void *) mfti);
-                free((void *) mftf);
+                //free((void *) mfti);
                 break;
             }
         }
@@ -276,7 +279,7 @@ void func_mkdir(char *cmd){
             strcpy(pom, cmd);
         }
 
-        zaloz_novou_slozku(ret, pom)
+        zaloz_novou_slozku(ret, pom);
     }
 
     printf("ls ret = %d\n", ret);

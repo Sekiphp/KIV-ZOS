@@ -190,11 +190,12 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
 
         /* Tady bychom meli zapsat obceh ROOT_DIRU */
         /* Jelikoz v nem ale pri prvnim spusteni nic neni, tak nic nezapisujeme :) */
+/*
         fseek(fw, data_start, SEEK_SET);
         char neco[CLUSTER_SIZE];
         strcpy(neco, "5\n10\n888");
         fwrite(neco, 1, CLUSTER_SIZE, fw);
-
+*/
         fclose(fw);
     }
 }
