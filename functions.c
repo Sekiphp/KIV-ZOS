@@ -9,6 +9,7 @@
 #include "functions.h"
 
 extern int pwd;
+extern char output_file;
 
 /* Ziska obsah vsech danych clusteru, ktere nalezi stejnemu fragmentu - Jeden mfti muze mit vsak mnoho fragmentu */
 char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
@@ -17,8 +18,7 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
     ret = (char*) malloc(sirka_bloku);
     FILE *fr;
 
-    // todo: filename udelat globalni
-    fr = fopen("ntfs.dat", "rb");
+    fr = fopen(output_file, "rb");
     if (fr != NULL) {
         fseek(fr, fragment_start_addr, SEEK_SET);
         fread(ret, sizeof(char), sirka_bloku, fr);
@@ -42,7 +42,7 @@ int append_obsah_souboru(int uid, char *append){
     printf("Chci appendnout: %s\n", append);
 
     i = strlen(soucasny_obsah);
-    fw = fopen("ntfs.dat", "r+b");
+    fw = fopen(output_file, "r+b");
     if (fw != NULL) {
         // musim si vypocitat adresu, kam budu zapisovat
         adresa = 0;
@@ -276,8 +276,7 @@ int zaloz_novou_slozku(int pwd, char *name){
                 pridej_prvek(bitmap_free_index, mfti);
 
                 // zapisu do souboru
-                // todo: filename
-                fw = fopen("ntfs.dat", "r+b");
+                fw = fopen(output_file, "r+b");
                 if(fw != NULL){
                     // mfti
                     mpom = &mfti;
