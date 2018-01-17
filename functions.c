@@ -80,10 +80,10 @@ int append_obsah_souboru(int uid, char *append){
             // pripojim k nemu co potrebuji a zapisu
             fseek(fw, adresa, SEEK_SET);
             strcat(ret, append);
-            strcat(ret, '\n');
+            strcat(ret, "\n");
             fwrite(ret, 1, strlen(ret), fw);
 
-            printf("Dokoncuji editaci clusteru/fragmentu; strlen=%s\n", strlen(ret));
+            printf("Dokoncuji editaci clusteru/fragmentu; strlen=%d\n", strlen(ret));
         }
         else{
             return -1;
