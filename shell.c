@@ -36,9 +36,11 @@ void *shell(void *arg){
         fgets(command, MAX, stdin);
 
         p_c = strtok(command, " ");
+        /*
         if (p_c != NULL){
             printf("Prvni: %s\n", p_c);
         }
+        */
 
         if(strncmp(p_c, "cp", 2) == 0){
             func_cp(p_c);

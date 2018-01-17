@@ -100,13 +100,8 @@ void func_ls(char *cmd){
         printf("PATH NOT FOUND\n");
         return;
     }
-    else {
-        // vypis obsahu adresare (+ jsou slozky, - soubory)
 
-    }
-
-    printf("ls ret = %d\n", ret);
-
+    //printf("ls ret = %d\n", ret);
 }
 
 void func_cat(char *cmd){
