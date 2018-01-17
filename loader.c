@@ -166,21 +166,24 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
 
         mfti = malloc(sizeof(struct mft_item));
 
-        mftf.fragment_start_address = data_start; // start adresa ve VFS
-        mftf.fragment_count = 1; // pocet clusteru ve VFS od startovaci adresy
-
         mfti->uid = 0;
         mfti->isDirectory = 1;
         mfti->item_order = 1;
         mfti->item_order_total = 1;
         strcpy(mfti->item_name, "ROOT_DIR");
         mfti->item_size = 0; // zatim tam nic neni, takze nula
+
+        // zapisu prvni "plny" fragment (ROOT_DIR)
+        mftf.fragment_start_address = data_start; // start adresa ve VFS
+        mftf.fragment_count = 1; // pocet clusteru ve VFS od startovaci adresy
         mfti->fragments[0] = mftf;
+
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
         mftf.fragment_start_address = 0;
         mftf.fragment_count = 0;
 
+        // zacinam od jednicky
         for (i = 1; i < MFT_FRAG_COUNT; i++){
             mfti->fragments[i] = mftf;
         }

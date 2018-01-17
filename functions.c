@@ -30,7 +30,7 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 }
 
 int append_obsah_souboru(int uid, char *append){
-    int i, adresa;
+    int i, j, adresa;
     char *ret;
     ret = (char *) malloc(CLUSTER_SIZE);
     MFT_LIST* mft_item_chceme;
@@ -45,9 +45,49 @@ int append_obsah_souboru(int uid, char *append){
     fw = fopen("ntfs.dat", "r+b");
     if (fw != NULL) {
         // musim si vypocitat adresu, kam budu zapisovat
-        adresa = bootr->data_start_address;
-        fseek(fw, fragment_start_addr, SEEK_SET);
-        
+        adresa = 0;
+        if (mft_seznam[uid] != NULL){
+            mft_item_chceme = mft_seznam[uid];
+
+            // projedeme vsechny itemy pro dane UID souboru
+            // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
+            // zacneme iterovar pres ->dalsi
+            i = 0;
+            while (mft_item_chceme != NULL){
+                i++;
+                printf("[%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_item_chceme->item.uid, mft_item_chceme->item.item_name);
+
+                // precteme vsechny fragmenty z daneho mft itemu (maximalne je jich: MFT_FRAG_COUNT)
+                for (j = 0; j < MFT_FRAG_COUNT; j++){
+                    mftf = mft_item_chceme->item.fragments[j];
+
+                    // najdu si posledni fragment s adresou
+                    if (mftf.fragment_start_address != 0) {
+                        adresa = mftf.fragment_start_address;
+                    }
+                }
+
+                // prehodim se na dalsi prvek
+                mft_item_chceme = mft_item_chceme->dalsi;
+            }
+        }
+
+        if (adresa != 0){
+            // nactu obsah daneho clusteru
+            fseek(fw, adresa, SEEK_SET);
+            strcat(ret, get_cluster_content(adresa, 1));
+
+            // pripojim k nemu co potrebuji a zapisu
+            fseek(fw, adresa, SEEK_SET);
+            strcat(ret, append);
+            strcat(ret, '\n');
+            fwrite(ret, 1, strlen(ret), fw);
+
+            printf("Dokoncuji editaci clusteru/fragmentu; strlen=%s\n", strlen(ret));
+        }
+        else{
+            return -1;
+        }
 
         fclose(fw);
     }
