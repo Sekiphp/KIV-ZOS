@@ -317,6 +317,7 @@ void ls(int uid) {
     // printf("obsah bufferu je: %s\n", buffer);
 
     printf("-- Napoveda: + slozka, - soubor --\n");
+    printf("--- NAZEV ----- VELIKOST - UID ---\n");
 
     // iteruji pro kazdou polozku z adresare a hledam jeji nazev
     p_c = strtok(buffer, "\n");
@@ -345,5 +346,5 @@ void ls_printer(char *p_c) {
     else{
         printf("-");
     }
-    printf(" %-15s %db\n", mfti.item_name, mfti.item_size);
+    printf(" %-15s %-6db %d\n", mfti.item_name, mfti.item_size, mfti.uid);
 }
