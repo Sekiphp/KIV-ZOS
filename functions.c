@@ -182,9 +182,9 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item mfti;
     struct mft_fragment mftf;
     struct mft_item *mpom;
-    char pomocnik[100];
+    char pomocnik[20];
 
-    strncpy(pomocnik, name, 100);
+    strncpy(pomocnik, name, strlen(name)-1);
     printf("-- NAME OF NEW DIR=%s\n", pomocnik);
 
     // najdu volnou bitmapu
@@ -213,7 +213,7 @@ int zaloz_novou_slozku(int pwd, char *name){
                 mfti.isDirectory = 1;
                 mfti.item_order = 1;
                 mfti.item_order_total = 1;
-                strcpy(mfti.item_name, name);
+                strcpy(mfti.item_name, pomocnik);
                 mfti.item_size = 0; // zatim tam nic neni, takze nula
                 mfti.fragments[0] = mftf;
 

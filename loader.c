@@ -93,8 +93,9 @@ void loader(char filename[]){
                     printf("\t\t\tJmeno polozky: %s\n", mft_table.item_name);
                     printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table.item_size);
                     printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table.fragments) / sizeof(struct mft_fragment));
-                    if(mft_table.uid == 1) {
-                        pwd = 1;
+
+                    if(i == 0) {
+                        pwd = mft_table.uid;
                     }
                 }
             }
