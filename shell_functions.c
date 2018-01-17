@@ -159,6 +159,7 @@ void func_info(char *cmd){
 
 void func_incp(char *cmd){
     int i = 0;
+    char * result;
     //printf("func incp");
 
     while((cmd = strtok(NULL, " ")) != NULL){
