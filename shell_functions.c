@@ -164,6 +164,7 @@ void func_incp(char *cmd){
                 printf("FILE %s NOT FOUND\n", pc_file);
                 return;
             }
+        }
         else {
             // najdu cilove misto pro ulozeni
             printf("Cesta k parsovani je: --%s--\n", cmd);
