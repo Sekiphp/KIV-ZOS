@@ -147,9 +147,11 @@ void func_info(char *cmd){
 
 
 void func_incp(char *cmd){
-    int i = 0;
+    int i, ret;
     FILE *f;
     char pc_file[100];
+
+    i = 0;
 
     // postupne cteni argumentu
     while((cmd = strtok(NULL, " ")) != NULL){
@@ -176,7 +178,7 @@ void func_incp(char *cmd){
         i++;
     }
 
-    if (i != 2){
+    if (i != 2) {
         printf("TOO FEW ARGS\n");
         return;
     }
