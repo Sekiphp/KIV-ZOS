@@ -252,8 +252,10 @@ printf("OK\n");
                 // v result muzu mit třeba 5000 znaku, tj rozdelovat po CLUSTER_SIZE
                 for (j = 0; j < potreba_clusteru; j++){
                     adresa = bootr->data_start_address + volne_clustery[j] * CLUSTER_SIZE;
-                    //strncpy(buffer, result CLUSTER_SIZE);
-                    set_cluster_content(adresa, substring(result, j * CLUSTER_SIZE, CLUSTER_SIZE));
+                    strncpy(buffer, result + (j * CLUSTER_SIZE), CLUSTER_SIZE);
+                    buffer[CLUSTER_SIZE] = '\0';
+
+                    set_cluster_content(adresa, buffer);
                 }
 
                 fclose(fw);
