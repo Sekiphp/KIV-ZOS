@@ -188,7 +188,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         fwrite(mfti, sizeof(struct mft_item), 1, fw);
         free((void *) mfti);
 
-        /* Tady bychom meli zapsat obceh ROOT_DIRU */
+        /* Tady bychom meli zapsat obsah ROOT_DIRU */
         /* Jelikoz v nem ale pri prvnim spusteni nic neni, tak nic nezapisujeme :) */
 /*
         fseek(fw, data_start, SEEK_SET);

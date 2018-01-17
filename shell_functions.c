@@ -91,13 +91,18 @@ void func_ls(char *cmd){
     int ret;
 
     // tady mam pozadovanou celou cestu
+    /*
     cmd = strtok(NULL, " ");
     if (cmd == NULL){
         printf("PATH NOT FOUND\n");
         return;
     }
+    */
 
     // zkusim si tu cestu projit
+    cmd = strtok(NULL, " ");
+    printf("Cesta k parsovani je: --%s--\n", cmd);
+
     ret = parsuj_pathu(cmd);
     if (ret == -1){
         printf("PATH NOT FOUND\n");
