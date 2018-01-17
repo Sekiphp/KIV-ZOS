@@ -310,6 +310,7 @@ int zaloz_novou_slozku(int pwd, char *name){
 void ls(int uid) {
     char buffer[1024];
     char *p_c;
+    int i = 0;
 
     // chci vypsat obsah aktualniho adresare
     strncpy(buffer, get_mft_item_content(uid), 1024);
@@ -321,10 +322,14 @@ void ls(int uid) {
     p_c = strtok(buffer, "\n");
     if (p_c != NULL){
         ls_printer(p_c);
+        i++;
     }
     while((p_c = strtok(NULL, "\n")) != NULL){
         ls_printer(p_c);
+        i++;
     }
+
+    printf("-- Celkem souboru: %d --\n", i);
 }
 
 /* Pro konkretni UID vypise info o souboru (prikaz ls) */
