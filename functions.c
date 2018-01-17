@@ -374,6 +374,7 @@ char* substring(const char* str, size_t begin, size_t len)
   return strndup(str + begin, len);
 }
 
+/*
 void func_incp(char *cmd){
     int i, j, k, size, ret, potreba_clusteru, adresa;
     char * result;
@@ -386,14 +387,14 @@ void func_incp(char *cmd){
     while((cmd = strtok(NULL, " ")) != NULL){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
-            /*
+
             strncpy(pom, cmd, strlen(cmd));
             f = fopen(pom, "r");
             if (f == NULL){
                 printf("FILE %s NOT FOUND\n", pom);
                 return; // -1 means file opening fail
             }
-*/
+
             fseek(f, 0, SEEK_END);
             size = ftell(f);
             printf("size=%d\n", size);
@@ -563,3 +564,4 @@ printf("OK\n");
         return;
     }
 }
+*/
