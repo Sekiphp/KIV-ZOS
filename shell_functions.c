@@ -160,6 +160,7 @@ void func_info(char *cmd){
 void func_incp(char *cmd){
     int i, size;
     char * result;
+    FILE *f;
 
     i = 0;
     size = 0;
@@ -167,9 +168,9 @@ void func_incp(char *cmd){
     while((cmd = strtok(NULL, " ")) != NULL){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
-            FILE *f = fopen(cmd, "r");
+            f = fopen(cmd, "r");
             if (f == NULL){
-                printf("FILE NOT FOUND\n");
+                printf("FILE %s NOT FOUND\n", cmd);
                 return; // -1 means file opening fail
             }
 
@@ -193,6 +194,10 @@ void func_incp(char *cmd){
         }
 
         i++;
+    }
+
+    if (i < 2){
+        printf("TOO FEW ARGS\n");
     }
 }
 
