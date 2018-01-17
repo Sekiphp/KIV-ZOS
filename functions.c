@@ -190,7 +190,7 @@ int parsuj_pathu(char *patha){
     int start_dir, uid_pom;
     char path[100];
     char buffer[1024];
-    MFT_SEZNAM mftsez;
+    MFT_LIST* mftsez;
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
     strncpy(path, patha, 100); // bez \0
