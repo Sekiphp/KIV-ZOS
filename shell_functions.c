@@ -169,7 +169,7 @@ void func_incp(char *cmd){
     while((cmd = strtok(NULL, " ")) != NULL){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
-            strncpy(pom, cmd, strlen(cmd) - 1);
+            strncpy(pom, cmd, strlen(cmd));
             f = fopen(pom, "r");
             if (f == NULL){
                 printf("FILE %s NOT FOUND\n", pom);
