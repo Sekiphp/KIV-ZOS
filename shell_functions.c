@@ -169,7 +169,6 @@ void func_incp(char *cmd){
             FILE *f = fopen(cmd, "rb");
             if (f == NULL)
             {
-                *result = NULL;
                 return; // -1 means file opening fail
             }
             fseek(f, 0, SEEK_END);
@@ -183,7 +182,6 @@ void func_incp(char *cmd){
                 return; // -2 means file reading fail
             }
             fclose(f);
-            (*result)[size] = 0;
             //return size;
         }
         else {
