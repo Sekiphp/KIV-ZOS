@@ -158,10 +158,39 @@ void func_info(char *cmd){
 
 
 void func_incp(char *cmd){
-    printf("func incp");
+    int i = 0;
+    //printf("func incp");
 
     while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+        if (i == 0){
+            // zpracovavam prvni argument - najdu v PC
+            int size = 0;
+            FILE *f = fopen(cmd, "rb");
+            if (f == NULL)
+            {
+                *result = NULL;
+                return -1; // -1 means file opening fail
+            }
+            fseek(f, 0, SEEK_END);
+            size = ftell(f);
+            printf("size=%d\n", size);
+            fseek(f, 0, SEEK_SET);
+            *result = (char *)malloc(size+1);
+            if (size != fread(*result, sizeof(char), size, f))
+            {
+                free(*result);
+                return -2; // -2 means file reading fail
+            }
+            fclose(f);
+            (*result)[size] = 0;
+            //return size;
+        }
+        else {
+            // najdu cilove misto pro ulozeni
+
+        }
+
+        i++;
     }
 }
 
