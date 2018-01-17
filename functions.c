@@ -373,3 +373,193 @@ char* substring(const char* str, size_t begin, size_t len)
 
   return strndup(str + begin, len);
 }
+
+void func_incp(char *cmd){
+    int i, j, k, size, ret, potreba_clusteru, adresa;
+    char * result;
+    FILE *f;
+    char pom[100], buffer[CLUSTER_SIZE];
+
+    i = 0;
+    size = 0;
+
+    while((cmd = strtok(NULL, " ")) != NULL){
+        if (i == 0){
+            // zpracovavam prvni argument - najdu v PC
+            /*
+            strncpy(pom, cmd, strlen(cmd));
+            f = fopen(pom, "r");
+            if (f == NULL){
+                printf("FILE %s NOT FOUND\n", pom);
+                return; // -1 means file opening fail
+            }
+*/
+            fseek(f, 0, SEEK_END);
+            size = ftell(f);
+            printf("size=%d\n", size);
+
+            fseek(f, 0, SEEK_SET);
+            result = (char *)malloc(size+1);
+            if (size != fread(result, sizeof(char), size, f))
+            {
+                printf("OPENING FILE ERROR\n");
+                free((void *) result);
+                return; // -2 means file reading fail
+            }
+            fclose(f);
+
+            // hledam volne clustery v bitmape
+            potreba_clusteru = size / CLUSTER_SIZE + 1;
+            int volne_clustery[potreba_clusteru];
+
+            printf("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
+
+            k = 0;
+            for (j = 0; j < CLUSTER_COUNT; j++) {
+                if (ntfs_bitmap[j] == 0) {
+                    // volna
+                    volne_clustery[k] = j;
+                    k++;
+                }
+
+                if (k == potreba_clusteru) {
+                    break;
+                }
+            }
+
+            if (k != potreba_clusteru){
+                printf("ERROR - NOT ENOUGH CLUSTERS (%d)\n", k);
+                return;
+            }
+
+printf("OK\n");
+
+            FILE *fw;
+            fw = fopen(output_file, "r+b");
+            if(fw != NULL){
+                // aktualizuji bitmapu v souboru
+                // + zapnim virtualni clustery (nactene ze souboru)
+                for (j = 0; j < k; j++){
+                    ntfs_bitmap[volne_clustery[j]] = 1;
+                }
+                fseek(fw, bootr->bitmap_start_address, SEEK_SET);
+                fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
+
+                // reseni spojitosti a nespojitosti bitmapy
+                int spoj_len = 1;
+                int starter = 0;
+
+                for(j = 0; j < potreba_clusteru; j++){
+                    printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
+                    if(volne_clustery[j+1] == volne_clustery[j]+1){
+                        spoj_len = spoj_len + 1;
+
+                        if (spoj_len == 2){
+                            starter = volne_clustery[j];
+                            printf("\t starter = %d\n", starter);
+                        }
+                    }
+                    else{
+                        if(spoj_len != 1){
+                            printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
+                        }
+
+                        spoj_len = 1;
+                        starter = 0;
+                    }
+                }
+
+                if(spoj_len != 1){
+                    printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
+                }
+
+                // prace s mft
+    if (bitmap_free_index != -1){
+        new_cluster_start = bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE;
+
+        // ziskam prvni volny MFT LIST a zjistim volne UID, ktere nasledne pridelim nove slozce
+        for (i = 0; i < CLUSTER_COUNT; i++){
+            if (mft_seznam[i] == NULL){
+                // tento prvek je volny, vyuziji jej tedy
+                mpom = malloc(sizeof(struct mft_item));
+
+                mftf.fragment_start_address = new_cluster_start; // start adresa ve VFS
+                mftf.fragment_count = 1;
+
+                mfti.uid = bitmap_free_index;
+                mfti.isDirectory = 1;
+                mfti.item_order = 1;
+                mfti.item_order_total = 1;
+                strcpy(mfti.item_name, pomocnik);
+                mfti.item_size = 0; // zatim tam nic neni, takze nula
+                mfti.fragments[0] = mftf;
+
+                // prvek mam pripraveny
+                // zaktualizuji si globalni pole a bitmapu
+                ntfs_bitmap[bitmap_free_index] = 1;
+                pridej_prvek(bitmap_free_index, mfti);
+
+                // zapisu do souboru
+                fw = fopen(output_file, "r+b");
+                if(fw != NULL){
+                    // mfti
+                    mpom = &mfti;
+                    printf("-- MFTI chci zapsat na adresu %lu\n", sizeof(struct boot_record) + bitmap_free_index * sizeof(struct mft_item));
+                    fseek(fw, sizeof(struct boot_record) + (bitmap_free_index) * sizeof(struct mft_item), SEEK_SET);
+                    fwrite(mpom, sizeof(struct mft_item), 1, fw);
+
+                    // bitmap
+                    printf("-- Bitmapu chci zapisovat na adresu %u\n", bootr->bitmap_start_address);
+                    fseek(fw, bootr->bitmap_start_address, SEEK_SET);
+                    fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
+
+                    // odkaz na slozku do nadrazeneho adresare
+                    printf("-- Zapisuji odkaz na adresar %d do adresare %d\n", bitmap_free_index, pwd);
+                    sprintf(pomocnik2, "%d", bitmap_free_index);
+                    append_obsah_souboru(pwd, pomocnik2);
+
+                    fclose(fw);
+                }
+
+                //free((void *) mfti);
+                break;
+            }
+        }
+    }
+
+                // aktualizuji virtualni mft
+
+                // aktualizuji mft v souboru
+
+                // zapisu obsah clusteru do souboru
+                // v result muzu mit třeba 5000 znaku, tj rozdelovat po CLUSTER_SIZE
+                for (j = 0; j < potreba_clusteru; j++){
+                    adresa = bootr->data_start_address + volne_clustery[j] * CLUSTER_SIZE;
+                    printf("-- Zapisuji na adresu %d\n", adresa);
+
+                    strncpy(buffer, result + (j * CLUSTER_SIZE), CLUSTER_SIZE);
+                    buffer[CLUSTER_SIZE] = '\0';
+
+                    set_cluster_content(adresa, buffer);
+                }
+
+                fclose(fw);
+            }
+
+            printf("%s\n", result);
+        }
+        else {
+            // najdu cilove misto pro ulozeni
+            printf("Cesta k parsovani je: --%s--\n", cmd);
+
+            ret = parsuj_pathu(cmd);
+        }
+
+        i++;
+    }
+
+    if (i != 2){
+        printf("TOO FEW ARGS\n");
+        return;
+    }
+}

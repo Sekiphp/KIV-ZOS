@@ -147,129 +147,30 @@ void func_info(char *cmd){
 
 
 void func_incp(char *cmd){
-    int i, j, k, size, ret, potreba_clusteru, adresa;
-    char * result;
+    int i = 0;
     FILE *f;
-    char pom[100], buffer[CLUSTER_SIZE];
+    char pc_file[100];
 
-    i = 0;
-    size = 0;
-
+    // postupne cteni argumentu
     while((cmd = strtok(NULL, " ")) != NULL){
         if (i == 0){
-            // zpracovavam prvni argument - najdu v PC
-            strncpy(pom, cmd, strlen(cmd));
-            f = fopen(pom, "r");
+            // soubor k presunu z pocitace
+            // overim jeho existenci
+            strncpy(pc_file, cmd, strlen(cmd));
+            f = fopen(pc_file, "r");
             if (f == NULL){
-                printf("FILE %s NOT FOUND\n", pom);
-                return; // -1 means file opening fail
-            }
-
-            fseek(f, 0, SEEK_END);
-            size = ftell(f);
-            printf("size=%d\n", size);
-
-            fseek(f, 0, SEEK_SET);
-            result = (char *)malloc(size+1);
-            if (size != fread(result, sizeof(char), size, f))
-            {
-                printf("OPENING FILE ERROR\n");
-                free((void *) result);
-                return; // -2 means file reading fail
-            }
-            fclose(f);
-
-            // hledam volne clustery v bitmape
-            potreba_clusteru = size / CLUSTER_SIZE + 1;
-            int volne_clustery[potreba_clusteru];
-
-            printf("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
-
-            k = 0;
-            for (j = 0; j < CLUSTER_COUNT; j++) {
-                if (ntfs_bitmap[j] == 0) {
-                    // volna
-                    volne_clustery[k] = j;
-                    k++;
-                }
-
-                if (k == potreba_clusteru) {
-                    break;
-                }
-            }
-
-            if (k != potreba_clusteru){
-                printf("ERROR - NOT ENOUGH CLUSTERS (%d)\n", k);
+                printf("FILE %s NOT FOUND\n", pc_file);
                 return;
             }
-
-printf("OK\n");
-
-            FILE *fw;
-            fw = fopen(output_file, "r+b");
-            if(fw != NULL){
-                // aktualizuji bitmapu v souboru
-                // + zapnim virtualni clustery (nactene ze souboru)
-                for (j = 0; j < k; j++){
-                    ntfs_bitmap[volne_clustery[j]] = 1;
-                }
-                fseek(fw, bootr->bitmap_start_address, SEEK_SET);
-                fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
-
-                // reseni spojitosti a nespojitosti bitmapy
-                int spoj_len = 1;
-                int starter = 0;
-
-                for(j = 0; j < potreba_clusteru; j++){
-                    printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
-                    if(volne_clustery[j+1] == volne_clustery[j]+1){
-                        spoj_len = spoj_len + 1;
-
-                        if (spoj_len == 2){
-                            starter = volne_clustery[j];
-                            printf("\t starter = %d\n", starter);
-                        }
-                    }
-                    else{
-                        if(spoj_len != 1){
-                            printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
-                        }
-
-                        spoj_len = 1;
-                        starter = 0;
-                    }
-                }
-
-                if(spoj_len != 1){
-                    printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
-                }
-
-                // aktualizuji virtualni mft
-
-                // aktualizuji mft v souboru
-
-                // zapisu obsah clusteru do souboru
-                // v result muzu mit třeba 5000 znaku, tj rozdelovat po CLUSTER_SIZE
-                for (j = 0; j < potreba_clusteru; j++){
-                    adresa = bootr->data_start_address + volne_clustery[j] * CLUSTER_SIZE;
-                    printf("-- Zapisuji na adresu %d\n", adresa);
-
-                    strncpy(buffer, result + (j * CLUSTER_SIZE), CLUSTER_SIZE);
-                    buffer[CLUSTER_SIZE] = '\0';
-
-                    set_cluster_content(adresa, buffer);
-                }
-
-                fclose(fw);
-            }
-
-            printf("%s\n", result);
-        }
         else {
             // najdu cilove misto pro ulozeni
             printf("Cesta k parsovani je: --%s--\n", cmd);
 
             ret = parsuj_pathu(cmd);
+            if (ret == -1){
+                printf("PATH %s NOT FOUND\n", cmd);
+                return;
+            }
         }
 
         i++;
@@ -279,6 +180,9 @@ printf("OK\n");
         printf("TOO FEW ARGS\n");
         return;
     }
+
+    // tady uz mohu bezpecne zpracovavat
+    printf("-- Vyparsovana cesta: %d\n", ret);
 }
 
 
