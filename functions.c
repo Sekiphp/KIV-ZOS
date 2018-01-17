@@ -7,9 +7,10 @@
 #include "shell_functions.h"
 #include "boot_record.h"
 #include "functions.h"
+#include "parametr.h"
 
 extern int pwd;
-extern char output_file;
+extern char output_file[100];
 
 /* Ziska obsah vsech danych clusteru, ktere nalezi stejnemu fragmentu - Jeden mfti muze mit vsak mnoho fragmentu */
 char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){

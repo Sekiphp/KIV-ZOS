@@ -9,7 +9,7 @@
 #include "functions.h"
 
 extern int pwd;
-extern char output_file;
+extern char output_file[100];
 
 void func_cp(char *cmd){
     while((cmd = strtok(NULL, " ")) != NULL){
