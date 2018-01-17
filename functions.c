@@ -202,7 +202,7 @@ int parsuj_pathu(char *patha){
     else {
         start_dir = pwd;
     }
-    printf("START DIR = %d\n", start_dir);
+    //printf("START DIR = %d\n", start_dir);
 
     if (strchr(patha, '/') != NULL){
         // zde parsuji cestu zacinajici lomenem
@@ -211,14 +211,14 @@ int parsuj_pathu(char *patha){
         if (p_c != NULL){
             uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
-            printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+            //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
             if (uid_pom == -1) return -1;
             start_dir = uid_pom; // jdu o slozku niz
         }
         while((p_c = strtok(NULL, "/")) != NULL){
             uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
-            printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+            //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
             if (uid_pom == -1) return -1;
             start_dir = uid_pom; // jdu o slozku niz
         }
@@ -226,32 +226,32 @@ int parsuj_pathu(char *patha){
     else {
         // chci vypsat obsah aktualniho adresare
         strncpy(buffer, get_mft_item_content(pwd), 1024);
-        printf("obsah bufferu je: %s\n", buffer);
+        // printf("obsah bufferu je: %s\n", buffer);
 
         printf("Napoveda: + slozka, - soubor\n");
 
         // iteruji pro kazdou polozku z adresare a hledam jeji nazev
         p_c = strtok(buffer, "\n");
         if (p_c != NULL){
-            printf("atoi(%s)=%d\n", p_c, atoi(p_c));
-            mfti = mft_seznam[atoi(p_c)].item;
+            //printf("atoi(%s)=%d\n", p_c, atoi(p_c));
+            mfti = mft_seznam[atoi(p_c)]->item;
 
-            if (mfti->isDirectory == 1){
-                printf("+ %s\n", mfti->item_name);
+            if (mfti.isDirectory == 1){
+                printf("+ %s\n", mfti.item_name);
             }
             else{
-                printf("- %s\n", mfti->item_name);
+                printf("- %s\n", mfti.item_name);
             }
         }
         while((p_c = strtok(NULL, "\n")) != NULL){
-            printf("atoi(%s)=%d\n", p_c, atoi(p_c));
-            mfti = mft_seznam[atoi(p_c)].item;
+            //printf("atoi(%s)=%d\n", p_c, atoi(p_c));
+            mfti = mft_seznam[atoi(p_c)]->item;
 
-            if (mfti->isDirectory == 1){
-                printf("+ %s\n", mfti->item_name);
+            if (mfti.isDirectory == 1){
+                printf("+ %s\n", mfti.item_name);
             }
             else{
-                printf("- %s\n", mfti->item_name);
+                printf("- %s\n", mfti.item_name);
             }
         }
     }
