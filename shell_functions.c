@@ -43,17 +43,19 @@ void func_mkdir(char *cmd){
     int ret, max;
     char pom[12];
 
-printf("%s\n", cmd);
-    // tady mam pozadovanou celou cestu
-/*
+    // zpracujeme si zadanou cestu
     cmd = strtok(NULL, " ");
     if (cmd == NULL){
         printf("PATH NOT FOUND\n");
         return;
     }
-*/
+    else {
+        printf("Cesta k parsovani je: --%s--\n", cmd);
+
+        ret = parsuj_pathu(cmd);
+    }
+
     // zkusim si tu cestu projit
-    ret = parsuj_pathu(cmd);
     if (ret == -1){
         printf("PATH NOT FOUND\n");
         return;
@@ -154,6 +156,7 @@ void func_pwd(char *cmd){
             printf("Jsi ve slozce %d\n", pwd);
         }
     }
+    printf("PWD = %d\n", pwd);
 }
 
 
