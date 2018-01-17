@@ -203,6 +203,8 @@ void func_incp(char *cmd){
                 return;
             }
 
+printf("OK\n");
+
             FILE *fw;
             fw = fopen(output_file, "r+b");
             if(fw != NULL){
@@ -218,13 +220,13 @@ void func_incp(char *cmd){
                 int spoj_len = 1;
                 int starter = 0;
 
-                for(int i = 0; i < 5; i++){
-                    printf("%d: spojity: %d ?= %d\n", i, volne_clustery[i+1], volne_clustery[i]+1);
-                    if(volne_clustery[i+1] == volne_clustery[i]+1){
+                for(j = 0; j < potreba_clusteru; j++){
+                    printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
+                    if(volne_clustery[j+1] == volne_clustery[j]+1){
                         spoj_len = spoj_len + 1;
 
                         if (spoj_len == 2){
-                            starter = volne_clustery[i];
+                            starter = volne_clustery[j];
                             printf("\t starter = %d\n", starter);
                         }
                     }
