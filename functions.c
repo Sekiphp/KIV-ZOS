@@ -30,6 +30,21 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
     return ret;
 }
 
+int set_cluster_content(int32_t cluster_start_addr, char *obsah){
+    FILE *f;
+
+    f = fopen(output_file, "r+b");
+    if (f != NULL) {
+        fseek(f, cluster_start_addr, SEEK_SET);
+        fwrite(obsah, 1, CLUSTER_SIZE, f);
+
+        fclose(f);
+        return 1;
+    }
+
+    return -1;
+}
+
 int append_obsah_souboru(int uid, char *append){
     int i, j, adresa;
     char *ret;
@@ -348,4 +363,13 @@ void ls_printer(char *p_c) {
         printf("-");
     }
     printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
+}
+
+/* https://www.linuxquestions.org/questions/programming-9/extract-substring-from-string-in-c-432620/ */
+char* substring(const char* str, size_t begin, size_t len)
+{
+  if (str == 0 || strlen(str) == 0 || strlen(str) < begin || strlen(str) < (begin+len))
+    return 0;
+
+  return strndup(str + begin, len);
 }

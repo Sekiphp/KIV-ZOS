@@ -147,10 +147,10 @@ void func_info(char *cmd){
 
 
 void func_incp(char *cmd){
-    int i, j, k, size, ret, potreba_clusteru;
+    int i, j, k, size, ret, potreba_clusteru, adresa;
     char * result;
     FILE *f;
-    char pom[100];
+    char pom[100], buffer[CLUSTER_SIZE];
 
     i = 0;
     size = 0;
@@ -214,11 +214,44 @@ void func_incp(char *cmd){
                 fseek(fw, bootr->bitmap_start_address, SEEK_SET);
                 fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
+                // reseni spojitosti a nespojitosti bitmapy
+                int spoj_len = 1;
+                int starter = 0;
+
+                for(int i = 0; i < 5; i++){
+                    printf("%d: spojity: %d ?= %d\n", i, volne_clustery[i+1], volne_clustery[i]+1);
+                    if(volne_clustery[i+1] == volne_clustery[i]+1){
+                        spoj_len = spoj_len + 1;
+
+                        if (spoj_len == 2){
+                            starter = volne_clustery[i];
+                            printf("\t starter = %d\n", starter);
+                        }
+                    }
+                    else{
+                        if(spoj_len != 1){
+                            printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
+                        }
+
+                        spoj_len = 1;
+                        starter = 0;
+                    }
+                }
+
+                if(spoj_len != 1){
+                    printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
+                }
+
                 // aktualizuji virtualni mft
 
                 // aktualizuji mft v souboru
 
                 // zapisu obsah clusteru do souboru
+                // v result muzu mit třeba 5000 znaku, tj rozdelovat po CLUSTER_SIZE
+                for (j = 0; j < potreba_clusteru; j++){
+                    //strncpy(buffer, result CLUSTER_SIZE);
+                    //set_cluster_content(, substring(result, j * , CLUSTER_SIZE));
+                }
 
                 fclose(fw);
             }
