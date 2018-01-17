@@ -101,6 +101,8 @@ void func_ls(char *cmd){
         return;
     }
 
+    ls(ret);
+
     //printf("ls ret = %d\n", ret);
 }
 

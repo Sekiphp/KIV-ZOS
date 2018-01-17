@@ -8,5 +8,7 @@
     int zaloz_novou_slozku(int pwd, char *name);
     int get_uid_by_name(char *dir_name, int uid_pwd);
     int append_obsah_souboru(int uid, char *append);
+    void ls_printer(char *p_c);
+    void ls(int pwd)
 
 #endif

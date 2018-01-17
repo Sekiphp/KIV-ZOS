@@ -189,8 +189,6 @@ int parsuj_pathu(char *patha){
     char *p_c;
     int start_dir, uid_pom;
     char path[100];
-    char buffer[1024];
-    struct mft_item mfti;
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
     strncpy(path, patha, 100); // bez \0
@@ -224,36 +222,7 @@ int parsuj_pathu(char *patha){
         }
     }
     else {
-        // chci vypsat obsah aktualniho adresare
-        strncpy(buffer, get_mft_item_content(pwd), 1024);
-        // printf("obsah bufferu je: %s\n", buffer);
 
-        printf("Napoveda: + slozka, - soubor\n");
-
-        // iteruji pro kazdou polozku z adresare a hledam jeji nazev
-        p_c = strtok(buffer, "\n");
-        if (p_c != NULL){
-            //printf("atoi(%s)=%d\n", p_c, atoi(p_c));
-            mfti = mft_seznam[atoi(p_c)]->item;
-
-            if (mfti.isDirectory == 1){
-                printf("+ %s\n", mfti.item_name);
-            }
-            else{
-                printf("- %s\n", mfti.item_name);
-            }
-        }
-        while((p_c = strtok(NULL, "\n")) != NULL){
-            //printf("atoi(%s)=%d\n", p_c, atoi(p_c));
-            mfti = mft_seznam[atoi(p_c)]->item;
-
-            if (mfti.isDirectory == 1){
-                printf("+ %s\n", mfti.item_name);
-            }
-            else{
-                printf("- %s\n", mfti.item_name);
-            }
-        }
     }
 
     return start_dir;
@@ -336,4 +305,37 @@ int zaloz_novou_slozku(int pwd, char *name){
     }
 
     return bitmap_free_index;
+}
+
+void ls(int pwd) {
+    char buffer[1024];
+    char *p_c;
+
+    // chci vypsat obsah aktualniho adresare
+    strncpy(buffer, get_mft_item_content(pwd), 1024);
+    // printf("obsah bufferu je: %s\n", buffer);
+
+    printf("Napoveda: + slozka, - soubor\n");
+
+    // iteruji pro kazdou polozku z adresare a hledam jeji nazev
+    p_c = strtok(buffer, "\n");
+    if (p_c != NULL){
+        ls_printer(p_c);
+    }
+    while((p_c = strtok(NULL, "\n")) != NULL){
+        ls_printer(p_c);
+    }
+}
+
+void ls_printer(char *p_c) {
+    struct mft_item mfti;
+
+    mfti = mft_seznam[atoi(p_c)]->item;
+
+    if (mfti.isDirectory == 1){
+        printf("+ %s\n", mfti.item_name);
+    }
+    else{
+        printf("- %s\n", mfti.item_name);
+    }
 }
