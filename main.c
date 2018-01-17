@@ -12,6 +12,7 @@
 #include "mft.h"
 
 extern int ntfs_bitmap[]; // v loader.c
+char output_file[100];
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
@@ -30,6 +31,7 @@ int main(int argc, char *argv[]){
     // priprava sdilenych atributu pro vsechny vlakna
     pamet.mutex = &mutex;
     strcpy(pamet.soubor, argv[1]);
+    strcpy(output_file, argv[1]);
 
     // mft seznam na null
     for(i = 0; i < CLUSTER_COUNT; i++){

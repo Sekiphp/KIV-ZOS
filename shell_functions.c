@@ -9,6 +9,7 @@
 #include "functions.h"
 
 extern int pwd;
+extern char output_file;
 
 void func_cp(char *cmd){
     while((cmd = strtok(NULL, " ")) != NULL){
@@ -203,7 +204,7 @@ void func_incp(char *cmd){
             }
 
             FILE *fw;
-            fw = fopen("ntfs.dat", "r+b");
+            fw = fopen(output_file, "r+b");
             if(fw != NULL){
                 // aktualizuji bitmapu v souboru
                 // + zapnim virtualni clustery (nactene ze souboru)
