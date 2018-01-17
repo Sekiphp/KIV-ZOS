@@ -189,17 +189,22 @@ void func_incp(char *cmd){
                 return; // -2 means file reading fail
             }
             fclose(f);
+
+            printf("%s\n", result);
         }
         else {
             // najdu cilove misto pro ulozeni
+            printf("Cesta k parsovani je: --%s--\n", cmd);
 
+            ret = parsuj_pathu(cmd);
         }
 
         i++;
     }
 
-    if (i < 2){
+    if (i != 2){
         printf("TOO FEW ARGS\n");
+        return;
     }
 }
 
