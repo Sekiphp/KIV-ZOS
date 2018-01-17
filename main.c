@@ -33,9 +33,9 @@ int main(int argc, char *argv[]){
 
     // mft seznam na null
     for(i = 0; i < CLUSTER_COUNT; i++){
-       printf("mft seznam NULL\n");
        mft_seznam[i] = NULL;
     }
+    printf("mft seznam NULL\n");
 
     // checker - pokud soubor neexistuje, tak ho vytvorim
     loader(argv[1]);

@@ -27,7 +27,7 @@ void *shell(void *arg){
             fread(boot, sizeof(struct boot_record), 1, fr);
             fclose(fr);
         }
-    	printf("boot shell: %s\n", boot->signature);
+    	//printf("boot shell: %s\n", boot->signature);
     pthread_mutex_unlock(param->mutex);
 
     /* infinite loop - cekam na prikazy */
