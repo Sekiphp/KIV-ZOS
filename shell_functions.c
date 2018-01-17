@@ -255,6 +255,8 @@ printf("OK\n");
                     strncpy(buffer, result + (j * CLUSTER_SIZE), CLUSTER_SIZE);
                     buffer[CLUSTER_SIZE] = '\0';
 
+                    printf('-- Zapisuji na adresu %d\n', adresa);
+
                     set_cluster_content(adresa, buffer);
                 }
 
