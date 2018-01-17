@@ -315,7 +315,7 @@ void ls(int uid) {
     strncpy(buffer, get_mft_item_content(uid), 1024);
     // printf("obsah bufferu je: %s\n", buffer);
 
-    printf("Napoveda: + slozka, - soubor\n");
+    printf("\tNapoveda: + slozka, - soubor\n");
 
     // iteruji pro kazdou polozku z adresare a hledam jeji nazev
     p_c = strtok(buffer, "\n");
@@ -327,15 +327,18 @@ void ls(int uid) {
     }
 }
 
+/* Pro konkretni UID vypise info o souboru (prikaz ls) */
 void ls_printer(char *p_c) {
     struct mft_item mfti;
 
     mfti = mft_seznam[atoi(p_c)]->item;
 
+    printf("\t");
     if (mfti.isDirectory == 1){
-        printf("+ %s\n", mfti.item_name);
+        printf("+");
     }
     else{
-        printf("- %s\n", mfti.item_name);
+        printf("-");
     }
+    printf("%-15s %d\n", mfti.item_name, mfti.item_size);
 }
