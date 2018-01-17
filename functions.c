@@ -307,6 +307,7 @@ int zaloz_novou_slozku(int pwd, char *name){
     return bitmap_free_index;
 }
 
+/* Ziskani informaci o souborech ve slozce */
 void ls(int uid) {
     char buffer[1024];
     char *p_c;

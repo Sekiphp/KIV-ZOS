@@ -104,7 +104,7 @@ void loader(char filename[]){
         printf("\t\t\tAdresa pocatku datoveho bloku: %d\n", bootr->data_start_address);
             // tady data cist nebudu, v tomto souboru zjistuji jen strukturu
 
-        //free((void *) mft_table);
+        free((void *) mff);
     	fclose(fr);
     }
 
@@ -194,12 +194,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
 
         /* Tady bychom meli zapsat obsah ROOT_DIRU */
         /* Jelikoz v nem ale pri prvnim spusteni nic neni, tak nic nezapisujeme :) */
-/*
-        fseek(fw, data_start, SEEK_SET);
-        char neco[CLUSTER_SIZE];
-        strcpy(neco, "5\n10\n888");
-        fwrite(neco, 1, CLUSTER_SIZE, fw);
-*/
+
         fclose(fw);
     }
 }

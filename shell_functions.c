@@ -160,7 +160,7 @@ void func_info(char *cmd){
 
 
 void func_incp(char *cmd){
-    int i, size, ret;
+    int i, j, k, size, ret, potreba_clusteru;
     char * result;
     FILE *f;
     char pom[100];
@@ -191,6 +191,44 @@ void func_incp(char *cmd){
                 return; // -2 means file reading fail
             }
             fclose(f);
+
+            // hledam volne clustery v bitmape
+            potreba_clusteru = (int) (size / CLUSTER_SIZE);
+            int volne_clustery[potreba_clusteru];
+
+            k = 0;
+            for (j = 0; j < CLUSTER_COUNT; j++) {
+                if (ntfs_bitmap[j] == 0) {
+                    // volna
+                    volne_clustery[k] = j;
+                    k++;
+                }
+            }
+
+            if (k != potreba_clusteru){
+                printf("ERROR - NOT ENOUGH CLUSTERS\n");
+                return;
+            }
+
+            FILE *fw;
+            fw = fopen("ntfs.dat", "r+b");
+            if(fw != NULL){
+                // aktualizuji bitmapu v souboru
+                // + zapnim virtualni clustery (nactene ze souboru)
+                for (j = 0; j < k; j++){
+                    ntfs_bitmap[volne_clustery[j]] = 1;
+                }
+                fseek(fw, bootr->bitmap_start_address, SEEK_SET);
+                fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
+
+                // aktualizuji virtualni mft
+
+                // aktualizuji mft v souboru
+
+                // zapisu obsah clusteru do souboru
+
+                fclose(fw);
+            }
 
             printf("%s\n", result);
         }
