@@ -40,7 +40,7 @@ void func_rm(char *cmd){
 
 /* validni: mkdir neco, mkdir /var/www/neco */
 void func_mkdir(char *cmd){
-    int ret, max;
+    int ret;
 
     // zpracujeme si zadanou cestu
     cmd = strtok(NULL, " ");

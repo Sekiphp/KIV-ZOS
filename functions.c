@@ -30,7 +30,8 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
 
 int append_obsah_souboru(int uid){
     int i, j, k;
-    char *ret = malloc(CLUSTER_SIZE);
+    char *ret;
+    ret = (char *) malloc(CLUSTER_SIZE);
     MFT_LIST* mft_item_chceme;
     struct mft_fragment mftf;
     char *soucasny_obsah = get_mft_item_content(uid);
@@ -228,12 +229,12 @@ int zaloz_novou_slozku(int pwd, char *name){
                 if(fw != NULL){
                     // mfti
                     mpom = &mfti;
-                    printf("-- MFTI chci zapsat na adresu %d\n", sizeof(struct boot_record) + bitmap_free_index * sizeof(struct mft_item));
+                    printf("-- MFTI chci zapsat na adresu %lu\n", sizeof(struct boot_record) + bitmap_free_index * sizeof(struct mft_item));
                     fseek(fw, sizeof(struct boot_record) + (bitmap_free_index) * sizeof(struct mft_item), SEEK_SET);
                     fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
                     // bitmap
-                    printf("-- Bitmapu chci zapisovat na adresu %d\n", bootr->bitmap_start_address);
+                    printf("-- Bitmapu chci zapisovat na adresu %lu\n", bootr->bitmap_start_address);
                     fseek(fw, bootr->bitmap_start_address, SEEK_SET);
                     fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
