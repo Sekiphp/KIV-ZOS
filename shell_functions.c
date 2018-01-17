@@ -179,7 +179,7 @@ void func_incp(char *cmd){
             fclose(f);
 
             // hledam volne clustery v bitmape
-            potreba_clusteru = (int) (size / CLUSTER_SIZE);
+            potreba_clusteru = size / CLUSTER_SIZE + 1;
             int volne_clustery[potreba_clusteru];
 
             printf("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
@@ -191,10 +191,14 @@ void func_incp(char *cmd){
                     volne_clustery[k] = j;
                     k++;
                 }
+
+                if (k == potreba_clusteru) {
+                    break;
+                }
             }
 
             if (k != potreba_clusteru){
-                printf("ERROR - NOT ENOUGH CLUSTERS\n");
+                printf("ERROR - NOT ENOUGH CLUSTERS (%d)\n", k);
                 return;
             }
 
