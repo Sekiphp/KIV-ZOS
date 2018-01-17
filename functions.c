@@ -190,7 +190,7 @@ int parsuj_pathu(char *patha){
     int start_dir, uid_pom;
     char path[100];
     char buffer[1024];
-    MFT_LIST* mftsez;
+    struct mft_item mfti;
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
     strncpy(path, patha, 100); // bez \0
@@ -234,24 +234,24 @@ int parsuj_pathu(char *patha){
         p_c = strtok(buffer, "\n");
         if (p_c != NULL){
             printf("atoi(%s)=%d\n", p_c, atoi(p_c));
-            mftsez = mft_seznam[atoi(p_c)].item;
+            mfti = mft_seznam[atoi(p_c)].item;
 
-            if (mftsez->isDirectory == 1){
-                printf("+ %s\n", mftsez->item_name);
+            if (mfti->isDirectory == 1){
+                printf("+ %s\n", mfti->item_name);
             }
             else{
-                printf("- %s\n", mftsez->item_name);
+                printf("- %s\n", mfti->item_name);
             }
         }
         while((p_c = strtok(NULL, "\n")) != NULL){
             printf("atoi(%s)=%d\n", p_c, atoi(p_c));
-            mftsez = mft_seznam[atoi(p_c)].item;
+            mfti = mft_seznam[atoi(p_c)].item;
 
-            if (mftsez->isDirectory == 1){
-                printf("+ %s\n", mftsez->item_name);
+            if (mfti->isDirectory == 1){
+                printf("+ %s\n", mfti->item_name);
             }
             else{
-                printf("- %s\n", mftsez->item_name);
+                printf("- %s\n", mfti->item_name);
             }
         }
     }
