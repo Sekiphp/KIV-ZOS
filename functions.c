@@ -6,6 +6,7 @@
 #include "mft.h"
 #include "shell_functions.h"
 #include "boot_record.h"
+#include "functions.h"
 
 extern int pwd;
 
@@ -28,15 +29,29 @@ char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
     return ret;
 }
 
-int append_obsah_souboru(int uid){
-    int i, j, k;
+int append_obsah_souboru(int uid, char *append){
+    int i, adresa;
     char *ret;
     ret = (char *) malloc(CLUSTER_SIZE);
     MFT_LIST* mft_item_chceme;
     struct mft_fragment mftf;
     char *soucasny_obsah = get_mft_item_content(uid);
+    FILE *fw;
 
-    printf("Soucasny obsh souboru je: %s --- \n", soucasny_obsah);
+    printf("Soucasny obsh souboru je: %s a ma delku %d --- \n", soucasny_obsah, strlen(soucasny_obsah));
+    printf("Chci appendnout: %s\n", append);
+
+    i = strlen(soucasny_obsah);
+    fw = fopen("ntfs.dat", "r+b");
+    if (fw != NULL) {
+        // musim si vypocitat adresu, kam budu zapisovat
+        adresa = bootr->data_start_address;
+        fseek(fw, fragment_start_addr, SEEK_SET);
+        
+
+        fclose(fw);
+    }
+
 
     return -1;
 }
@@ -183,7 +198,7 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item mfti;
     struct mft_fragment mftf;
     struct mft_item *mpom;
-    char pomocnik[20];
+    char pomocnik[20], pomocnik2[5];
 
     strncpy(pomocnik, name, strlen(name)-1);
     printf("-- NAME OF NEW DIR=%s\n", pomocnik);
@@ -234,13 +249,14 @@ int zaloz_novou_slozku(int pwd, char *name){
                     fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
                     // bitmap
-                    printf("-- Bitmapu chci zapisovat na adresu %lu\n", bootr->bitmap_start_address);
+                    printf("-- Bitmapu chci zapisovat na adresu %u\n", bootr->bitmap_start_address);
                     fseek(fw, bootr->bitmap_start_address, SEEK_SET);
                     fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
                     // odkaz na slozku do nadrazeneho adresare
                     printf("-- Zapisuji odkaz na adresar %d do adresare %d\n", bitmap_free_index, pwd);
-                    append_obsah_souboru(pwd);
+                    sprintf(pomocnik2, "%d", bitmap_free_index);
+                    append_obsah_souboru(pwd, pomocnik2);
 
                     fclose(fw);
                 }
