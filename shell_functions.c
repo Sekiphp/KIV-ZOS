@@ -158,7 +158,7 @@ void func_info(char *cmd){
 
 
 void func_incp(char *cmd){
-    int i, size;
+    int i, size, ret;
     char * result;
     FILE *f;
     char pom[100];
