@@ -50,7 +50,7 @@ char* get_mft_item_content(int uid){
     if (mft_seznam[uid] != NULL){
         mft_item_chceme = mft_seznam[uid];
 
-        printf("je tu alespon jeden item co stoji za zminku %d\n", mft_item_chceme->ij);
+        //printf("je tu alespon jeden item co stoji za zminku %d\n", mft_item_chceme->ij);
 
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
@@ -182,9 +182,11 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item mfti;
     struct mft_fragment mftf;
     struct mft_item *mpom;
-char pomocnik[100];
-strncpy(pomocnik, name, sizeof(name)-1);
-printf("NAME=%s\n", pomocnik);
+    char pomocnik[100];
+
+    strncpy(pomocnik, name, 100);
+    printf("-- NAME OF NEW DIR=%s\n", pomocnik);
+
     // najdu volnou bitmapu
     bitmap_free_index = -1;
     for (i = 0; i < CLUSTER_COUNT; i++){
