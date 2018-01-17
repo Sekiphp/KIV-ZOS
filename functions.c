@@ -346,5 +346,5 @@ void ls_printer(char *p_c) {
     else{
         printf("-");
     }
-    printf(" %-15s %-6db %d\n", mfti.item_name, mfti.item_size, mfti.uid);
+    printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
 }
