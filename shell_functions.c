@@ -41,7 +41,6 @@ void func_rm(char *cmd){
 /* validni: mkdir neco, mkdir /var/www/neco */
 void func_mkdir(char *cmd){
     int ret, max;
-    char pom[12];
 
     // zpracujeme si zadanou cestu
     cmd = strtok(NULL, " ");
@@ -64,14 +63,7 @@ void func_mkdir(char *cmd){
         // --- zde vytvorime slozku ---
         // dle bitmapy najdu prvni volny cluster a vypoctu si jeho adresu, fragment_count zvolim na 1
         // do prvniho fragmentu polozky mft_seznam[ret]->item zapisu nakonec UID noveho adresare
-        while((cmd = strtok(NULL, " ")) != NULL){
-            max = sizeof(cmd) - 1;
-            printf("Ostatni: %s, %d\n", cmd, max);
-
-            strncpy(pom, cmd, max);
-        }
-
-        zaloz_novou_slozku(ret, pom);
+        zaloz_novou_slozku(ret, cmd);
     }
 
     printf("ls ret = %d\n", ret);
@@ -92,15 +84,6 @@ void func_rmdir(char *cmd){
 void func_ls(char *cmd){
     int ret;
 
-    // tady mam pozadovanou celou cestu
-    /*
-    cmd = strtok(NULL, " ");
-    if (cmd == NULL){
-        printf("PATH NOT FOUND\n");
-        return;
-    }
-    */
-
     // zkusim si tu cestu projit
     cmd = strtok(NULL, " ");
     if (cmd == NULL){
@@ -112,11 +95,13 @@ void func_ls(char *cmd){
         ret = parsuj_pathu(cmd);
     }
 
+    // cesta neexistuje, nelze splnit pozadavek
     if (ret == -1){
         printf("PATH NOT FOUND\n");
         return;
     }
     else {
+        // vypis obsahu adresare (+ jsou slozky, - soubory)
 
     }
 
