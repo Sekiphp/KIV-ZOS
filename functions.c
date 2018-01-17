@@ -190,6 +190,7 @@ int parsuj_pathu(char *patha){
     int start_dir, uid_pom;
     char path[100];
     char buffer[1024];
+    MFT_SEZNAM mftsez;
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
     strncpy(path, patha, 100); // bez \0
@@ -226,6 +227,33 @@ int parsuj_pathu(char *patha){
         // chci vypsat obsah aktualniho adresare
         strncpy(buffer, get_mft_item_content(pwd), 1024);
         printf("obsah bufferu je: %s\n", buffer);
+
+        printf("Napoveda: + slozka, - soubor\n");
+
+        // iteruji pro kazdou polozku z adresare a hledam jeji nazev
+        p_c = strtok(buffer, "\n");
+        if (p_c != NULL){
+            printf("atoi(%s)=%d\n", p_c, atoi(p_c));
+            mftsez = mft_seznam[atoi(p_c)].item;
+
+            if (mftsez->isDirectory == 1){
+                printf("+ %s\n", mftsez->item_name);
+            }
+            else{
+                printf("- %s\n", mftsez->item_name);
+            }
+        }
+        while((p_c = strtok(NULL, "\n")) != NULL){
+            printf("atoi(%s)=%d\n", p_c, atoi(p_c));
+            mftsez = mft_seznam[atoi(p_c)].item;
+
+            if (mftsez->isDirectory == 1){
+                printf("+ %s\n", mftsez->item_name);
+            }
+            else{
+                printf("- %s\n", mftsez->item_name);
+            }
+        }
     }
 
     return start_dir;
