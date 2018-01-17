@@ -161,6 +161,7 @@ void func_incp(char *cmd){
     int i, size;
     char * result;
     FILE *f;
+    char pom[100];
 
     i = 0;
     size = 0;
@@ -168,9 +169,10 @@ void func_incp(char *cmd){
     while((cmd = strtok(NULL, " ")) != NULL){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
-            f = fopen(cmd, "r");
+            strncpy(pom, cmd, strlen(cmd) - 1);
+            f = fopen(pom, "r");
             if (f == NULL){
-                printf("FILE %s NOT FOUND\n", cmd);
+                printf("FILE %s NOT FOUND\n", pom);
                 return; // -1 means file opening fail
             }
 
