@@ -133,6 +133,7 @@ int parsuj_pathu(char *patha){
     char *p_c;
     int start_dir, uid_pom;
     char path[100];
+    char buffer[1024];
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
     strncpy(path, patha, 100); // bez \0
@@ -147,6 +148,7 @@ int parsuj_pathu(char *patha){
     printf("START DIR = %d\n", start_dir);
 
     if (strchr(patha, '/') != NULL){
+        // zde parsuji cestu zacinajici lomenem
         // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
         p_c = strtok(path, "/");
         if (p_c != NULL){
@@ -163,6 +165,11 @@ int parsuj_pathu(char *patha){
             if (uid_pom == -1) return -1;
             start_dir = uid_pom; // jdu o slozku niz
         }
+    }
+    else {
+        // chci vypsat obsah aktualniho adresare
+        strncpy(buffer, get_mft_item_content(pwd), 1024);
+        printf("obsah bufferu je: %s\n", buffer);
     }
 
     return start_dir;
