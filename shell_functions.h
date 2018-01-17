@@ -15,5 +15,7 @@
     void func_incp(char *cmd);
     void func_outcp(char *cmd);
     void func_load(char *cmd);
+    void func_defrag();
+    void func_consist();
 
 #endif

@@ -81,6 +81,12 @@ void *shell(void *arg){
         if(strncmp(p_c, "load", 4) == 0){
             func_load(p_c);
         }
+        if(strncmp(p_c, "defrag", 6) == 0){
+            func_defrag();
+        }
+        if(strncmp(p_c, "consist", 7) == 0){
+            func_consist();
+        }
     }
 
     printf("SHELL ending\n");

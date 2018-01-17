@@ -291,3 +291,11 @@ void func_load(char *cmd){
         printf("Ostatni: %s\n", cmd);
     }
 }
+
+void func_defrag(){
+
+}
+
+void func_consist(){
+
+}
