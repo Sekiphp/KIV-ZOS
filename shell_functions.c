@@ -102,12 +102,14 @@ void func_ls(char *cmd){
     // zkusim si tu cestu projit
     cmd = strtok(NULL, " ");
     if (cmd == NULL){
-        strcpy(cmd, "");
+        ret = parsuj_pathu("");
+    }
+    else {
+        printf("Cesta k parsovani je: --%s--\n", cmd);
+
+        ret = parsuj_pathu(cmd);
     }
 
-    printf("Cesta k parsovani je: --%s--\n", cmd);
-
-    ret = parsuj_pathu(cmd);
     if (ret == -1){
         printf("PATH NOT FOUND\n");
         return;
