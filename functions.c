@@ -307,12 +307,12 @@ int zaloz_novou_slozku(int pwd, char *name){
     return bitmap_free_index;
 }
 
-void ls(int pwd) {
+void ls(int uid) {
     char buffer[1024];
     char *p_c;
 
     // chci vypsat obsah aktualniho adresare
-    strncpy(buffer, get_mft_item_content(pwd), 1024);
+    strncpy(buffer, get_mft_item_content(uid), 1024);
     // printf("obsah bufferu je: %s\n", buffer);
 
     printf("Napoveda: + slozka, - soubor\n");
