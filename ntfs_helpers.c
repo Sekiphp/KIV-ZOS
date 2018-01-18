@@ -117,7 +117,7 @@ char* get_file_content(int file_uid) {
             for (j = 0; j < MFT_FRAG_COUNT; j++){
                 mftf = mfti.fragments[j];
 
-                if (mftf.fragment_start_address != 0) {
+                if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
                     k++;
                     printf("-- Fragment %d ze souboru s UID %d, start=%d, count=%d\n", j, mfti.uid, mftf.fragment_start_address, mftf.fragment_count);
 
@@ -128,9 +128,10 @@ char* get_file_content(int file_uid) {
                     }
 
                     strcat(ret, get_fragment_content(mftf));
+printf("ret: %s\n", ret);
                 }
             }
-
+printf("hodne se cyklim");
             // prehodim se na dalsi prvek
             mft_itemy = mft_itemy->dalsi;
         }

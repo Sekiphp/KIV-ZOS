@@ -45,7 +45,7 @@ void func_mkdir(char *cmd){
         return;
     }
     else {
-        ret = parsuj_pathu(cmd);
+        ret = parsuj_pathu(cmd, 0);
     }
 
     // zkusim si tu cestu projit
@@ -79,10 +79,10 @@ void func_ls(char *cmd){
     // zkusim si tu cestu projit
     cmd = strtok(NULL, " ");
     if (cmd == NULL){
-        ret = parsuj_pathu("");
+        ret = parsuj_pathu("", 1);
     }
     else {
-        ret = parsuj_pathu(cmd);
+        ret = parsuj_pathu(cmd, 1);
     }
 
     // cesta neexistuje, nelze splnit pozadavek
@@ -105,8 +105,23 @@ void func_cat(char *cmd){
 
 
 void func_cd(char *cmd){
+    char *pom;
+    int kam;
+
     while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %d\n", parsuj_pathu(cmd));
+        pom = (char *) malloc(strlen(cmd) -1);
+        strncpy(pom, cmd, strlen(cmd) -1);
+
+        kam = parsuj_pathu(pom, 1);
+
+        if (kam != -1){
+            pwd = kam;
+            printf("-- menim kurzor pwd: %d\n", kam);
+        }
+	else {
+            printf("PATH NOT FOUND\n");
+            return;
+        }
     }
 }
 
@@ -138,7 +153,7 @@ void func_info(char *cmd){
 //    printf("NAME %s", );
 
     printf("Data z clusteru s UID=0: %s\n", get_file_content(0));
-    printf("parsuj pathu = %d\n", parsuj_pathu("/var/www/diginex.cz"));
+    printf("parsuj pathu = %d\n", parsuj_pathu("/var/www/diginex.cz", 1));
 }
 
 
@@ -166,7 +181,7 @@ void func_incp(char *cmd){
             // najdu cilove misto pro ulozeni
             printf("Cesta k parsovani je: --%s--\n", cmd);
 
-            ret = parsuj_pathu(cmd);
+            ret = parsuj_pathu(cmd, 1);
             if (ret == -1){
                 printf("PATH %s NOT FOUND\n", cmd);
                 return;

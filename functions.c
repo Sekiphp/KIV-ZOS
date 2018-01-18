@@ -73,7 +73,7 @@ int is_name_unique(char *newname, int uid_pwd){
 }
 
 /* Prochazi danou cestu a vrati UID slozky, ktera je posledni nebo -1 pri chybe */
-int parsuj_pathu(char *patha){
+int parsuj_pathu(char *patha, int cd){
     char *p_c;
     int start_dir, uid_pom;
     char path[100];
@@ -90,6 +90,7 @@ int parsuj_pathu(char *patha){
     }
     printf("START DIR = %d\n", start_dir);
 
+if(strcmp(patha, "") != 0) {
     if (strchr(patha, '/') != NULL){
         // zde parsuji cestu zacinajici lomenem
         // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
@@ -110,12 +111,19 @@ int parsuj_pathu(char *patha){
         }
     }
     else {
-        printf("V ceste neni /\n");
+	if (cd == 1) {
+            // pouziva ce pro prikaz cd
+            printf("V ceste neni /\n");
+            uid_pom = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
 
+            if (uid_pom == -1) return -1;
+            start_dir = uid_pom;
+        }
     }
-
+}
     return start_dir;
 }
+
 
 /* Vytvori novou slozku o zadanem nazvu */
 int zaloz_novou_slozku(int pwd, char *name){
@@ -164,6 +172,16 @@ int zaloz_novou_slozku(int pwd, char *name){
                 strcpy(mfti.item_name, pomocnik);
                 mfti.item_size = 0; // zatim tam nic neni, takze nula
                 mfti.fragments[0] = mftf;
+
+
+                // dalsi fragmenty z budou jen prazdne (pro poradek)
+                mftf.fragment_start_address = 0;
+                mftf.fragment_count = 0;
+
+                // zacinam od jednicky
+                for (i = 1; i < MFT_FRAG_COUNT; i++){
+                    mfti.fragments[i] = mftf;
+                }
 
                 // prvek mam pripraveny
                 // zaktualizuji si globalni pole a bitmapu
