@@ -110,6 +110,7 @@ int parsuj_pathu(char *patha){
         }
     }
     else {
+        printf("V ceste neni /\n");
 
     }
 
