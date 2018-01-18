@@ -5,6 +5,7 @@
 #include "loader.h"
 #include "mft.h"
 #include "shell_functions.h"
+#include "ntfs_helpers.h"
 #include "boot_record.h"
 #include "functions.h"
 

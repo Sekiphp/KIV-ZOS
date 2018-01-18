@@ -8,157 +8,10 @@
 #include "boot_record.h"
 #include "functions.h"
 #include "parametr.h"
+#include "ntfs_helpers.h"
 
 extern int pwd;
 extern char output_file[100];
-
-/* Ziska obsah vsech danych clusteru, ktere nalezi stejnemu fragmentu - Jeden mfti muze mit vsak mnoho fragmentu */
-char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count){
-    int sirka_bloku = CLUSTER_SIZE * fragments_count;
-    char *ret;
-    ret = (char*) malloc(sirka_bloku);
-    FILE *fr;
-
-    fr = fopen(output_file, "rb");
-    if (fr != NULL) {
-        fseek(fr, fragment_start_addr, SEEK_SET);
-        fread(ret, sizeof(char), sirka_bloku, fr);
-
-        fclose(fr);
-    }
-
-    return ret;
-}
-
-int set_cluster_content(int32_t cluster_start_addr, char *obsah){
-    FILE *f;
-
-    f = fopen(output_file, "r+b");
-    if (f != NULL) {
-        fseek(f, cluster_start_addr, SEEK_SET);
-        fwrite(obsah, 1, CLUSTER_SIZE, f);
-
-        fclose(f);
-        return 1;
-    }
-
-    return -1;
-}
-
-int append_obsah_souboru(int uid, char *append){
-    int i, j, adresa;
-    char *ret;
-    ret = (char *) malloc(CLUSTER_SIZE);
-    MFT_LIST* mft_item_chceme;
-    struct mft_fragment mftf;
-    char *soucasny_obsah = get_mft_item_content(uid);
-    FILE *fw;
-
-    printf("Soucasny obsh souboru je: %s a ma delku %d --- \n", soucasny_obsah, strlen(soucasny_obsah));
-    printf("Chci appendnout: %s\n", append);
-
-    i = strlen(soucasny_obsah);
-    fw = fopen(output_file, "r+b");
-    if (fw != NULL) {
-        // musim si vypocitat adresu, kam budu zapisovat
-        adresa = 0;
-        if (mft_seznam[uid] != NULL){
-            mft_item_chceme = mft_seznam[uid];
-
-            // projedeme vsechny itemy pro dane UID souboru
-            // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
-            // zacneme iterovar pres ->dalsi
-            i = 0;
-            while (mft_item_chceme != NULL){
-                i++;
-                printf("[%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_item_chceme->item.uid, mft_item_chceme->item.item_name);
-
-                // precteme vsechny fragmenty z daneho mft itemu (maximalne je jich: MFT_FRAG_COUNT)
-                for (j = 0; j < MFT_FRAG_COUNT; j++){
-                    mftf = mft_item_chceme->item.fragments[j];
-
-                    // najdu si posledni fragment s adresou
-                    if (mftf.fragment_start_address != 0) {
-                        adresa = mftf.fragment_start_address;
-                    }
-                }
-
-                // prehodim se na dalsi prvek
-                mft_item_chceme = mft_item_chceme->dalsi;
-            }
-        }
-
-        if (adresa != 0){
-            // nactu obsah daneho clusteru
-            fseek(fw, adresa, SEEK_SET);
-            strcat(ret, get_cluster_content(adresa, 1));
-
-            // pripojim k nemu co potrebuji a zapisu
-            fseek(fw, adresa, SEEK_SET);
-            strcat(ret, append);
-            strcat(ret, "\n");
-            fwrite(ret, 1, strlen(ret), fw);
-
-            printf("Dokoncuji editaci clusteru/fragmentu; strlen=%d\n", strlen(ret));
-        }
-        else{
-            return -1;
-        }
-
-        fclose(fw);
-    }
-
-
-    return -1;
-}
-
-/* Ziska obsah vsech fragmentu pro soubor nebo slozku daneho UID */
-char* get_mft_item_content(int uid){
-    int i, j, k;
-    char *ret = malloc(CLUSTER_SIZE);
-    MFT_LIST* mft_item_chceme;
-    struct mft_fragment mftf;
-
-    if (mft_seznam[uid] != NULL){
-        mft_item_chceme = mft_seznam[uid];
-
-        //printf("je tu alespon jeden item co stoji za zminku %d\n", mft_item_chceme->ij);
-
-        // projedeme vsechny itemy pro dane UID souboru
-        // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
-        // zacneme iterovar pres ->dalsi
-        i = 0;
-        k = 0; // celkovy pocet zopracovanych neprazdnych fragmentu
-        while (mft_item_chceme != NULL){
-            i++;
-            printf("pocet iteraci=%d\n", i);
-            printf("Nacteny item s UID=%d ma nazev %s\n", mft_item_chceme->item.uid, mft_item_chceme->item.item_name);
-
-            // precteme vsechny fragmenty z daneho mft itemu (je jich: MFT_FRAG_COUNT)
-            for (j = 0; j < MFT_FRAG_COUNT; j++){
-                mftf = mft_item_chceme->item.fragments[j];
-
-                if (mftf.fragment_start_address != 0) {
-                    k++;
-                    printf("Zpracovavam fragment %d ze souboru s UID %d, start=%d, count=%d\n", j, mft_item_chceme->item.uid, mftf.fragment_start_address, mftf.fragment_count);
-
-                    // prubezne je potreba realokovat oblast tak, aby se mi podarilo nacist cely soubor
-                    if (k != 1){
-                        int *tmp = realloc(ret, k * CLUSTER_SIZE);
-                        if (tmp == NULL) return "ERROR";
-                    }
-
-                    strcat(ret, get_cluster_content(mftf.fragment_start_address, mftf.fragment_count));
-                }
-            }
-
-            // prehodim se na dalsi prvek
-            mft_item_chceme = mft_item_chceme->dalsi;
-        }
-    }
-
-    return ret;
-}
 
 /*
 Pokusi se v obsahu daneho adresare najit jiny adresar za pomoci jeho jmena
@@ -168,7 +21,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
     int hledane, i;
 
-    char *obsah = get_mft_item_content(uid_pwd);
+    char *obsah = get_file_content(uid_pwd);
     char *curLine = obsah;
 
     printf("Spoustim metodu *get_uid_by_name* s dir_name = %s a uid_pwd = %d\n\tTato polozka ma obsah clusteru: %s \n----------\n", dir_name, uid_pwd, obsah);
