@@ -187,13 +187,14 @@ int append_file_content(int file_uid, char *append){
 
         if (adresa != 0){
             // nactu obsah daneho clusteru
-            fseek(fw, adresa, SEEK_SET);
             strcat(ret, get_cluster_content(adresa));
 
-            // pripojim k nemu co potrebuji a zapisu
-            fseek(fw, adresa, SEEK_SET);
-            strcat(ret, append);
+            // pripojim k nemu co potrebuji
             strcat(ret, "\n");
+            strcat(ret, append);
+
+            // zapisu
+            fseek(fw, adresa, SEEK_SET);
             fwrite(ret, 1, strlen(ret), fw);
 
             printf("Dokoncuji editaci clusteru /%s/; strlen=%zd\n", ret, strlen(ret));
