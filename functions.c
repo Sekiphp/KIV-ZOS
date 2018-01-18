@@ -25,7 +25,6 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
     char *obsah = get_file_content(uid_pwd);
     char *curLine = obsah;
-    strncpy(dir_name, dir_name, strlen(dir_name) - 1); // \n pryc
 
     printf("get_uid_by_name(dir_name = %s, uid_pwd = %d)\n\tObsah clusteru: %s \n----------\n", dir_name, uid_pwd, obsah);
 
@@ -126,12 +125,13 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item *mpom;
     char pomocnik[20], pomocnik2[5], pom[5];
 
-    if (is_name_unique(name, pwd) != 1){
+    strncpy(pomocnik, name, strlen(name)-1);
+
+    if (is_name_unique(pomocnik, pwd) != 1){
         printf("EXIST\n");
         return -1;
     }
 
-    strncpy(pomocnik, name, strlen(name)-1);
     printf("-- NAME OF NEW DIR=%s\n", pomocnik);
 
     // najdu volnou bitmapu
