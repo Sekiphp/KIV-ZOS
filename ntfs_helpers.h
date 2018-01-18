@@ -5,7 +5,7 @@
     char* get_cluster_content(int32_t adresa);
     int set_cluster_content(int32_t adresa, char *obsah);
 
-    char* get_fragment_content(struct mft_fragment fragment);
+    char* get_fragment_content(struct mft_fragment *fragment);
 
     char* get_file_content(int file_uid);
 
