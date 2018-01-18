@@ -128,10 +128,10 @@ char* get_file_content(int file_uid) {
                     }
 
                     strcat(ret, get_fragment_content(mftf));
-printf("ret: %s\n", ret);
+                    //printf("ret: %s\n", ret);
                 }
             }
-printf("hodne se cyklim");
+
             // prehodim se na dalsi prvek
             mft_itemy = mft_itemy->dalsi;
         }

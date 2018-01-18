@@ -112,13 +112,15 @@ void func_cd(char *cmd){
         pom = (char *) malloc(strlen(cmd) -1);
         strncpy(pom, cmd, strlen(cmd) -1);
 
+        printf("_%s_\n", pom);
+
         kam = parsuj_pathu(pom, 1);
 
         if (kam != -1){
             pwd = kam;
             printf("-- menim kurzor pwd: %d\n", kam);
         }
-	else {
+        else {
             printf("PATH NOT FOUND\n");
             return;
         }
