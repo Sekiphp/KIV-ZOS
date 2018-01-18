@@ -108,10 +108,7 @@ void func_cd(char *cmd){
     char *pom;
     int kam;
 
-    while((cmd = strtok(NULL, " ")) != NULL){
-        pom = (char *) malloc(strlen(cmd) -1);
-        strncpy(pom, cmd, strlen(cmd) -1);
-
+    pom = strtok(NULL, " ");
         printf("_%s_\n", pom);
 
         kam = parsuj_pathu(pom, 1);
@@ -124,7 +121,6 @@ void func_cd(char *cmd){
             printf("PATH NOT FOUND\n");
             return;
         }
-    }
 }
 
 
