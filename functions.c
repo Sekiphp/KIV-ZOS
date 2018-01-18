@@ -27,7 +27,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     char *curLine = obsah;
 
     char *dirname;
-    dirname = (char *) malloc(strlen(dir_name));
+    dirname = (char *) malloc(strlen(dir_name)-1);
 
     //memset(pomocnik, '', 20);
     strncpy(dirname, dir_name, strlen(dir_name)-1);
@@ -66,6 +66,8 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
         i++;
     }
+
+    free((void *) dirname);
 
     return -1;
 }
