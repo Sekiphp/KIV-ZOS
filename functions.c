@@ -88,7 +88,7 @@ int parsuj_pathu(char *patha){
     else {
         start_dir = pwd;
     }
-    //printf("START DIR = %d\n", start_dir);
+    printf("START DIR = %d\n", start_dir);
 
     if (strchr(patha, '/') != NULL){
         // zde parsuji cestu zacinajici lomenem
@@ -97,14 +97,14 @@ int parsuj_pathu(char *patha){
         if (p_c != NULL){
             uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
-            //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+            printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
             if (uid_pom == -1) return -1;
             start_dir = uid_pom; // jdu o slozku niz
         }
         while((p_c = strtok(NULL, "/")) != NULL){
             uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
-            //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+            printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
             if (uid_pom == -1) return -1;
             start_dir = uid_pom; // jdu o slozku niz
         }
