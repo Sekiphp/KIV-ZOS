@@ -43,7 +43,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                printf("\t\tHledane mfti s uid=%d (name=%s) NOT NULL\n", hledane, mfti.item_name);
+                printf("\t\tHledane mfti s uid=%d (name=%s) %s NOT NULL\n", hledane, mfti.item_name, dir_name);
 
                 if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
                     printf("\t\tSHODA\n");
@@ -134,6 +134,7 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item *mpom;
     char pomocnik[20], pomocnik2[5], pom[5];
 
+    memset(pomocnik, ' ', 20);
     strncpy(pomocnik, name, strlen(name)-1);
 
     if (is_name_unique(pomocnik, pwd) != 1){
