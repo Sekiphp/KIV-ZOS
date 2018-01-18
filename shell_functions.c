@@ -109,8 +109,8 @@ void func_cd(char *cmd){
     int kam;
 
     cmd = strtok(NULL, " ");
-    pom = (char *) malloc(strlen(cmd) -1);
-    strncpy(pom, cmd, strlen(cmd) -1);
+    pom = (char *) malloc(strlen(cmd));
+    strncpy(pom, cmd, strlen(cmd));
 
     printf("_%s_%s_%d_%d\n", pom, cmd, strlen(pom), strlen(cmd));
 
