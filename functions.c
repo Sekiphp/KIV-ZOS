@@ -153,7 +153,7 @@ int zaloz_novou_slozku(int pwd, char *name){
     strncpy(pomocnik, name, strlen(name)-1);
 
     if (is_name_unique(pomocnik, pwd) != 1){
-        printf("EXIST\n");
+        printf("EXIST _%s_\n", pomocnik);
         return -1;
     }
 
@@ -188,7 +188,6 @@ int zaloz_novou_slozku(int pwd, char *name){
                 strcpy(mfti.item_name, pomocnik);
                 mfti.item_size = 0; // zatim tam nic neni, takze nula
                 mfti.fragments[0] = mftf;
-
 
                 // dalsi fragmenty z budou jen prazdne (pro poradek)
                 mftf.fragment_start_address = 0;
