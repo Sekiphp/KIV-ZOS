@@ -34,7 +34,7 @@ void func_rm(char *cmd){
 }
 
 
-/* validni: mkdir neco, mkdir /var/www/neco */
+/* validni: mkdir neco, mkdir /var/www/neco, ale /var/www uz musi existovat */
 void func_mkdir(char *cmd){
     int ret;
 
@@ -106,7 +106,7 @@ void func_cat(char *cmd){
 
 void func_cd(char *cmd){
     while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+        printf("Ostatni: %d\n", parsuj_pathu(cmd));
     }
 }
 
