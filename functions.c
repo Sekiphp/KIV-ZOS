@@ -65,7 +65,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 }
 
 int is_name_unique(char *newname, int uid_pwd){
-    if (get_uid_by_name() == -1) {
+    if (get_uid_by_name(newname, uid_pwd) == -1) {
         return 1;
     }
 
