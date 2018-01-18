@@ -196,7 +196,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         /* Zapiseme odkaz na nadrazeny adresar */
         fseek(fw, data_start, SEEK_SET);
         char neco[CLUSTER_SIZE];
-        strcpy(neco, "0\n"); // backlink
+        strcpy(neco, "0"); // backlink - \n prida appender
         fwrite(neco, 1, CLUSTER_SIZE, fw);
 
         fclose(fw);

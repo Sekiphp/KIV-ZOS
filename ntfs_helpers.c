@@ -100,7 +100,7 @@ char* get_file_content(int file_uid) {
     if (mft_seznam[file_uid] != NULL){
         mft_itemy = mft_seznam[file_uid];
 
-        printf("Je tu alespon jeden item co stoji za zminku %d\n", mft_itemy->ij);
+        printf("get_file_content - stoji za zminku %d\n", mft_itemy->ij);
 
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
@@ -190,7 +190,7 @@ int append_file_content(int file_uid, char *append){
             strcat(ret, get_cluster_content(adresa));
 
             // pripojim k nemu co potrebuji
-            //strcat(ret, "\n");
+            strcat(ret, "\n");
             strcat(ret, append);
 
             // zapisu

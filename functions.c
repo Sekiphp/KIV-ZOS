@@ -26,7 +26,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
     char *obsah = get_file_content(uid_pwd);
     char *curLine = obsah;
 
-    dir_len = strlen(dir_name) - 1;
+    dir_len = strlen(dir_name);
 
     char *dirname;
     dirname = (char *) malloc(dir_len);
