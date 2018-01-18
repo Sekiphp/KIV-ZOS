@@ -14,8 +14,10 @@ extern int pwd;
 extern char output_file[100];
 
 /*
-Pokusi se v obsahu daneho adresare najit jiny adresar za pomoci jeho jmena
-@return UID hledaneho adresare nebo -1 pri chybe
+    Prelozi jmeno adresare na UID
+     -> nacte si obsah clusteru soucasneho adresare a prochazi vsechny tyto adresare a hleda shodnost jmena
+    @param dir_name Jmeno adresare pro preklad
+    @param uid_pwd Soucasna slozka, kde se nachazim (ze ktere vychazim)
 */
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
@@ -24,7 +26,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     char *obsah = get_file_content(uid_pwd);
     char *curLine = obsah;
 
-    printf("Spoustim metodu *get_uid_by_name* s dir_name = %s a uid_pwd = %d\n\tTato polozka ma obsah clusteru: %s \n----------\n", dir_name, uid_pwd, obsah);
+    printf("get_uid_by_name(dir_name = %s, uid_pwd = %d)\n\tObsah clusteru: %s \n----------\n", dir_name, uid_pwd, obsah);
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
     i = 0;
@@ -35,19 +37,22 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
         if (i != 0){
             // skip prvni radky v clusteru - je tam backlink
             hledane = atoi(curLine);
-            printf("*** nactene UID z clusteru %s (int=%d)\n", curLine, hledane);
+            printf("\tnactene UID z clusteru %s (int=%d)\n", curLine, hledane);
 
             // tady si roparsuji MFT a zjistim jestli se shoduje nazev
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                printf("\tHledane mfti s uid=%d (name=%s) NOT NULL\n", hledane, mfti.item_name);
+                printf("\t\tHledane mfti s uid=%d (name=%s) NOT NULL\n", hledane, mfti.item_name);
 
                 if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
-                    printf("\tSHODA\n");
+                    printf("\t\tSHODA\n");
                     return mfti.uid;
                 }
             }
+        }
+        else {
+            printf("\tBacklink teto slozky je %s\n", curLine);
         }
 
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
