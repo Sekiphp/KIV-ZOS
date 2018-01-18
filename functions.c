@@ -64,6 +64,14 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     return -1;
 }
 
+int is_name_unique(char *newname, int uid_pwd){
+    if (get_uid_by_name() == -1) {
+        return 1;
+    }
+
+    return 0;
+}
+
 /* Prochazi danou cestu a vrati UID slozky, ktera je posledni nebo -1 pri chybe */
 int parsuj_pathu(char *patha){
     char *p_c;
@@ -116,6 +124,11 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_fragment mftf;
     struct mft_item *mpom;
     char pomocnik[20], pomocnik2[5], pom[5];
+
+    if (is_name_unique(name, pwd) != 0){
+        printf("EXIST\n");
+        return -1;
+    }
 
     strncpy(pomocnik, name, strlen(name)-1);
     printf("-- NAME OF NEW DIR=%s\n", pomocnik);
