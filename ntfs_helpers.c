@@ -190,7 +190,7 @@ int append_file_content(int file_uid, char *append){
             strcat(ret, get_cluster_content(adresa));
 
             // pripojim k nemu co potrebuji
-            strcat(ret, "\n");
+            //strcat(ret, "\n");
             strcat(ret, append);
 
             // zapisu
