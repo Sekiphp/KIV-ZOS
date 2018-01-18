@@ -167,7 +167,7 @@ int zaloz_novou_slozku(int pwd, char *name){
                     // odkaz na slozku do nadrazeneho adresare
                     printf("-- Zapisuji odkaz na adresar %d do adresare %d\n", bitmap_free_index, pwd);
                     sprintf(pomocnik2, "%d", bitmap_free_index);
-                    append_obsah_souboru(pwd, pomocnik2);
+                    append_file_content(pwd, pomocnik2);
 
                     // odkaz na nadrazenou slozku do teto slozky - backlink
                     // budou to prvni zapsana data v teto slozce

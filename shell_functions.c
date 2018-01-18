@@ -141,7 +141,7 @@ void func_info(char *cmd){
     printf("NAME - UID - SIZE - FRAGMENTY - CLUSTERY\n");
 //    printf("NAME %s", );
 
-    printf("Data z clusteru s UID=1: %s\n", get_mft_item_content(1));
+    printf("Data z clusteru s UID=0: %s\n", get_file_content(0));
     printf("parsuj pathu = %d\n", parsuj_pathu("/var/www/diginex.cz"));
 }
 

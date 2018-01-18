@@ -151,7 +151,7 @@ int append_file_content(int file_uid, char *append){
     char *soucasny_obsah = get_mft_item_content(file_uid);
     FILE *fw;
 
-    printf("Soucasny obsh souboru je: %s a ma delku %d --- \n", soucasny_obsah, strlen(soucasny_obsah));
+    printf("Soucasny obsh souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
     printf("Chci appendnout: %s\n", append);
 
     i = strlen(soucasny_obsah);
@@ -196,7 +196,7 @@ int append_file_content(int file_uid, char *append){
             strcat(ret, "\n");
             fwrite(ret, 1, strlen(ret), fw);
 
-            printf("Dokoncuji editaci clusteru/fragmentu; strlen=%d\n", strlen(ret));
+            printf("Dokoncuji editaci clusteru/fragmentu; strlen=%zd\n", strlen(ret));
         }
         else{
             return -1;
