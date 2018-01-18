@@ -166,7 +166,7 @@ Pokusi se v obsahu daneho adresare najit jiny adresar za pomoci jeho jmena
 */
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
-    int hledane;
+    int hledane, i;
 
     char *obsah = get_mft_item_content(uid_pwd);
     char *curLine = obsah;
@@ -174,27 +174,33 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     printf("Spoustim metodu *get_uid_by_name* s dir_name = %s a uid_pwd = %d\n\tTato polozka ma obsah clusteru: %s \n----------\n", dir_name, uid_pwd, obsah);
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
+    i = 0;
     while (curLine){
         char * nextLine = strchr(curLine, '\n');
         if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
 
-        hledane = atoi(curLine);
-        printf("*** nactene UID z clusteru %s (int=%d)\n", curLine, hledane);
+        if (i != 0){
+            // skip prvni radky v clusteru - je tam backlink
+            hledane = atoi(curLine);
+            printf("*** nactene UID z clusteru %s (int=%d)\n", curLine, hledane);
 
-        // tady si roparsuji MFT a zjistim jestli se shoduje nazev
-        if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
-            mfti = mft_seznam[hledane]->item;
+            // tady si roparsuji MFT a zjistim jestli se shoduje nazev
+            if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
+                mfti = mft_seznam[hledane]->item;
 
-            printf("\tHledane mfti s uid=%d (name=%s) NOT NULL\n", hledane, mfti.item_name);
+                printf("\tHledane mfti s uid=%d (name=%s) NOT NULL\n", hledane, mfti.item_name);
 
-            if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
-                printf("\tSHODA\n");
-                return mfti.uid;
+                if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
+                    printf("\tSHODA\n");
+                    return mfti.uid;
+                }
             }
         }
 
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
         curLine = nextLine ? (nextLine + 1) : NULL;
+
+        i++;
     }
 
     return -1;
@@ -251,7 +257,7 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item mfti;
     struct mft_fragment mftf;
     struct mft_item *mpom;
-    char pomocnik[20], pomocnik2[5];
+    char pomocnik[20], pomocnik2[5], pom[5];
 
     strncpy(pomocnik, name, strlen(name)-1);
     printf("-- NAME OF NEW DIR=%s\n", pomocnik);
@@ -309,6 +315,13 @@ int zaloz_novou_slozku(int pwd, char *name){
                     printf("-- Zapisuji odkaz na adresar %d do adresare %d\n", bitmap_free_index, pwd);
                     sprintf(pomocnik2, "%d", bitmap_free_index);
                     append_obsah_souboru(pwd, pomocnik2);
+
+                    // odkaz na nadrazenou slozku do teto slozky - backlink
+                    // budou to prvni zapsana data v teto slozce
+                    printf("-- Zapisuji backlink na adresar %d do adresare %d, adresa je %s\n", pwd, bitmap_free_index, bootr->data_start_address + pwd * CLUSTER_SIZE);
+                    sprintf(pom, "%d", pwd);
+                    fseek(fw, bootr->data_start_address + pwd * CLUSTER_SIZE, SEEK_SET);
+                    fwrite(pom, 1, strlen(pom), fw);
 
                     fclose(fw);
                 }

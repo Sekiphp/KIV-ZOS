@@ -193,7 +193,11 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         free((void *) mfti);
 
         /* Tady bychom meli zapsat obsah ROOT_DIRU */
-        /* Jelikoz v nem ale pri prvnim spusteni nic neni, tak nic nezapisujeme :) */
+        /* Zapiseme odkaz na nadrazeny adresar */
+        fseek(fw, data_start, SEEK_SET);
+        char neco[CLUSTER_SIZE];
+        strcpy(neco, "-1\n"); // backlink
+        fwrite(neco, 1, CLUSTER_SIZE, fw);
 
         fclose(fw);
     }
