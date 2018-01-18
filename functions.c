@@ -26,7 +26,13 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     char *obsah = get_file_content(uid_pwd);
     char *curLine = obsah;
 
-    printf("get_uid_by_name(dir_name = %s, uid_pwd = %d)\n\tObsah clusteru: %s \n----------\n", dir_name, uid_pwd, obsah);
+    char *dirname;
+    dirname = (char *) malloc(strlen(dir_name));
+
+    //memset(pomocnik, '', 20);
+    strncpy(dirname, dir_name, strlen(dir_name)-1);
+
+    printf("get_uid_by_name(dirname = %s, uid_pwd = %d)\n\tObsah clusteru: %s \n----------\n", dirname, uid_pwd, obsah);
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
     i = 0;
@@ -43,9 +49,9 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp=%dNOT NULL\n", hledane, mfti.item_name, dir_name, strcmp(mfti.item_name, dir_name) );
+                printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp=%dNOT NULL\n", hledane, mfti.item_name, dirname, strcmp(mfti.item_name, dirname));
 
-                if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
+                if (strcmp(mfti.item_name, dirname) == 0 && mfti.isDirectory == 1) {
                     printf("\t\tSHODA\n");
                     return mfti.uid;
                 }
@@ -90,37 +96,38 @@ int parsuj_pathu(char *patha, int cd){
     }
     printf("START DIR = %d\n", start_dir);
 
-if(strcmp(patha, "") != 0) {
-    if (strchr(patha, '/') != NULL){
-        // zde parsuji cestu zacinajici lomenem
-        // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
-        p_c = strtok(path, "/");
-        if (p_c != NULL){
-            uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
+    if(strcmp(patha, "") != 0) {
+        if (strchr(patha, '/') != NULL){
+            // zde parsuji cestu zacinajici lomenem
+            // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
+            p_c = strtok(path, "/");
+            if (p_c != NULL){
+                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
-            printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
-            if (uid_pom == -1) return -1;
-            start_dir = uid_pom; // jdu o slozku niz
+                printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+                if (uid_pom == -1) return -1;
+                start_dir = uid_pom; // jdu o slozku niz
+            }
+            while((p_c = strtok(NULL, "/")) != NULL){
+                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
+
+                printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+                if (uid_pom == -1) return -1;
+                start_dir = uid_pom; // jdu o slozku niz
+            }
         }
-        while((p_c = strtok(NULL, "/")) != NULL){
-            uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
+        else {
+    	   if (cd == 1) {
+                // pouziva ce pro prikaz cd
+                printf("V ceste neni /\n");
+                uid_pom = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
 
-            printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
-            if (uid_pom == -1) return -1;
-            start_dir = uid_pom; // jdu o slozku niz
+                if (uid_pom == -1) return -1;
+                start_dir = uid_pom;
+            }
         }
     }
-    else {
-	if (cd == 1) {
-            // pouziva ce pro prikaz cd
-            printf("V ceste neni /\n");
-            uid_pom = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
 
-            if (uid_pom == -1) return -1;
-            start_dir = uid_pom;
-        }
-    }
-}
     return start_dir;
 }
 
