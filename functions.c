@@ -195,7 +195,7 @@ void ls(int uid) {
     int i = 0;
 
     // chci vypsat obsah aktualniho adresare
-    strncpy(buffer, get_mft_item_content(uid), 1024);
+    strncpy(buffer, get_file_content(uid), 1024);
     // printf("obsah bufferu je: %s\n", buffer);
 
     printf("-- Napoveda: + slozka, - soubor --\n");

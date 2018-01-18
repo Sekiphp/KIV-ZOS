@@ -148,7 +148,7 @@ int append_file_content(int file_uid, char *append){
     ret = (char *) malloc(CLUSTER_SIZE);
     MFT_LIST* mft_item_chceme;
     struct mft_fragment mftf;
-    char *soucasny_obsah = get_mft_item_content(file_uid);
+    char *soucasny_obsah = get_file_content(file_uid);
     FILE *fw;
 
     printf("Soucasny obsh souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
@@ -188,7 +188,7 @@ int append_file_content(int file_uid, char *append){
         if (adresa != 0){
             // nactu obsah daneho clusteru
             fseek(fw, adresa, SEEK_SET);
-            strcat(ret, get_cluster_content(adresa, 1));
+            strcat(ret, get_cluster_content(adresa));
 
             // pripojim k nemu co potrebuji a zapisu
             fseek(fw, adresa, SEEK_SET);
