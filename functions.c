@@ -21,16 +21,18 @@ extern char output_file[100];
 */
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
-    int hledane, i;
+    int hledane, i, dir_len;
 
     char *obsah = get_file_content(uid_pwd);
     char *curLine = obsah;
 
+    dir_len = strlen(dir_name) - 1;
+
     char *dirname;
-    dirname = (char *) malloc(strlen(dir_name)-1);
+    dirname = (char *) malloc(dir_len);
 
     //memset(pomocnik, '', 20);
-    strncpy(dirname, dir_name, strlen(dir_name)-1);
+    strncpy(dirname, dir_name, dir_len);
 
     printf("get_uid_by_name(dirname = %s, uid_pwd = %d)\n\tObsah clusteru: %s \n----------\n", dirname, uid_pwd, obsah);
 
@@ -49,9 +51,9 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp=%dNOT NULL\n", hledane, mfti.item_name, dirname, strcmp(mfti.item_name, dirname));
+                printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, dir_len);
 
-                if (strcmp(mfti.item_name, dirname) == 0 && mfti.isDirectory == 1) {
+                if (strncmp(mfti.item_name, dirname, dir_len) == 0 && mfti.isDirectory == 1) {
                     printf("\t\tSHODA\n");
                     return mfti.uid;
                 }
