@@ -105,22 +105,25 @@ void func_cat(char *cmd){
 
 
 void func_cd(char *cmd){
-    char *pom;
+    char *pom1, *pom;
     int kam;
 
-    pom = strtok(NULL, " ");
-        printf("_%s_\n", pom);
+    pom1 = strtok(NULL, " ");
+    pom = (char *) malloc(strlen(pom1) -1);
+    strncpy(pom, cmd, strlen(pom1) -1);
 
-        kam = parsuj_pathu(pom, 1);
+    printf("_%s_\n", pom);
 
-        if (kam != -1){
-            pwd = kam;
-            printf("-- menim kurzor pwd: %d\n", kam);
-        }
-        else {
-            printf("PATH NOT FOUND\n");
-            return;
-        }
+    kam = parsuj_pathu(pom, 1);
+
+    if (kam != -1){
+        pwd = kam;
+        printf("-- menim kurzor pwd: %d\n", kam);
+    }
+    else {
+        printf("PATH NOT FOUND\n");
+        return;
+    }
 }
 
 
