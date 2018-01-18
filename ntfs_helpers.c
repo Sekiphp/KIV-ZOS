@@ -140,39 +140,38 @@ char* get_file_content(int file_uid) {
 }
 
 /*
- !!! REFAKTOTING NUTNY !!!
+ !!! castecny REFAKTOTING NUTNY !!!
  */
 int append_file_content(int file_uid, char *append){
     int i, j, adresa;
     char *ret;
-    ret = (char *) malloc(CLUSTER_SIZE);
-    MFT_LIST* mft_item_chceme;
+    MFT_LIST* mft_itemy;
     struct mft_fragment mftf;
-    char *soucasny_obsah = get_file_content(file_uid);
     FILE *fw;
+
+    ret = (char *) malloc(CLUSTER_SIZE);
+    char *soucasny_obsah = get_file_content(file_uid);
 
     printf("Soucasny obsh souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
     printf("Chci appendnout: %s\n", append);
 
-    i = strlen(soucasny_obsah);
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
         // musim si vypocitat adresu, kam budu zapisovat
         adresa = 0;
         if (mft_seznam[file_uid] != NULL){
-            mft_item_chceme = mft_seznam[file_uid];
+            mft_itemy = mft_seznam[file_uid];
 
             // projedeme vsechny itemy pro dane UID souboru
-            // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
             // zacneme iterovar pres ->dalsi
             i = 0;
-            while (mft_item_chceme != NULL){
+            while (mft_itemy != NULL){
                 i++;
-                printf("[%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_item_chceme->item.uid, mft_item_chceme->item.item_name);
+                printf("-- [%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_itemy->item.uid, mft_itemy->item.item_name);
 
                 // precteme vsechny fragmenty z daneho mft itemu (maximalne je jich: MFT_FRAG_COUNT)
                 for (j = 0; j < MFT_FRAG_COUNT; j++){
-                    mftf = mft_item_chceme->item.fragments[j];
+                    mftf = mft_itemy->item.fragments[j];
 
                     // najdu si posledni fragment s adresou
                     if (mftf.fragment_start_address != 0) {
@@ -181,7 +180,7 @@ int append_file_content(int file_uid, char *append){
                 }
 
                 // prehodim se na dalsi prvek
-                mft_item_chceme = mft_item_chceme->dalsi;
+                mft_itemy = mft_itemy->dalsi;
             }
         }
 
@@ -198,13 +197,12 @@ int append_file_content(int file_uid, char *append){
 
             printf("Dokoncuji editaci clusteru/fragmentu; strlen=%zd\n", strlen(ret));
         }
-        else{
+        else {
             return -1;
         }
 
         fclose(fw);
     }
 
-
-    return -1;
+    return 1;
 }
