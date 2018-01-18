@@ -186,6 +186,8 @@ void func_incp(char *cmd){
 
     // tady uz mohu bezpecne zpracovavat
     printf("-- Vyparsovana cesta: %d\n", ret);
+
+    vytvor_soubor_z_pc(ret, pc_file);
 }
 
 

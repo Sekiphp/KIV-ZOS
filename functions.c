@@ -365,17 +365,9 @@ void ls_printer(char *p_c) {
     printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
 }
 
-/* https://www.linuxquestions.org/questions/programming-9/extract-substring-from-string-in-c-432620/ */
-char* substring(const char* str, size_t begin, size_t len)
-{
-  if (str == 0 || strlen(str) == 0 || strlen(str) < begin || strlen(str) < (begin+len))
-    return 0;
 
-  return strndup(str + begin, len);
-}
 
-/*
-void func_incp(char *cmd){
+void vytvor_soubor_z_pc(int cislova_slozka, char *pc_soubor){
     int i, j, k, size, ret, potreba_clusteru, adresa;
     char * result;
     FILE *f;
@@ -564,4 +556,3 @@ printf("OK\n");
         return;
     }
 }
-*/
