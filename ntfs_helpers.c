@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "mft.h"
 #include "ntfs_helpers.h"
 #include "loader.h"
-#include "mft.h"
 #include "shell_functions.h"
 #include "boot_record.h"
 #include "functions.h"
@@ -62,7 +62,7 @@ int set_cluster_content(int32_t adresa, char *obsah) {
     @param fragment Struktura fragmentu, kterou chceme cist
     @return Obsah celeho fragmentu
 */
-char* get_fragment_content(struct mft_fragment *fragment) {
+char* get_fragment_content(struct mft_fragment fragment) {
     int adresa, bloku, i;
     char *ret;
 
