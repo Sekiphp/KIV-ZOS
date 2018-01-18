@@ -318,9 +318,9 @@ int zaloz_novou_slozku(int pwd, char *name){
 
                     // odkaz na nadrazenou slozku do teto slozky - backlink
                     // budou to prvni zapsana data v teto slozce
-                    printf("-- Zapisuji backlink na adresar %d do adresare %d, adresa je %s\n", pwd, bitmap_free_index, bootr->data_start_address + pwd * CLUSTER_SIZE);
+                    printf("-- Zapisuji backlink na adresar %d do adresare %d, adresa je %d\n", pwd, bitmap_free_index, bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE);
                     sprintf(pom, "%d", pwd);
-                    fseek(fw, bootr->data_start_address + pwd * CLUSTER_SIZE, SEEK_SET);
+                    fseek(fw, bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE, SEEK_SET);
                     fwrite(pom, 1, strlen(pom), fw);
 
                     fclose(fw);
@@ -350,10 +350,12 @@ void ls(int uid) {
 
     // iteruji pro kazdou polozku z adresare a hledam jeji nazev
     p_c = strtok(buffer, "\n");
+    printf("ID nadrazene slozky je %s\n", p_c);
+    /* prvni odkaz je odkaz na nadrazenou slozku
     if (p_c != NULL){
         ls_printer(p_c);
         i++;
-    }
+    }*/
     while((p_c = strtok(NULL, "\n")) != NULL){
         ls_printer(p_c);
         i++;
@@ -381,14 +383,14 @@ void ls_printer(char *p_c) {
 
 
 void vytvor_soubor_z_pc(int cilova_slozka, char *pc_soubor){
-    int i, j, k, size, ret, potreba_clusteru, adresa;
+ /*   int i, j, k, size, ret, potreba_clusteru, adresa;
     char * result;
     FILE *f;
     char pom[100], buffer[CLUSTER_SIZE];
 
     i = 0;
     size = 0;
-/*
+
     while((cmd = strtok(NULL, " ")) != NULL){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
