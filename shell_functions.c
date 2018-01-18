@@ -45,8 +45,6 @@ void func_mkdir(char *cmd){
         return;
     }
     else {
-        printf("Cesta k parsovani je: --%s--\n", cmd);
-
         ret = parsuj_pathu(cmd);
     }
 
@@ -84,8 +82,6 @@ void func_ls(char *cmd){
         ret = parsuj_pathu("");
     }
     else {
-        printf("Cesta k parsovani je: --%s--\n", cmd);
-
         ret = parsuj_pathu(cmd);
     }
 
