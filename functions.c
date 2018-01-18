@@ -127,7 +127,7 @@ if(strcmp(patha, "") != 0) {
 
 /* Vytvori novou slozku o zadanem nazvu */
 int zaloz_novou_slozku(int pwd, char *name){
-    int i, bitmap_free_index, new_cluster_start;
+    int i, j, bitmap_free_index, new_cluster_start;
     FILE *fw;
     struct mft_item mfti;
     struct mft_fragment mftf;
@@ -179,8 +179,8 @@ int zaloz_novou_slozku(int pwd, char *name){
                 mftf.fragment_count = 0;
 
                 // zacinam od jednicky
-                for (i = 1; i < MFT_FRAG_COUNT; i++){
-                    mfti.fragments[i] = mftf;
+                for (j = 1; j < MFT_FRAG_COUNT; j++){
+                    mfti.fragments[j] = mftf;
                 }
 
                 // prvek mam pripraveny
