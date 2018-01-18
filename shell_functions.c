@@ -105,16 +105,18 @@ void func_cat(char *cmd){
 
 
 void func_cd(char *cmd){
-    char *pom1, *pom;
+    char *pom;
     int kam;
 
-    pom1 = strtok(NULL, " ");
-    pom = (char *) malloc(strlen(pom1) -1);
-    strncpy(pom, cmd, strlen(pom1) -1);
+    cmd = strtok(NULL, " ");
+    pom = (char *) malloc(strlen(cmd) -1);
+    strncpy(pom, cmd, strlen(cmd) -1);
 
     printf("_%s_\n", pom);
 
     kam = parsuj_pathu(pom, 1);
+
+    free((void *) pom);
 
     if (kam != -1){
         pwd = kam;
