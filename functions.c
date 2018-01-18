@@ -19,7 +19,7 @@ extern char output_file[100];
     @param dir_name Jmeno adresare pro preklad
     @param uid_pwd Soucasna slozka, kde se nachazim (ze ktere vychazim)
 */
-int get_uid_by_name(char *dir_name, int uid_pwd){
+int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
     struct mft_item mfti;
     int hledane, i, dir_len;
 
@@ -34,7 +34,8 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     //memset(pomocnik, '', 20);
     strncpy(dirname, dir_name, dir_len);
 
-    printf("get_uid_by_name(dirname = %s, uid_pwd = %d)\n\tObsah clusteru: %s \n----------\n", dirname, uid_pwd, obsah);
+    //if (debug == 1) printf("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
+    //if (debug == 1) printf("\tObsah clusteru: %s \n----------\n", obsah);
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
     i = 0;
@@ -45,22 +46,22 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
         if (i != 0){
             // skip prvni radky v clusteru - je tam backlink
             hledane = atoi(curLine);
-            printf("\tnactene UID z clusteru %s (int=%d)\n", curLine, hledane);
+            if (debug == 1) printf("\tnactene UID z clusteru %s (int=%d)\n", curLine, hledane);
 
             // tady si roparsuji MFT a zjistim jestli se shoduje nazev
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, dir_len);
+                if (debug == 1) printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, dir_len);
 
                 if (strncmp(mfti.item_name, dirname, dir_len) == 0 && mfti.isDirectory == 1) {
-                    printf("\t\tSHODA\n");
+                    if (debug == 1) printf("\t\tSHODA\n");
                     return mfti.uid;
                 }
             }
         }
         else {
-            printf("\tBacklink teto slozky je %s\n", curLine);
+            if (debug == 1) printf("\tBacklink teto slozky je %s\n", curLine);
         }
 
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
@@ -75,7 +76,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 }
 
 int is_name_unique(char *newname, int uid_pwd){
-    if (get_uid_by_name(newname, uid_pwd) == -1) {
+    if (get_uid_by_name(newname, uid_pwd, 0) == -1) {
         return 1;
     }
 
@@ -106,14 +107,14 @@ int parsuj_pathu(char *patha, int cd){
             // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
             p_c = strtok(path, "/");
             if (p_c != NULL){
-                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
+                uid_pom = get_uid_by_name(p_c, start_dir, 1); // pokusim se prevest nazev na UID
 
                 printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
                 if (uid_pom == -1) return -1;
                 start_dir = uid_pom; // jdu o slozku niz
             }
             while((p_c = strtok(NULL, "/")) != NULL){
-                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
+                uid_pom = get_uid_by_name(p_c, start_dir, 1); // pokusim se prevest nazev na UID
 
                 printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
                 if (uid_pom == -1) return -1;
@@ -124,7 +125,7 @@ int parsuj_pathu(char *patha, int cd){
     	   if (cd == 1) {
                 // pouziva ce pro prikaz cd
                 printf("V ceste neni /\n");
-                uid_pom = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
+                uid_pom = get_uid_by_name(patha, start_dir, 1); // pokusim se prevest nazev na UID
 
                 if (uid_pom == -1) return -1;
                 start_dir = uid_pom;
