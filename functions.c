@@ -76,6 +76,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
 }
 
 int is_name_unique(char *newname, int uid_pwd){
+    printf("EXISTNNN _%s_\n", newname);
     if (get_uid_by_name(newname, uid_pwd, 0) == -1) {
         return 1;
     }
