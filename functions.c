@@ -63,7 +63,13 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
             }
         }
         else {
+            // ../../ relativni cesty
             if (debug == 1) printf("\tBacklink teto slozky je %s\n", curLine);
+
+            if (strncmp(dirname, "..", 2) == 0){
+                printf("Vracim se zpatky\n");
+                return atoi(curLine);
+            }
         }
 
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
