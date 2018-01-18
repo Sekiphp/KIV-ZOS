@@ -43,7 +43,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                printf("\t\tHledane mfti s uid=%d (name=%s) %s NOT NULL\n", hledane, mfti.item_name, dir_name);
+                printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp=%dNOT NULL\n", hledane, mfti.item_name, dir_name, strcmp(mfti.item_name, dir_name) );
 
                 if (strcmp(mfti.item_name, dir_name) == 0 && mfti.isDirectory == 1) {
                     printf("\t\tSHODA\n");
