@@ -380,7 +380,7 @@ void ls_printer(char *p_c) {
 
 
 
-void vytvor_soubor_z_pc(int cislova_slozka, char *pc_soubor){
+void vytvor_soubor_z_pc(int cilova_slozka, char *pc_soubor){
     int i, j, k, size, ret, potreba_clusteru, adresa;
     char * result;
     FILE *f;
@@ -388,7 +388,7 @@ void vytvor_soubor_z_pc(int cislova_slozka, char *pc_soubor){
 
     i = 0;
     size = 0;
-
+/*
     while((cmd = strtok(NULL, " ")) != NULL){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
@@ -563,9 +563,5 @@ printf("OK\n");
 
         i++;
     }
-
-    if (i != 2){
-        printf("TOO FEW ARGS\n");
-        return;
-    }
+*/
 }

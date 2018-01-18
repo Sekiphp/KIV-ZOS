@@ -11,6 +11,6 @@
     int append_obsah_souboru(int uid, char *append);
     void ls_printer(char *p_c);
     void ls(int uid);
-    void vytvor_soubor_z_pc(int cislova_slozka, char *pc_soubor);
+    void vytvor_soubor_z_pc(int cilova_slozka, char *pc_soubor);
 
 #endif
