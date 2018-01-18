@@ -112,7 +112,7 @@ void func_cd(char *cmd){
     pom = (char *) malloc(strlen(cmd) -1);
     strncpy(pom, cmd, strlen(cmd) -1);
 
-    printf("_%s_%s_\n", pom, cmd);
+    printf("_%s_%s_%d_%d\n", pom, cmd, strlen(pom), strlen(cmd));
 
     kam = parsuj_pathu(pom, 1);
 
