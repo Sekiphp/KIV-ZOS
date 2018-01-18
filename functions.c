@@ -34,6 +34,8 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
     //memset(pomocnik, '', 20);
     strncpy(dirname, dir_name, dir_len);
 
+    rintf("EXISTN _%s_\n", dirname);
+
     //if (debug == 1) printf("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
     //if (debug == 1) printf("\tObsah clusteru: %s \n----------\n", obsah);
 
@@ -76,7 +78,6 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
 }
 
 int is_name_unique(char *newname, int uid_pwd){
-    printf("EXISTNNN _%s_\n", newname);
     if (get_uid_by_name(newname, uid_pwd, 0) == -1) {
         return 1;
     }
