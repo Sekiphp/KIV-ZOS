@@ -153,7 +153,7 @@ int append_file_content(int file_uid, char *append){
     ret = (char *) malloc(CLUSTER_SIZE);
     char *soucasny_obsah = get_file_content(file_uid);
 
-    printf("Soucasny obsh souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
+    printf("Soucasny obsah souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
     printf("Chci appendnout: %s\n", append);
 
     fw = fopen(output_file, "r+b");
@@ -196,7 +196,7 @@ int append_file_content(int file_uid, char *append){
             strcat(ret, "\n");
             fwrite(ret, 1, strlen(ret), fw);
 
-            printf("Dokoncuji editaci clusteru/fragmentu; strlen=%zd\n", strlen(ret));
+            printf("Dokoncuji editaci clusteru /%s/; strlen=%zd\n", ret, strlen(ret));
         }
         else {
             return -1;
