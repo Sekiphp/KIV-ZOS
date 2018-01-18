@@ -132,9 +132,12 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_item mfti;
     struct mft_fragment mftf;
     struct mft_item *mpom;
-    char pomocnik[20], pomocnik2[5], pom[5];
+    char pomocnik2[5], pom[5];
+    char *pomocnik;
 
-    memset(pomocnik, ' ', 20);
+    pomocnik = (char *) malloc(strlen(name));
+
+    //memset(pomocnik, '', 20);
     strncpy(pomocnik, name, strlen(name)-1);
 
     if (is_name_unique(pomocnik, pwd) != 1){
@@ -223,6 +226,8 @@ int zaloz_novou_slozku(int pwd, char *name){
             }
         }
     }
+
+    free((void *) pomocnik);
 
     return bitmap_free_index;
 }
