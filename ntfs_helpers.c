@@ -163,7 +163,7 @@ int update_filesize(int file_uid, int length){
         fwrite(mpom, mft_size, 1, fw);
 
         fclose(fw);
-        free((void *) mpom);
+//        free((void *) mpom);
 
         return 0;
     }
