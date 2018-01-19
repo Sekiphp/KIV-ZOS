@@ -140,6 +140,11 @@ char* get_file_content(int file_uid) {
     return ret;
 }
 
+/*
+    Upravi danemu souboru velikost
+    @param file_uid Unikatni cislo souboru
+    @param length Delka pro zapis do MFTI souboru
+*/
 int update_filesize(int file_uid, int length){
     FILE *fw;
     struct mft_item *mpom;
@@ -167,8 +172,10 @@ int update_filesize(int file_uid, int length){
 }
 
 /*
- !!! castecny REFAKTOTING NUTNY !!!
- */
+    Pripoji na konec souboru dalsi data
+    @param file_uid UID souboru
+    @param append Retezec pro pripojeni nakonec souboru
+*/
 int append_file_content(int file_uid, char *append){
     int i, j, adresa, delka;
     char *ret;

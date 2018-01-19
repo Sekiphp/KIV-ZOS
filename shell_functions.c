@@ -97,9 +97,20 @@ void func_ls(char *cmd){
 }
 
 void func_cat(char *cmd){
-    while((cmd = strtok(NULL, " \n")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+    int ret;
+
+    cmd = strtok(NULL, " \n");
+    printf("Ostatni: %s\n", cmd);
+
+    ret = parsuj_pathu(cmd, 1);
+    printf("vyparsovano: %d\n", ret);
+
+    // cesta neexistuje, nelze splnit pozadavek
+    if (ret == -1){
+        printf("FILE NOT FOUND\n");
+        return;
     }
+
 }
 
 
