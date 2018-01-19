@@ -35,8 +35,6 @@ void *shell(void *arg){
         else {
             fgets(command, MAX, fr);
 
-            printf("%s", command);
-
             if (feof(fr) == 1) {
                 fclose(fr);
                 use_file = 0;
@@ -51,15 +49,15 @@ void *shell(void *arg){
         if(strncmp(p_c, "mv", 2) == 0){
             func_mv(p_c);
         }
-        if(strncmp(p_c, "rm", 2) == 0){
-            func_rm(p_c);
-        }
         if(strncmp(p_c, "mkdir", 5) == 0){
             func_mkdir(p_c);
         }
         if(strncmp(p_c, "rmdir", 5) == 0){
             printf("rmdir");
             func_rmdir(p_c);
+        }
+        if(strncmp(p_c, "rm", 2) == 0){
+            func_rm(p_c);
         }
         if(strncmp(p_c, "ls", 2) == 0){
             func_ls(p_c);
