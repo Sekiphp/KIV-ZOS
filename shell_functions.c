@@ -139,7 +139,8 @@ void func_pwd(){
             link_int = pwd;
 
             while((link_int = get_backlink(link_int)) > 0){
-                printf("%d\n", link_int);
+                strcpy(link, mft_seznam[link_int]->item.item_name);
+                printf("%d = %s\n", link_int, link);
             }
 
             printf("Jsi ve slozce %d\n", pwd);
