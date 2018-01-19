@@ -218,7 +218,7 @@ void func_info(char *cmd){
 
                 if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
                     k++;
-                    adr = (mftf.fragment_start_address - bootr->data_start_address) / bootr->cluster_size - 1;
+                    adr = (mftf.fragment_start_address - bootr->data_start_address) / bootr->cluster_size;
                     printf("-- Fragment start=%d, count=%d, clusterID=%d\n", mftf.fragment_start_address, mftf.fragment_count, adr);
                 }
             }
