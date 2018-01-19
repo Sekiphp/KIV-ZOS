@@ -140,7 +140,7 @@ void func_pwd(){
 
             while(link_int > 0){
                 // /alservis, /www, /var
-                strcpy(link, "/")
+                strcpy(link, "/");
                 strcat(link, mft_seznam[link_int]->item.item_name);
 
                 // to co uz ve stringu je dam na konec
