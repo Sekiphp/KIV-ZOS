@@ -142,6 +142,7 @@ char* get_file_content(int file_uid) {
 
 int update_filesize(int file_uid, int length){
     FILE *fw;
+    struct mft_item *mpom;
 
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
@@ -149,8 +150,9 @@ int update_filesize(int file_uid, int length){
         mft_seznam[file_uid]->item.item_size = length;
 
         // zapisu mft
+        mpom = &mft_seznam[file_uid]->item;
         fseek(fw, bootr->mft_start_address + file_uid * sizeof(struct mft_item), SEEK_SET);
-        fwrite(mft_seznam[file_uid]->item, sizeof(struct mft_item), 1, fw);
+        fwrite(npom, sizeof(struct mft_item), 1, fw);
 
         fclose(fw);
         return 0;
@@ -220,7 +222,7 @@ int append_file_content(int file_uid, char *append){
             // zaktualizuji virtualni mft i mft v souboru
             update_filesize(file_uid, delka);
 
-            printf("Dokoncuji editaci clusteru /%s/; strlen=%zd\n", ret, delka);
+            printf("Dokoncuji editaci clusteru /%s/; strlen=%d\n", ret, delka);
         }
         else {
             return -1;

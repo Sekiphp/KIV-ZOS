@@ -110,7 +110,7 @@ void func_cd(char *cmd){
     int kam;
 
     cmd = strtok(NULL, " \n");
-    printf("_%s_%d\n", cmd, strlen(cmd));
+    printf("_%s_%zd\n", cmd, strlen(cmd));
 
     kam = parsuj_pathu(cmd, 1);
 
