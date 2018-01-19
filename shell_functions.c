@@ -182,8 +182,10 @@ void func_pwd(){
 
 
 void func_info(char *cmd){
-    int ret;
+    int ret, j, k;
     struct mft_item mfti;
+    MFT_LIST* mft_itemy;
+    struct mft_fragment mftf;
 
     cmd = strtok(NULL, " \n");
     ret = parsuj_pathu(cmd, 1);
@@ -199,6 +201,31 @@ void func_info(char *cmd){
     printf("%s - %d - %d\n", mfti.item_name, mfti.uid, mfti.item_size);
 
     printf("-- FRAGMENTY:\n");
+
+    if (mft_seznam[ret] != NULL){
+        mft_itemy = mft_seznam[ret];
+
+        // projedeme vsechny itemy pro dane UID souboru
+        k = 0; // celkovy pocet zopracovanych neprazdnych fragmentu
+        while (mft_itemy != NULL){
+            mfti = mft_itemy->item;
+
+            // precteme vsechny fragmenty z daneho mft itemu (je jich: MFT_FRAG_COUNT)
+            for (j = 0; j < MFT_FRAG_COUNT; j++){
+                mftf = mfti.fragments[j];
+
+                if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
+                    k++;
+                    printf("-- Fragment start=%d, count=%d\n", mftf.fragment_start_address, mftf.fragment_count);
+                }
+            }
+
+            // prehodim se na dalsi prvek
+            mft_itemy = mft_itemy->dalsi;
+        }
+    }
+
+
     printf("-- CLUSTERY:\n");
 }
 
