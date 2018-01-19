@@ -39,7 +39,7 @@ void func_mkdir(char *cmd){
     int ret;
 
     // zpracujeme si zadanou cestu
-    cmd = strtok(NULL, " ");
+    cmd = strtok(NULL, " \n");
     if (cmd == NULL){
         printf("PATH NOT FOUND\n");
         return;
@@ -77,7 +77,7 @@ void func_ls(char *cmd){
     int ret;
 
     // zkusim si tu cestu projit
-    cmd = strtok(NULL, " ");
+    cmd = strtok(NULL, " \n");
     if (cmd == NULL){
         ret = parsuj_pathu("", 1);
     }
@@ -97,7 +97,7 @@ void func_ls(char *cmd){
 }
 
 void func_cat(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
+    while((cmd = strtok(NULL, " \n")) != NULL){
         printf("Ostatni: %s\n", cmd);
     }
 }
@@ -105,18 +105,12 @@ void func_cat(char *cmd){
 
 
 void func_cd(char *cmd){
-    char *pom;
     int kam;
 
-    cmd = strtok(NULL, " ");
-    pom = (char *) malloc(strlen(cmd));
-    strncpy(pom, cmd, strlen(cmd));
+    cmd = strtok(NULL, " \n");
+    printf("_%s_%d\n", cmd, strlen(cmd));
 
-    printf("_%s_%s_%d_%d\n", pom, cmd, strlen(pom), strlen(cmd));
-
-    kam = parsuj_pathu(pom, 1);
-
-    free((void *) pom);
+    kam = parsuj_pathu(cmd, 1);
 
     if (kam != -1){
         pwd = kam;

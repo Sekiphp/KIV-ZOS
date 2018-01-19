@@ -153,19 +153,13 @@ int zaloz_novou_slozku(int pwd, char *name){
     struct mft_fragment mftf;
     struct mft_item *mpom;
     char pomocnik2[5], pom[5];
-    char *pomocnik;
 
-    pomocnik = (char *) malloc(strlen(name));
-
-    //memset(pomocnik, '', 20);
-    strncpy(pomocnik, name, strlen(name)-1);
-
-    if (is_name_unique(pomocnik, pwd) != 1){
-        printf("EXIST _%s_\n", pomocnik);
+    if (is_name_unique(name, pwd) != 1){
+        printf("EXIST _%s_\n", name);
         return -1;
     }
 
-    printf("-- NAME OF NEW DIR=%s\n", pomocnik);
+    printf("-- NAME OF NEW DIR=%s\n", name);
 
     // najdu volnou bitmapu
     bitmap_free_index = -1;
@@ -193,7 +187,7 @@ int zaloz_novou_slozku(int pwd, char *name){
                 mfti.isDirectory = 1;
                 mfti.item_order = 1;
                 mfti.item_order_total = 1;
-                strcpy(mfti.item_name, pomocnik);
+                strcpy(mfti.item_name, name);
                 mfti.item_size = 0; // zatim tam nic neni, takze nula
                 mfti.fragments[0] = mftf;
 
@@ -246,7 +240,6 @@ int zaloz_novou_slozku(int pwd, char *name){
         }
     }
 
-    free((void *) pomocnik);
 
     return bitmap_free_index;
 }
