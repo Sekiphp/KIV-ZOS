@@ -128,11 +128,18 @@ print working directory
 return: PATH
 */
 void func_pwd(char *cmd){
+    char link[20];
+    int link_int;
+
     if (pwd > 0) {
-        if (pwd == 1) {
+        if (pwd == 0) {
             printf("/\n");
         }
         else {
+            while((int_link = get_backlink) > 0){
+                printf("%d\n", int_link);
+            }
+
             printf("Jsi ve slozce %d\n", pwd);
         }
     }

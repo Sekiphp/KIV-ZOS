@@ -56,6 +56,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
 
                 if (debug == 1) printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, dir_len);
 
+                // todo - isDirectory ... nelze overit unikatnost jmena
                 if (strncmp(mfti.item_name, dirname, dir_len) == 0 && mfti.isDirectory == 1) {
                     if (debug == 1) printf("\t\tSHODA\n");
                     return mfti.uid;
@@ -83,12 +84,35 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
     return -1;
 }
 
+/*
+    Zkontroluje jestli je jmeno souboru v danem umisteni unikatni
+    @param newname Nazev souboru
+    @param uid_pwd Pracovni adresar, ve kterem hledame
+*/
 int is_name_unique(char *newname, int uid_pwd){
     if (get_uid_by_name(newname, uid_pwd, 0) == -1) {
         return 1;
     }
 
     return 0;
+}
+
+int get_backlink(int uid_pwd) {
+    char *curLine = get_file_content(uid_pwd);
+
+    // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
+    while (curLine){
+        char * nextLine = strchr(curLine, '\n');
+        if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
+
+        printf("\tBacklink teto slozky je %s\n", curLine);
+
+        return atoi(curLine);
+
+        // tady by bylo prehozeni na dalsi radek, ale to uz neni potreba :)
+    }
+
+    return -1;
 }
 
 /* Prochazi danou cestu a vrati UID slozky, ktera je posledni nebo -1 pri chybe */
