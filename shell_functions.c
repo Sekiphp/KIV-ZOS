@@ -180,9 +180,11 @@ void func_pwd(){
 }
 
 
-
+/*
+    Vypise informace z FS o danem souboru
+*/
 void func_info(char *cmd){
-    int ret, j, k;
+    int ret, j, k, adr;
     struct mft_item mfti;
     MFT_LIST* mft_itemy;
     struct mft_fragment mftf;
@@ -200,7 +202,7 @@ void func_info(char *cmd){
     printf("NAME - UID - SIZE\n");
     printf("%s - %d - %d\n", mfti.item_name, mfti.uid, mfti.item_size);
 
-    printf("-- FRAGMENTY:\n");
+    printf("FRAGMENTY & CLUSTERY:\n");
 
     if (mft_seznam[ret] != NULL){
         mft_itemy = mft_seznam[ret];
@@ -216,7 +218,8 @@ void func_info(char *cmd){
 
                 if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
                     k++;
-                    printf("-- Fragment start=%d, count=%d\n", mftf.fragment_start_address, mftf.fragment_count);
+                    adr = (mftf.fragment_start_address - bootr->data_start_address) / bootr->cluster_size - 1;
+                    printf("-- Fragment start=%d, count=%d, clusterID=%d\n", mftf.fragment_start_address, mftf.fragment_count, adr);
                 }
             }
 
@@ -225,8 +228,7 @@ void func_info(char *cmd){
         }
     }
 
-
-    printf("-- CLUSTERY:\n");
+    printf("Pocet fragmentu: %d\n", k);
 }
 
 
