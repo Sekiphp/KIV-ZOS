@@ -84,7 +84,10 @@ void *shell(void *arg){
         if(strncmp(p_c, "load", 4) == 0){
             p_c = strtok(NULL, " \n");
             fr = fopen(p_c, "r");
-            if (fr != NULL) use_file = 1;
+            if (fr != NULL)
+                use_file = 1;
+            else
+                printf("FILE NOT FOUND\n");
         }
         if(strncmp(p_c, "defrag", 6) == 0){
             func_defrag();
