@@ -116,6 +116,7 @@ void func_cd(char *cmd){
 
     if (kam != -1){
         pwd = kam;
+        printf("OK\n");
         printf("-- menim kurzor pwd: %d\n", kam);
     }
     else {

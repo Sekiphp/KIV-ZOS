@@ -140,11 +140,30 @@ char* get_file_content(int file_uid) {
     return ret;
 }
 
+int update_filesize(int file_uid, int length){
+    FILE *fw;
+
+    fw = fopen(output_file, "r+b");
+    if (fw != NULL) {
+        // aktualizuji virtualni MFT
+        mft_seznam[file_uid]->item.item_size = length;
+
+        // zapisu mft
+        fseek(fw, bootr->mft_start_address + file_uid * sizeof(struct mft_item), SEEK_SET);
+        fwrite(mft_seznam[file_uid]->item, sizeof(struct mft_item), 1, fw);
+
+        fclose(fw);
+        return 0;
+    }
+
+    return -1;
+}
+
 /*
  !!! castecny REFAKTOTING NUTNY !!!
  */
 int append_file_content(int file_uid, char *append){
-    int i, j, adresa;
+    int i, j, adresa, delka;
     char *ret;
     MFT_LIST* mft_itemy;
     struct mft_fragment mftf;
@@ -192,12 +211,16 @@ int append_file_content(int file_uid, char *append){
             // pripojim k nemu co potrebuji
             strcat(ret, "\n");
             strcat(ret, append);
+            delka = strlen(ret);
 
             // zapisu
             fseek(fw, adresa, SEEK_SET);
-            fwrite(ret, 1, strlen(ret), fw);
+            fwrite(ret, 1, delka, fw);
 
-            printf("Dokoncuji editaci clusteru /%s/; strlen=%zd\n", ret, strlen(ret));
+            // zaktualizuji virtualni mft i mft v souboru
+            update_filesize(file_uid, delka);
+
+            printf("Dokoncuji editaci clusteru /%s/; strlen=%zd\n", ret, delka);
         }
         else {
             return -1;
