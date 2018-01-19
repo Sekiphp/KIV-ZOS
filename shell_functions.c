@@ -148,16 +148,13 @@ void func_pwd(){
                 strcpy(full_link, link);
                 strcat(full_link, pom);
 
-                printf("%d = %s\n", link_int, link);
-
                 link_int = get_backlink(link_int);
             }
 
-            printf("Jsi ve slozce %d\n", pwd);
             printf("%s\n", full_link);
         }
     }
-    printf("PWD = %d\n", pwd);
+    //printf("PWD = %d\n", pwd);
 }
 
 
