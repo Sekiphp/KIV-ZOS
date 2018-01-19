@@ -94,6 +94,9 @@ void *shell(void *arg){
         if(strncmp(p_c, "consist", 7) == 0){
             func_consist();
         }
+        if(strncmp(p_c, "exit", 4) == 0){
+            break;
+        }
     }
 
     printf("SHELL ending\n");
