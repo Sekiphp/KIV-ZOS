@@ -132,7 +132,7 @@ void func_pwd(){
     char link[20], full_link[200], pom[200];
     int link_int;
 
-    if (pwd > 0) {
+    if (pwd >= 0) {
         if (pwd == 0) {
             printf("/\n");
         }
