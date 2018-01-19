@@ -67,7 +67,7 @@ void *shell(void *arg){
             func_cd(p_c);
         }
         if(strncmp(p_c, "pwd", 3) == 0){
-            func_pwd(p_c);
+            func_pwd();
         }
         if(strncmp(p_c, "info", 4) == 0){
             func_info(p_c);

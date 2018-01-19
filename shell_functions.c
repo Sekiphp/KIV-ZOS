@@ -127,7 +127,7 @@ void func_cd(char *cmd){
 print working directory
 return: PATH
 */
-void func_pwd(char *cmd){
+void func_pwd(){
     char link[20];
     int link_int;
 
@@ -136,7 +136,9 @@ void func_pwd(char *cmd){
             printf("/\n");
         }
         else {
-            while((link_int = get_backlink) > 0){
+            link_int = pwd;
+
+            while((link_int = get_backlink(link_int)) > 0){
                 printf("%d\n", link_int);
             }
 
