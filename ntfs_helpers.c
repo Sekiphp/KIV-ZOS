@@ -155,10 +155,10 @@ int update_filesize(int file_uid, int length){
         // zapisu mft
         mpom = &mft_seznam[file_uid]->item;
         fseek(fw, bootr->mft_start_address + file_uid * mft_size, SEEK_SET);
-        fwrite(npom, mft_size, 1, fw);
+        fwrite(mpom, mft_size, 1, fw);
 
         fclose(fw);
-        free((void *) npom);
+        free((void *) mpom);
 
         return 0;
     }
