@@ -136,8 +136,8 @@ void func_pwd(char *cmd){
             printf("/\n");
         }
         else {
-            while((int_link = get_backlink) > 0){
-                printf("%d\n", int_link);
+            while((link_int = get_backlink) > 0){
+                printf("%d\n", link_int);
             }
 
             printf("Jsi ve slozce %d\n", pwd);
