@@ -64,11 +64,23 @@ void func_mkdir(char *cmd){
 }
 
 
-
+/*
+    Smaze prazdny adresar
+*/
 void func_rmdir(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+    int ret;
+
+    cmd = strtok(NULL, " \n");
+
+    ret = parsuj_pathu(cmd, 1);
+
+    printf("RET %d", ret);
+
+    if (ret == -1){
+        printf("PATH NOT FOUND\n");
+        return;
     }
+
 }
 
 
