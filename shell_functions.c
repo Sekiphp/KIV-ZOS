@@ -100,13 +100,18 @@ void func_cat(char *cmd){
     int ret;
 
     cmd = strtok(NULL, " \n");
-    printf("Ostatni: %s\n", cmd);
 
     ret = parsuj_pathu(cmd, 1);
     printf("vyparsovano: %d\n", ret);
 
     // cesta neexistuje, nelze splnit pozadavek
     if (ret == -1){
+        printf("FILE NOT FOUND\n");
+        return;
+    }
+
+    // je posledni uid soubor a ne slozka
+    if (mft_seznam[ret]->item.isDirectory == 1){
         printf("FILE NOT FOUND\n");
         return;
     }
