@@ -96,6 +96,9 @@ void func_ls(char *cmd){
     //printf("ls ret = %d\n", ret);
 }
 
+/*
+    Vypise obsah souboru
+*/
 void func_cat(char *cmd){
     int ret;
 
@@ -116,6 +119,7 @@ void func_cat(char *cmd){
         return;
     }
 
+    printf("%s\n", get_file_content(ret));
 }
 
 
