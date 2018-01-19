@@ -128,7 +128,7 @@ print working directory
 return: PATH
 */
 void func_pwd(){
-    char link[20];
+    char link[20], full_link[200], pom[200];
     int link_int;
 
     if (pwd > 0) {
@@ -139,13 +139,22 @@ void func_pwd(){
             link_int = pwd;
 
             while(link_int > 0){
-                strcpy(link, mft_seznam[link_int]->item.item_name);
+                // /alservis, /www, /var
+                strcpy(link, "/")
+                strcat(link, mft_seznam[link_int]->item.item_name);
+
+                // to co uz ve stringu je dam na konec
+                strcpy(pom, full_link);
+                strcpy(full_link, link);
+                strcat(full_link, pom);
+
                 printf("%d = %s\n", link_int, link);
 
                 link_int = get_backlink(link_int);
             }
 
             printf("Jsi ve slozce %d\n", pwd);
+            printf("%s\n", full_link);
         }
     }
     printf("PWD = %d\n", pwd);
