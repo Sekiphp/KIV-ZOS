@@ -21,7 +21,7 @@ extern char output_file[100];
 */
 int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
     struct mft_item mfti;
-    int hledane, i, dir_len;
+    int hledane, i, dir_len, cmp_len;
 
     char *obsah = get_file_content(uid_pwd);
     char *curLine = obsah;
@@ -53,11 +53,12 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
             // tady si roparsuji MFT a zjistim jestli se shoduje nazev
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
+                cmp_len = strlen(mfti.item_name);
 
-                if (debug == 1) printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, dir_len);
+                if (debug == 1) printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, cmp_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
-                if (strncmp(mfti.item_name, dirname, dir_len) == 0 && mfti.isDirectory == 1) {
+                if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
                     if (debug == 1) printf("\t\tSHODA\n");
                     return mfti.uid;
                 }
@@ -141,14 +142,14 @@ int parsuj_pathu(char *patha, int cd){
             if (p_c != NULL){
                 uid_pom = get_uid_by_name(p_c, start_dir, 1); // pokusim se prevest nazev na UID
 
-                printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+                //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
                 if (uid_pom == -1) return -1;
                 start_dir = uid_pom; // jdu o slozku niz
             }
             while((p_c = strtok(NULL, "/")) != NULL){
                 uid_pom = get_uid_by_name(p_c, start_dir, 1); // pokusim se prevest nazev na UID
 
-                printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
+                //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
                 if (uid_pom == -1) return -1;
                 start_dir = uid_pom; // jdu o slozku niz
             }

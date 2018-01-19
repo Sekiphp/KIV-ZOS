@@ -103,7 +103,9 @@ void func_cat(char *cmd){
 }
 
 
-
+/*
+    Posun v adresarich
+*/
 void func_cd(char *cmd){
     int kam;
 
@@ -124,8 +126,7 @@ void func_cd(char *cmd){
 
 
 /*
-print working directory
-return: PATH
+    Print working directory
 */
 void func_pwd(){
     char link[20], full_link[200], pom[200];
