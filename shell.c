@@ -14,10 +14,11 @@
 
 /* Posloucha prikazy pro ovladani virtualniho operacniho systemu */
 void *shell(void *arg){
-    sdilenaPamet *param = (sdilenaPamet *) arg;
+    //sdilenaPamet *param = (sdilenaPamet *) arg;
     FILE *fr;
     char command[MAX];
     char *p_c;
+    int use_file = 0;
 
     printf("SHELL booting...\n");
 
@@ -28,16 +29,21 @@ void *shell(void *arg){
     while(1){
         printf("$ Zadejte prikaz: ");
 
-        if (fr != NULL)
+        if (use_file == 0) {
             fgets(command, MAX, stdin);
-        else
+        }
+        else {
             fgets(command, MAX, fr);
 
-        p_c = strtok(command, " ");
+            printf("%s", command);
 
-        if (p_c = NULL){
-            fclose(fr);
+            if (feof(fr) == 1) {
+                fclose(fr);
+                use_file = 0;
+            }
         }
+
+        p_c = strtok(command, " ");
 
         if(strncmp(p_c, "cp", 2) == 0){
             func_cp(p_c);
@@ -78,6 +84,7 @@ void *shell(void *arg){
         if(strncmp(p_c, "load", 4) == 0){
             p_c = strtok(NULL, " \n");
             fr = fopen(p_c, "r");
+            if (fr != NULL) use_file = 1;
         }
         if(strncmp(p_c, "defrag", 6) == 0){
             func_defrag();
