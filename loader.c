@@ -171,7 +171,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         mfti->item_order = 1;
         mfti->item_order_total = 1;
         strcpy(mfti->item_name, "ROOT_DIR");
-        mfti->item_size = 0; // zatim tam nic neni, takze nula
+        mfti->item_size = 1; // zatim tam nic neni, takze nula (je tam backlink)
 
         // zapisu prvni "plny" fragment (ROOT_DIR)
         mftf.fragment_start_address = data_start; // start adresa ve VFS

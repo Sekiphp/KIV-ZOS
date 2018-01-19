@@ -184,6 +184,8 @@ int zaloz_novou_slozku(int pwd, char *name){
         return -1;
     }
 
+    sprintf(pom, "%d", pwd);
+
     printf("-- NAME OF NEW DIR=%s\n", name);
 
     // najdu volnou bitmapu
@@ -213,7 +215,7 @@ int zaloz_novou_slozku(int pwd, char *name){
                 mfti.item_order = 1;
                 mfti.item_order_total = 1;
                 strcpy(mfti.item_name, name);
-                mfti.item_size = 0; // zatim tam nic neni, takze nula
+                mfti.item_size = strlen(pom); // zatim tam nic neni, takze nula
                 mfti.fragments[0] = mftf;
 
                 // dalsi fragmenty z budou jen prazdne (pro poradek)
@@ -252,7 +254,6 @@ int zaloz_novou_slozku(int pwd, char *name){
                     // odkaz na nadrazenou slozku do teto slozky - backlink
                     // budou to prvni zapsana data v teto slozce
                     printf("-- Zapisuji backlink na adresar %d do adresare %d, adresa je %d\n", pwd, bitmap_free_index, bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE);
-                    sprintf(pom, "%d", pwd);
                     fseek(fw, bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE, SEEK_SET);
                     fwrite(pom, 1, strlen(pom), fw);
 
