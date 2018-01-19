@@ -21,14 +21,8 @@ void *shell(void *arg){
 
     printf("SHELL booting...\n");
 
-    pthread_mutex_lock(param->mutex);
-        fr = fopen(param->soubor, "rb");
-        if (fr != NULL) {
-            fread(boot, sizeof(struct boot_record), 1, fr);
-            fclose(fr);
-        }
-    	//printf("boot shell: %s\n", boot->signature);
-    pthread_mutex_unlock(param->mutex);
+    //pthread_mutex_lock(param->mutex);
+    //pthread_mutex_unlock(param->mutex);
 
     /* infinite loop - cekam na prikazy */
     while(1){
@@ -36,11 +30,6 @@ void *shell(void *arg){
         fgets(command, MAX, stdin);
 
         p_c = strtok(command, " ");
-        /*
-        if (p_c != NULL){
-            printf("Prvni: %s\n", p_c);
-        }
-        */
 
         if(strncmp(p_c, "cp", 2) == 0){
             func_cp(p_c);
