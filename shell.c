@@ -58,6 +58,7 @@ void *shell(void *arg){
             func_mkdir(p_c);
         }
         if(strncmp(p_c, "rmdir", 5) == 0){
+            printf("rmdir");
             func_rmdir(p_c);
         }
         if(strncmp(p_c, "ls", 2) == 0){
