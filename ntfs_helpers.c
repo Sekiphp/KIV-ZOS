@@ -143,18 +143,23 @@ char* get_file_content(int file_uid) {
 int update_filesize(int file_uid, int length){
     FILE *fw;
     struct mft_item *mpom;
+    int mft_size = sizeof(struct mft_item);
 
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
+        mpom = malloc(mft_size);
+
         // aktualizuji virtualni MFT
         mft_seznam[file_uid]->item.item_size = length;
 
         // zapisu mft
         mpom = &mft_seznam[file_uid]->item;
-        fseek(fw, bootr->mft_start_address + file_uid * sizeof(struct mft_item), SEEK_SET);
-        fwrite(npom, sizeof(struct mft_item), 1, fw);
+        fseek(fw, bootr->mft_start_address + file_uid * mft_size, SEEK_SET);
+        fwrite(npom, mft_size, 1, fw);
 
         fclose(fw);
+        free((void *) npom);
+
         return 0;
     }
 
