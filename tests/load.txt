@@ -1,0 +1,12 @@
+ls
+mkdir var
+mkdir home
+mkdir etc
+cd var
+mkdir www
+cd ..
+cd home
+mkdir lubos
+mkdir standa
+cd standa
+pwd

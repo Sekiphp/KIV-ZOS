@@ -27,9 +27,17 @@ void *shell(void *arg){
     /* infinite loop - cekam na prikazy */
     while(1){
         printf("$ Zadejte prikaz: ");
-        fgets(command, MAX, stdin);
+
+        if (fr != NULL)
+            fgets(command, MAX, stdin);
+        else
+            fgets(command, MAX, fr);
 
         p_c = strtok(command, " ");
+
+        if (p_c = NULL){
+            fclose(fr);
+        }
 
         if(strncmp(p_c, "cp", 2) == 0){
             func_cp(p_c);
@@ -68,7 +76,8 @@ void *shell(void *arg){
             func_outcp(p_c);
         }
         if(strncmp(p_c, "load", 4) == 0){
-            func_load(p_c);
+            p_c = strtok(NULL, " \n");
+            fr = fopen(p_c, "r");
         }
         if(strncmp(p_c, "defrag", 6) == 0){
             func_defrag();
