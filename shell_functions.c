@@ -196,7 +196,7 @@ void func_info(char *cmd){
     mfti = mft_seznam[ret]->item;
 
     printf("NAME - UID - SIZE\n");
-    printf("%s - %d - %d\n", mfti.item_name, mfti.uid, mfti.cluster_size);
+    printf("%s - %d - %d\n", mfti.item_name, mfti.uid, mfti.item_size);
 
     printf("-- FRAGMENTY:\n");
     printf("-- CLUSTERY:\n");
