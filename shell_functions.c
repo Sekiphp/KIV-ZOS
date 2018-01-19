@@ -182,15 +182,24 @@ void func_pwd(){
 
 
 void func_info(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+    int ret;
+    struct mft_item mfti;
+
+    cmd = strtok(NULL, " \n");
+    ret = parsuj_pathu(cmd, 1);
+
+    if (ret == -1) {
+        printf("FILE NOT FOUND\n");
+        return;
     }
 
-    printf("NAME - UID - SIZE - FRAGMENTY - CLUSTERY\n");
-//    printf("NAME %s", );
+    mfti = mft_seznam[ret]->item;
 
-    printf("Data z clusteru s UID=0: %s\n", get_file_content(0));
-    printf("parsuj pathu = %d\n", parsuj_pathu("/var/www/diginex.cz", 1));
+    printf("NAME - UID - SIZE\n");
+    printf("%s - %d - %d\n", mfti.item_name, mfti.uid, mfti.cluster_size);
+
+    printf("-- FRAGMENTY:\n");
+    printf("-- CLUSTERY:\n");
 }
 
 
