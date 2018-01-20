@@ -104,7 +104,6 @@ int delete_file(int file_uid) {
     @param file_uid
 */
 void clear_mft(int file_uid) {
-    MFT_LIST* mft_itemy;
     FILE *fw;
     int i, adresa;
     char obsah[sizeof(struct mft_item)];
