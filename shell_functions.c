@@ -376,10 +376,9 @@ void func_incp(char *cmd){
 
 
 void func_outcp(char *cmd){
-    int i, ret, delka;
+    int i, ret;
     FILE *fw;
     char pc_file[100];
-    char *nazev;
     char *obsah;
 
     i = 0;
@@ -391,7 +390,7 @@ void func_outcp(char *cmd){
             ret = parsuj_pathu(cmd, 1);
 
             if (ret == -1){
-                printf("PATH %s NOT FOUND\n", jen_cesta);
+                printf("PATH NOT FOUND\n");
                 return;
             }
 
