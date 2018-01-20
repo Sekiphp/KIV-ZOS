@@ -380,7 +380,7 @@ void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid
 
 
     delete_file(file_uid);
-    vytvor_soubor(pwd, filename, text, puvodni_uid);
+    vytvor_soubor(pwd, filename, text, puvodni_uid, 1);
 }
 
 

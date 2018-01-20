@@ -367,7 +367,7 @@ void func_incp(char *cmd){
     // tady uz mohu bezpecne zpracovavat
     printf("-- Vyparsovana cesta: %d\n", ret);
 
-    vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1);
+    vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1, 0);
 }
 
 

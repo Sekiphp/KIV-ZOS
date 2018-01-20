@@ -401,7 +401,7 @@ char* read_file_from_pc(char *pc_soubor){
 /*
     Vytvori soubor z pocitace (incp)
 */
-void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid){
+void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir){
     int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
     FILE *fw;
     char pom[20];
@@ -451,7 +451,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
         // pripravim si mft item
         mfti.uid = volne_uid;
-        mfti.isDirectory = 0;
+        mfti.isDirectory = is_dir;
         mfti.item_order = 1;
         mfti.item_order_total = 1;
         strcpy(mfti.item_name, filename);
