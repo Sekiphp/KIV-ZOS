@@ -336,7 +336,7 @@ void ls(int uid) {
 void ls_printer(char *p_c) {
     struct mft_item mfti;
 
-    if (mft_seznam[atoi(p_c)] != NULL){
+    //if (mft_seznam[atoi(p_c)] != NULL){
         mfti = mft_seznam[atoi(p_c)]->item;
 
         printf(" ");
@@ -347,7 +347,7 @@ void ls_printer(char *p_c) {
             printf("-");
         }
         printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
-    }
+    //}
 }
 
 int is_empty_dir(int file_uid) {
