@@ -401,7 +401,7 @@ char* read_file_from_pc(char *pc_soubor){
 /*
     Vytvori soubor z pocitace (incp)
 */
-void vytvor_soubor(int cilova_slozka, char *filename, char *text){
+void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid){
     int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
     FILE *fw;
     char pom[20];
@@ -413,7 +413,12 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text){
     size = strlen(text);
 
     // volne UID pro soubor
-    volne_uid = get_volne_uid();
+    if (puvodni_uid == -1){
+        volne_uid = get_volne_uid();
+    }
+    else {
+        volne_uid = puvodni_uid;
+    }
 
     // kolik budu potrebovat najit clusteru
     potreba_clusteru = size / CLUSTER_SIZE + 1;

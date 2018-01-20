@@ -138,6 +138,8 @@ void func_rmdir(char *cmd){
     }
 
     printf("BUFÍK=%s\n", buffer);
+    // UID se musi zachovat kvuli linkum
+    edit_file_content(pwd, buffer, mft_seznam[ret]->item.item_name, mft_seznam[ret]->item.uid){
 
     printf("OK\n");
 }
@@ -365,7 +367,7 @@ void func_incp(char *cmd){
     // tady uz mohu bezpecne zpracovavat
     printf("-- Vyparsovana cesta: %d\n", ret);
 
-    vytvor_soubor(ret, nazev, read_file_from_pc(pc_file));
+    vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1);
 }
 
 

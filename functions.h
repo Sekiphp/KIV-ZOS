@@ -11,7 +11,7 @@
     void ls(int uid);
     int is_empty_dir(int file_uid);
     char* read_file_from_pc(char *pc_soubor);
-    void vytvor_soubor(int cilova_slozka, char *filename, char *pc_soubor);
+    void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid)
     int get_backlink(int uid_pwd);
 
 #endif
