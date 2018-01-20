@@ -298,6 +298,7 @@ void func_incp(char *cmd){
         else {
             // najdu cilove misto pro ulozeni
 
+            // pripravim si cestu a nazev souboru pro vytvoreni
             nazev = strrchr(cmd, '/');
             if (nazev != NULL) {
                 nazev++;

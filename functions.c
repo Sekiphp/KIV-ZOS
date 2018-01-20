@@ -339,15 +339,39 @@ int is_empty_dir(int file_uid) {
 
 
 void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
- /*   int i, j, k, size, ret, potreba_clusteru, adresa;
+    int i, j, k, size, ret, potreba_clusteru, adresa;
     char * result;
-    FILE *f;
+    FILE *fr, fw;
     char pom[100], buffer[CLUSTER_SIZE];
+    char *obsah_z_pc;
 
     i = 0;
     size = 0;
 
-    while((cmd = strtok(NULL, " ")) != NULL){
+    // pracuji se souborem z vnejsi
+    fr = fopen(pc_soubor, "r");
+    if (fr != NULL){
+        // zjistim si delku souboru
+        fseek(fr, 0, SEEK_END);
+        size = ftell(fr);
+
+        obsah_z_pc = (char *) malloc(size);
+        printf("-- size souboru %s je=%d\n", pc_soubor, size);
+
+        // prectu soubor do promenne
+        fseek(fr, 0, SEEK_SET);
+        fread(obsah_z_pc, 1, size, fr);
+
+        printf("-- nacteno z pocitace: %s\n", obsah_z_pc);
+
+        fclose(fr);
+    }
+
+
+
+
+/*
+    while((cmd = strtok(NULL, " \n")) != NULL){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
 
@@ -396,7 +420,7 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
                 return;
             }
 
-printf("OK\n");
+                printf("OK\n");
 
             FILE *fw;
             fw = fopen(output_file, "r+b");
