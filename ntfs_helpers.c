@@ -94,9 +94,6 @@ int delete_file(int file_uid) {
 
         // vycistim mft (virtualne i v souboru)
         clear_mft(file_uid);
-
-        // odstranim odkaz z nadrazeneho adresare
-
     }
 
     return 1;

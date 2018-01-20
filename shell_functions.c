@@ -109,6 +109,13 @@ void func_rmdir(char *cmd){
     }
 
     delete_file(ret);
+
+    // odstranim odkaz z nadrazeneho adresare
+    char *soucasny_obsah = get_file_content(pwd);
+    printf("soucasnost=%s\n", soucasny_obsah);
+
+
+
     printf("OK\n");
 }
 
