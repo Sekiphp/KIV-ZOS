@@ -338,6 +338,8 @@ void func_incp(char *cmd){
                 delka = strlen(cmd) - strlen(nazev);
                 jen_cesta = (char *) malloc(delka);
                 strncpy(jen_cesta, cmd, delka - 1);
+
+                ret = parsuj_pathu(jen_cesta, 1);
             }
             else {
                 delka = strlen(cmd);
@@ -345,11 +347,12 @@ void func_incp(char *cmd){
                 jen_cesta = (char *) malloc(delka);
                 strncpy(nazev, cmd, delka);
                 strncpy(jen_cesta, "/", 1);
+
+                ret = pwd;
             }
 
             printf("-- Full path: %s\n-- Filename: %s\n-- Path to dir: %s\n", cmd, nazev, jen_cesta);
 
-            ret = parsuj_pathu(jen_cesta, 1);
             if (ret == -1){
                 printf("PATH %s NOT FOUND\n", jen_cesta);
                 return;
