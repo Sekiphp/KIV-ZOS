@@ -310,7 +310,7 @@ void ls(int uid) {
 
     // chci vypsat obsah aktualniho adresare
     strncpy(buffer, get_file_content(uid), 1024);
-    // printf("obsah bufferu je: %s\n", buffer);
+    printf("obsah bufferu je: %s\n", buffer);
 
     printf("-- Napoveda: + slozka, - soubor --\n");
     printf("--- NAZEV ----- VELIKOST - UID ---\n");
