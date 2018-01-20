@@ -324,7 +324,6 @@ void ls(int uid) {
         i++;
     }*/
     while((p_c = strtok(NULL, "\n")) != NULL){
-        printf("p_c=%s\n", p_c);
         ls_printer(p_c);
         i++;
     }
