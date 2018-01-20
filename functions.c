@@ -370,7 +370,7 @@ int is_empty_dir(int file_uid) {
 
 
 void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
-    int i, j, k, size, ret, potreba_clusteru, adresa;
+    int i, j, k, size, ret, potreba_clusteru, adresa, volne_uid;
     char * result;
     FILE *fr, fw;
     char pom[100], buffer[CLUSTER_SIZE];
@@ -397,6 +397,9 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         fclose(fr);
     }
 
+    // volne UID pro soubor
+    volne_uid = get_volne_uid();
+
     // kolik budu potrebovat najit clusteru
     potreba_clusteru = size / CLUSTER_SIZE + 1;
     int volne_clustery[potreba_clusteru];
@@ -408,6 +411,7 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         if (ntfs_bitmap[i] == 0) {
             // volna
             volne_clustery[j] = i;
+            printf("-- Volny cluster: %d\n", i);
             j++;
         }
 
@@ -422,32 +426,37 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
     }
 
     // reseni spojitosti a nespojitosti bitmapy
-                int spoj_len = 1;
-                int starter = 0;
+    int spoj_len = 1;
+    int starter = 0;
 
-                for(j = 0; j < potreba_clusteru; j++){
-                    printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
-                    if(volne_clustery[j+1] == volne_clustery[j]+1){
-                        spoj_len = spoj_len + 1;
+    for (j = 0; j < potreba_clusteru; j++) {
+        //printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
+        if (volne_clustery[j+1] == volne_clustery[j]+1) {
+            spoj_len = spoj_len + 1;
 
-                        if (spoj_len == 2){
-                            starter = volne_clustery[j];
-                            printf("\t starter = %d\n", starter);
-                        }
-                    }
-                    else{
-                        if(spoj_len != 1){
-                            printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
-                        }
+            if (spoj_len == 2){
+                starter = volne_clustery[j];
+                //printf("\t starter = %d\n", starter);
+            }
+        }
+        else {
+            if (spoj_len != 1) {
+                //printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
+                printf("f(%d, %d)\n", starter, spoj_len);
+            }
+            else {
+                printf("f(%d, %d)\n", volne_clustery[j], spoj_len);
+            }
 
-                        spoj_len = 1;
-                        starter = 0;
-                    }
-                }
+            spoj_len = 1;
+            starter = 0;
+        }
+    }
 
-                if(spoj_len != 1){
-                    printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
-                }
+    if (spoj_len != 1) {
+        //printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
+        printf("f(%d, %d)\n", starter, spoj_len);
+    }
 
 
 /*
