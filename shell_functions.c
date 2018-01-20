@@ -125,7 +125,7 @@ void func_rmdir(char *cmd){
 
         if (atoi(curLine) != ret){
             strcat(buffer, curLine);
-            strcat(buffer, '\n');
+            strcat(buffer, "\n");
         }
         printf("CURLINE = %s\n", curLine);
 
