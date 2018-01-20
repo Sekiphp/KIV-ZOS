@@ -375,7 +375,7 @@ int append_file_content(int file_uid, char *append){
     @param file_uid Soubor pro editaci
     @param text Cely (novy) obsah
  */
-int edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid){
+void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid){
     delete_file(file_uid);
     vytvor_soubor(pwd, filename, text, puvodni_uid);
 }
