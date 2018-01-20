@@ -61,7 +61,7 @@ int set_cluster_content(int32_t adresa, char *obsah) {
     Smaze data ve vsech clusterech patricich k danemu souboru a uklidi po danem souboru
     @param file_uid UID souboru ke smazani
 */
-int delete_file(int file_uid) {
+void delete_file(int file_uid) {
     MFT_LIST* mft_itemy;
     struct mft_item mfti;
     struct mft_fragment mftf;
@@ -95,8 +95,6 @@ int delete_file(int file_uid) {
         // vycistim mft (virtualne i v souboru)
         clear_mft(file_uid);
     }
-
-    return 1;
 }
 
 /*
@@ -126,6 +124,8 @@ void clear_mft(int file_uid) {
 
         fclose(fw);
     }
+
+    printf("clear mft success\n");
 }
 
 /*

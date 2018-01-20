@@ -76,7 +76,8 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
                 if (debug == 1) printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, cmp_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
-                if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
+                // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
+                if (strncmp(mfti.item_name, dirname, cmp_len) == 0) {
                     if (debug == 1) printf("\t\tSHODA\n");
                     return mfti.uid;
                 }
@@ -323,6 +324,7 @@ void ls(int uid) {
         i++;
     }*/
     while((p_c = strtok(NULL, "\n")) != NULL){
+        printf("p_c=%s\n", p_c);
         ls_printer(p_c);
         i++;
     }
@@ -334,16 +336,18 @@ void ls(int uid) {
 void ls_printer(char *p_c) {
     struct mft_item mfti;
 
-    mfti = mft_seznam[atoi(p_c)]->item;
+    //if (mft_seznam[atoi(p_c)] != NULL){
+        mfti = mft_seznam[atoi(p_c)]->item;
 
-    printf(" ");
-    if (mfti.isDirectory == 1){
-        printf("+");
-    }
-    else{
-        printf("-");
-    }
-    printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
+        printf(" ");
+        if (mfti.isDirectory == 1){
+            printf("+");
+        }
+        else{
+            printf("-");
+        }
+        printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
+    //}
 }
 
 int is_empty_dir(int file_uid) {
@@ -490,8 +494,17 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
             mftf.fragment_count = spoj_len;
 
             mfti.fragments[l] = mftf;
+            l++;
         }
 
+        // dalsi fragmenty z budou jen prazdne (pro poradek)
+        mftf.fragment_start_address = 0;
+        mftf.fragment_count = 0;
+
+        // zacinam od jednicky
+        for (j = l; j < MFT_FRAG_COUNT; j++){
+            mfti.fragments[j] = mftf;
+        }
 
         // aktualizuji bitmapu vsude
         for (j = 0; j < potreba_clusteru; j++){
@@ -512,6 +525,9 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
         sprintf(pom, "%d", volne_uid);
         append_file_content(cilova_slozka, pom);
+
+        // samozrejme nesmim zapomenout vlozit obsah noveho souboru
+        append_file_content(volne_uid, obsah_z_pc);
 
         fclose(fw);
     }
