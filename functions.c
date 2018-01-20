@@ -511,7 +511,7 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         // odkaz na slozku do nadrazeneho adresare
         printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
         sprintf(pom, "%d", volne_uid);
-        append_obsah_souboru(cilova_slozka, pom);
+        append_file_content(cilova_slozka, pom);
 
         fclose(fw);
     }
