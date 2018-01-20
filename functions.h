@@ -2,15 +2,15 @@
 #define FUNC_H
 
     /* Hlavicky funkci ze souboru functions.c -> komentare jsou tam */
-    char* get_mft_item_content(int uid);
-    char* get_cluster_content(int32_t fragment_start_addr, int32_t fragments_count);
-    int set_cluster_content(int32_t cluster_start_addr, char *obsah);
-    int parsuj_pathu(char *patha);
+    int get_volne_uid();
+    int parsuj_pathu(char *patha, int cd);
     int zaloz_novou_slozku(int pwd, char *name);
-    int get_uid_by_name(char *dir_name, int uid_pwd);
-    int append_obsah_souboru(int uid, char *append);
+    int get_uid_by_name(char *dir_name, int uid_pwd, int debug);
+    int is_name_unique(char *newname, int uid_pwd);
     void ls_printer(char *p_c);
     void ls(int uid);
-    void vytvor_soubor_z_pc(int cilova_slozka, char *pc_soubor);
+    int is_empty_dir(int file_uid);
+    void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor);
+    int get_backlink(int uid_pwd);
 
 #endif

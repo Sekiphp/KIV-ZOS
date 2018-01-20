@@ -84,7 +84,7 @@ void loader(char filename[]){
                     printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table.uid);
                 }
                 else{
-                    pridej_prvek(mft_table.uid, mft_table);
+                    pridej_prvek_mft(mft_table.uid, mft_table);
 
                     printf("\t\t\tUID: %d\n", mft_table.uid);
                     printf("\t\t\tIsDirectory: %d\n", mft_table.isDirectory);
@@ -171,7 +171,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         mfti->item_order = 1;
         mfti->item_order_total = 1;
         strcpy(mfti->item_name, "ROOT_DIR");
-        mfti->item_size = 0; // zatim tam nic neni, takze nula
+        mfti->item_size = 1; // zatim tam nic neni, takze nula (je tam backlink)
 
         // zapisu prvni "plny" fragment (ROOT_DIR)
         mftf.fragment_start_address = data_start; // start adresa ve VFS
@@ -196,7 +196,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         /* Zapiseme odkaz na nadrazeny adresar */
         fseek(fw, data_start, SEEK_SET);
         char neco[CLUSTER_SIZE];
-        strcpy(neco, "0\n"); // backlink
+        strcpy(neco, "0"); // backlink - \n prida appender
         fwrite(neco, 1, CLUSTER_SIZE, fw);
 
         fclose(fw);

@@ -14,33 +14,34 @@
 
 /* Posloucha prikazy pro ovladani virtualniho operacniho systemu */
 void *shell(void *arg){
-    sdilenaPamet *param = (sdilenaPamet *) arg;
+    //sdilenaPamet *param = (sdilenaPamet *) arg;
     FILE *fr;
     char command[MAX];
     char *p_c;
+    int use_file = 0;
 
     printf("SHELL booting...\n");
 
-    pthread_mutex_lock(param->mutex);
-        fr = fopen(param->soubor, "rb");
-        if (fr != NULL) {
-            fread(boot, sizeof(struct boot_record), 1, fr);
-            fclose(fr);
-        }
-    	//printf("boot shell: %s\n", boot->signature);
-    pthread_mutex_unlock(param->mutex);
+    //pthread_mutex_lock(param->mutex);
+    //pthread_mutex_unlock(param->mutex);
 
     /* infinite loop - cekam na prikazy */
     while(1){
         printf("$ Zadejte prikaz: ");
-        fgets(command, MAX, stdin);
+
+        if (use_file == 0) {
+            fgets(command, MAX, stdin);
+        }
+        else {
+            fgets(command, MAX, fr);
+
+            if (feof(fr) == 1) {
+                fclose(fr);
+                use_file = 0;
+            }
+        }
 
         p_c = strtok(command, " ");
-        /*
-        if (p_c != NULL){
-            printf("Prvni: %s\n", p_c);
-        }
-        */
 
         if(strncmp(p_c, "cp", 2) == 0){
             func_cp(p_c);
@@ -48,14 +49,15 @@ void *shell(void *arg){
         if(strncmp(p_c, "mv", 2) == 0){
             func_mv(p_c);
         }
-        if(strncmp(p_c, "rm", 2) == 0){
-            func_rm(p_c);
-        }
         if(strncmp(p_c, "mkdir", 5) == 0){
             func_mkdir(p_c);
         }
         if(strncmp(p_c, "rmdir", 5) == 0){
             func_rmdir(p_c);
+            continue;
+        }
+        if(strncmp(p_c, "rm", 2) == 0){
+            func_rm(p_c);
         }
         if(strncmp(p_c, "ls", 2) == 0){
             func_ls(p_c);
@@ -67,7 +69,7 @@ void *shell(void *arg){
             func_cd(p_c);
         }
         if(strncmp(p_c, "pwd", 3) == 0){
-            func_pwd(p_c);
+            func_pwd();
         }
         if(strncmp(p_c, "info", 4) == 0){
             func_info(p_c);
@@ -79,13 +81,21 @@ void *shell(void *arg){
             func_outcp(p_c);
         }
         if(strncmp(p_c, "load", 4) == 0){
-            func_load(p_c);
+            p_c = strtok(NULL, " \n");
+            fr = fopen(p_c, "r");
+            if (fr != NULL)
+                use_file = 1;
+            else
+                printf("FILE NOT FOUND\n");
         }
         if(strncmp(p_c, "defrag", 6) == 0){
             func_defrag();
         }
         if(strncmp(p_c, "consist", 7) == 0){
             func_consist();
+        }
+        if(strncmp(p_c, "exit", 4) == 0){
+            break;
         }
     }
 
