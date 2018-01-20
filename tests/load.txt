@@ -10,3 +10,5 @@ mkdir lubos
 mkdir standa
 cd standa
 pwd
+cd ../..
+ls
