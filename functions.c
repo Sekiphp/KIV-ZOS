@@ -491,8 +491,17 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
             mftf.fragment_count = spoj_len;
 
             mfti.fragments[l] = mftf;
+            l++;
         }
 
+        // dalsi fragmenty z budou jen prazdne (pro poradek)
+        mftf.fragment_start_address = 0;
+        mftf.fragment_count = 0;
+
+        // zacinam od jednicky
+        for (i = l; i < MFT_FRAG_COUNT; i++){
+            mfti->fragments[i] = mftf;
+        }
 
         // aktualizuji bitmapu vsude
         for (j = 0; j < potreba_clusteru; j++){
