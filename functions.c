@@ -372,7 +372,7 @@ int is_empty_dir(int file_uid) {
 void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
     int i, j, k, size, ret, potreba_clusteru, adresa, volne_uid;
     char * result;
-    FILE *fr, fw;
+    FILE *fr, *fw;
     char pom[100], buffer[CLUSTER_SIZE];
     char *obsah_z_pc;
 
@@ -459,6 +459,23 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
     }
 
 
+    // otevru si spojeni s nasim fs
+    FILE *fw;
+    fw = fopen(output_file, "r+b");
+    if (fw != NULL) {
+        // aktualizuji bitmapu vsude
+        for (j = 0; j < potreba_clusteru; j++){
+            ntfs_bitmap[volne_clustery[j]] = 1;
+        }
+        fseek(fw, bootr->bitmap_start_address, SEEK_SET);
+        fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
+
+
+
+        fclose(fw);
+    }
+
+
 /*
     while((cmd = strtok(NULL, " \n")) != NULL){
         if (i == 0){
@@ -467,18 +484,6 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
             // ziskani size
             // nacteni obsahu do result
             // ziskani volnych clusteru
-
-            FILE *fw;
-            fw = fopen(output_file, "r+b");
-            if(fw != NULL){
-                // aktualizuji bitmapu v souboru
-                // + zapnim virtualni clustery (nactene ze souboru)
-                for (j = 0; j < k; j++){
-                    ntfs_bitmap[volne_clustery[j]] = 1;
-                }
-                fseek(fw, bootr->bitmap_start_address, SEEK_SET);
-                fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
-
 // reseni nespojitosti bitmapy
 
                 // prace s mft
