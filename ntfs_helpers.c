@@ -102,10 +102,9 @@ int delete_file(int file_uid) {
 */
 void clear_mft(file_uid) {
     MFT_LIST* mft_itemy;
-    struct mft_item mfti;
     FILE *fw;
     int i, adresa;
-    char obsah[sizeof(mft_item)];
+    char obsah[sizeof(struct mft_item)];
 
     // vynuluji z listu (virtualne)
     free((void *) mft_seznam[file_uid]->item);
@@ -116,11 +115,11 @@ void clear_mft(file_uid) {
         for(i = 0; i < CLUSTER_COUNT; i++) {
             if (i == file_uid) {
                 // prepisu mfti prazdnem
-                adresa = sizeof(boot_record) + sizeof(mft_item) * file_uid;
-                memset(obsah, 0, sizeof(mft_item));
+                adresa = sizeof(struct boot_record) + sizeof(struct mft_item) * file_uid;
+                memset(obsah, 0, sizeof(struct mft_item));
                 printf("-- MFTI chci zapisovat na adresu %u\n", adresa);
                 fseek(fw, adresa, SEEK_SET);
-                fwrite(obsah, 1, sizeof(mft_item), fw);
+                fwrite(obsah, 1, sizeof(struct mft_item), fw);
             }
         }
 
