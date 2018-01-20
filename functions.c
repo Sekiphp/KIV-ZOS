@@ -460,7 +460,6 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
 
 
     // otevru si spojeni s nasim fs
-    FILE *fw;
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
         // aktualizuji bitmapu vsude
