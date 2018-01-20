@@ -373,10 +373,10 @@ int is_empty_dir(int file_uid) {
     Vytvori soubor z pocitace (incp)
 */
 void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
-    int i, j, k, l, size, ret, potreba_clusteru, adresa, volne_uid, spoj_len, starter;
+    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
     FILE *fr, *fw;
-    char *result, *obsah_z_pc;
-    char pom[20]
+    char *obsah_z_pc;
+    char pom[20];
     struct mft_fragment mftf;
     struct mft_item mfti;
     struct mft_item *mpom;
