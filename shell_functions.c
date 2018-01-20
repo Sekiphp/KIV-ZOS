@@ -85,7 +85,7 @@ void func_mkdir(char *cmd){
     Smaze prazdny adresar
 */
 void func_rmdir(char *cmd){
-    int ret;
+    int ret, i;
     char buffer[CLUSTER_SIZE];
 
     cmd = strtok(NULL, " \n");
@@ -118,19 +118,23 @@ void func_rmdir(char *cmd){
     char *curLine = soucasny_obsah;
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
+    i = 0;
     strcpy(buffer, "");
     while (curLine){
         char * nextLine = strchr(curLine, '\n');
         if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
 
         if (atoi(curLine) != ret){
+            if (i != 0)
+                strcat(buffer, "\n");
+
             strcat(buffer, curLine);
-            strcat(buffer, "\n");
         }
         printf("CURLINE = %s\n", curLine);
 
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
         curLine = nextLine ? (nextLine + 1) : NULL;
+        i++;
     }
 
     printf("BUFÍK=%s\n", buffer);
