@@ -337,15 +337,17 @@ void ls_printer(char *p_c) {
     struct mft_item mfti;
 
     mfti = mft_seznam[atoi(p_c)]->item;
+    if (mfti != NULL){
 
-    printf(" ");
-    if (mfti.isDirectory == 1){
-        printf("+");
+        printf(" ");
+        if (mfti.isDirectory == 1){
+            printf("+");
+        }
+        else{
+            printf("-");
+        }
+        printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
     }
-    else{
-        printf("-");
-    }
-    printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
 }
 
 int is_empty_dir(int file_uid) {
