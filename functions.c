@@ -281,9 +281,9 @@ int zaloz_novou_slozku(int pwd, char *name){
                     fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
                     // odkaz na slozku do nadrazeneho adresare (zapis do clusteru)
-                    printf("-- Zapisuji odkaz na adresar %d do adresare %d\n", bitmap_free_index, pwd);
-                    sprintf(pomocnik2, "%d", bitmap_free_index);
-                    append_file_content(pwd, pomocnik2);
+                    printf("-- Zapisuji odkaz na adresar %d do adresare %d\n", volne_uid, pwd);
+                    sprintf(pomocnik2, "%d", volne_uid);
+                    append_file_content(pwd, pomocnik2, 1);
 
                     // odkaz na nadrazenou slozku do teto slozky - backlink
                     // budou to prvni zapsana data v teto slozce
@@ -536,11 +536,11 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         if (odkaz == 1) {
             printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
             sprintf(pom, "%d", volne_uid);
-            append_file_content(cilova_slozka, pom);
+            append_file_content(cilova_slozka, pom, 1);
         }
 
         // samozrejme nesmim zapomenout vlozit obsah noveho souboru
-        append_file_content(volne_uid, text);
+        append_file_content(volne_uid, text, 0);
 
         fclose(fw);
     }

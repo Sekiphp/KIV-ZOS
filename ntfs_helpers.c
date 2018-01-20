@@ -299,7 +299,7 @@ int update_filesize(int file_uid, int length){
     @param file_uid UID souboru
     @param append Retezec pro pripojeni nakonec souboru
 */
-int append_file_content(int file_uid, char *append){
+int append_file_content(int file_uid, char *append, int dir){
     int i, j, adresa, delka;
     char *ret;
     MFT_LIST* mft_itemy;
@@ -346,7 +346,9 @@ int append_file_content(int file_uid, char *append){
             strcat(ret, get_cluster_content(adresa));
 
             // pripojim k nemu co potrebuji
-            strcat(ret, "\n");
+            if (dir == 1)
+                strcat(ret, "\n"); // tohle plati jen pro slozky
+
             strcat(ret, append);
             delka = strlen(ret);
 
