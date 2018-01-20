@@ -376,8 +376,50 @@ void func_incp(char *cmd){
 
 
 void func_outcp(char *cmd){
+    int i, ret, delka;
+    FILE *fw;
+    char pc_file[100];
+    char *nazev;
+    char *obsah;
+
+    i = 0;
+
+    // postupne cteni argumentu
     while((cmd = strtok(NULL, " \n")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+        if (i == 0){
+            // soubor k presunu z FS
+            ret = parsuj_pathu(cmd, 1);
+
+            if (ret == -1){
+                printf("PATH %s NOT FOUND\n", jen_cesta);
+                return;
+            }
+
+            obsah = get_file_content(ret);
+
+            printf("OUT obsah: %s\n", obsah);
+        }
+        else {
+            // ulozim do pc
+
+            strncpy(pc_file, cmd, strlen(cmd));
+            fw = fopen(pc_file, "w");
+            if (fw == NULL){
+                printf("FILE %s NOT FOUND\n", pc_file);
+                return;
+            }
+
+            fwrite(obsah, 1, strlen(obsah), fw);
+
+            fclose(fw);
+        }
+
+        i++;
+    }
+
+    if (i != 2) {
+        printf("TOO FEW ARGS\n");
+        return;
     }
 }
 
