@@ -28,9 +28,26 @@ void func_mv(char *cmd){
 
 
 void func_rm(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+    int ret;
+
+    cmd = strtok(NULL, " \n");
+
+    ret = parsuj_pathu(cmd, 1);
+
+    printf("RET %d", ret);
+
+    if (ret == -1){
+        printf("PATH NOT FOUND\n");
+        return;
     }
+
+    if (mft_seznam[ret]->item.isDirectory == 1){
+        printf("NOT A FILE\n");
+        return;
+    }
+
+    delete_file(ret);
+    printf("OK\n");
 }
 
 
@@ -92,6 +109,7 @@ void func_rmdir(char *cmd){
     }
 
     delete_file(ret);
+    printf("OK\n");
 }
 
 
