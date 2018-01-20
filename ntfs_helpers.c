@@ -126,6 +126,8 @@ void clear_mft(int file_uid) {
 
         fclose(fw);
     }
+
+    printf("clear mft success\n");
 }
 
 /*
