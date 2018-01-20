@@ -76,7 +76,8 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
                 if (debug == 1) printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, cmp_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
-                if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
+                // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
+                if (strncmp(mfti.item_name, dirname, cmp_len) == 0) {
                     if (debug == 1) printf("\t\tSHODA\n");
                     return mfti.uid;
                 }
