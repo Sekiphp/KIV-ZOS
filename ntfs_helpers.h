@@ -12,5 +12,6 @@
     void delete_file(int file_uid);
     int update_filesize(int file_uid, int length);
     int append_file_content(int file_uid, char *append);
+    //int edit_file_content(int file_uid, char *text);
 
 #endif

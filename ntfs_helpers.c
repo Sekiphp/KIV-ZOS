@@ -307,9 +307,9 @@ int append_file_content(int file_uid, char *append){
     FILE *fw;
 
     ret = (char *) malloc(CLUSTER_SIZE);
-    char *soucasny_obsah = get_file_content(file_uid);
+    //char *soucasny_obsah = get_file_content(file_uid);
 
-    printf("Soucasny obsah souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
+    //printf("Soucasny obsah souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
     printf("Chci appendnout: %s\n", append);
 
     fw = fopen(output_file, "r+b");
@@ -368,3 +368,87 @@ int append_file_content(int file_uid, char *append){
 
     return 1;
 }
+
+/*
+    TODO
+    Zmeni obsah souboru - resi nafukovani a smrstovani souboru
+    @param file_uid Soubor pro editaci
+    @param text Cely (novy) obsah
+ */
+/*
+int edit_file_content(int file_uid, char *text){
+    int i, j, adresa, delka, potreba_clusteru, mam_clusteru, zpracovano_clusteru;
+    char *ret;
+    MFT_LIST* mft_itemy;
+    struct mft_fragment mftf;
+    char buffer[CLUSTER_COUNT];
+
+    potreba_clusteru = (strlen(text) / 1024) + 1;
+
+    ret = (char *) malloc(CLUSTER_SIZE);
+
+    printf("Chci zapsat: %s\n", text);
+
+    // vymazu obsah vsech fragmentu, aby se mi to nepletlo
+    // soucasne si clustery spoctu a zkontroluji jeslti jich mam dostatek
+    mam_clusteru = 0;
+    if (mft_seznam[file_uid] != NULL) {
+        mft_itemy = mft_seznam[file_uid];
+
+        // projedeme vsechny itemy pro dane UID souboru
+        i = 0;
+        while (mft_itemy != NULL){
+            i++;
+            printf("-- [%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_itemy->item.uid, mft_itemy->item.item_name);
+
+            // precteme vsechny fragmenty z daneho mft itemu (maximalne je jich: MFT_FRAG_COUNT)
+            for (j = 0; j < MFT_FRAG_COUNT; j++){
+                mftf = mft_itemy->item.fragments[j];
+                mam_clusteru += mftf.fragment_count;
+
+                clear_fragment_content(mftf);
+            }
+
+            // prehodim se na dalsi prvek
+            mft_itemy = mft_itemy->dalsi;
+        }
+    }
+
+    if (mam_clusteru >= potreba_clusteru){
+        // je to relativne v pohode
+        mft_itemy = mft_seznam[file_uid];
+
+        // projedeme vsechny itemy pro dane UID souboru
+        i = 0;
+        zpracovano_clusteru = 0;
+        while (mft_itemy != NULL){
+            i++;
+            printf("-- [%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_itemy->item.uid, mft_itemy->item.item_name);
+
+            // precteme vsechny fragmenty z daneho mft itemu (maximalne je jich: MFT_FRAG_COUNT)
+            for (j = 0; j < MFT_FRAG_COUNT; j++){
+                mftf = mft_itemy->item.fragments[j];
+                zpracovano_clusteru += mftf.fragment_count;
+
+                strncpy(buffer, text, CLUSTER_SIZE);
+
+            }
+
+            // prehodim se na dalsi prvek
+            mft_itemy = mft_itemy->dalsi;
+        }
+    }
+    else {
+        // a jeje, tohle je spatne, musim alokovat dalsi clustery
+        // TODO
+    }
+
+            // zaktualizuji virtualni mft i mft v souboru
+            //update_filesize(file_uid, delka);
+
+            //printf("Dokoncuji editaci clusteru /%s/; strlen=%d\n", ret, delka);
+
+
+    return 1;
+}
+*/

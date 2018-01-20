@@ -372,39 +372,46 @@ int is_empty_dir(int file_uid) {
     return 0;
 }
 
+char* read_file_from_pc(char *pc_soubor){
+    int size;
+    FILE *fr;
+    char *ret;
 
-/*
-    Vytvori soubor z pocitace (incp)
-*/
-void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
-    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
-    FILE *fr, *fw;
-    char *obsah_z_pc;
-    char pom[20];
-    struct mft_fragment mftf;
-    struct mft_item mfti;
-    struct mft_item *mpom;
-
-    size = 0;
-
-    // pracuji se souborem z vnejsi
     fr = fopen(pc_soubor, "r");
     if (fr != NULL){
         // zjistim si delku souboru
         fseek(fr, 0, SEEK_END);
         size = ftell(fr);
 
-        obsah_z_pc = (char *) malloc(size);
+        ret = (char *) malloc(size);
         printf("-- size souboru %s je=%d\n", pc_soubor, size);
 
         // prectu soubor do promenne
         fseek(fr, 0, SEEK_SET);
-        fread(obsah_z_pc, 1, size, fr);
+        fread(ret, 1, size, fr);
 
-        printf("-- nacteno z pocitace: %s\n", obsah_z_pc);
+        printf("-- nacteno z pocitace: %s\n", ret);
 
         fclose(fr);
     }
+
+    return ret;
+}
+
+
+/*
+    Vytvori soubor z pocitace (incp)
+*/
+void vytvor_soubor(int cilova_slozka, char *filename, char *text){
+    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
+    FILE *fw;
+    char pom[20];
+    struct mft_fragment mftf;
+    struct mft_item mfti;
+    struct mft_item *mpom;
+
+    // delka textu
+    size = strlen(text);
 
     // volne UID pro soubor
     volne_uid = get_volne_uid();
@@ -444,7 +451,7 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         mfti.item_order = 1;
         mfti.item_order_total = 1;
         strcpy(mfti.item_name, filename);
-        mfti.item_size = strlen(obsah_z_pc); // zatim tam nic neni, takze nula
+        mfti.item_size = strlen(text); // zatim tam nic neni, takze nula
 
         // reseni spojitosti a nespojitosti bitmapy
         spoj_len = 1;
@@ -527,7 +534,7 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         append_file_content(cilova_slozka, pom);
 
         // samozrejme nesmim zapomenout vlozit obsah noveho souboru
-        append_file_content(volne_uid, obsah_z_pc);
+        append_file_content(volne_uid, text);
 
         fclose(fw);
     }

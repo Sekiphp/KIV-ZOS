@@ -112,7 +112,6 @@ void func_rmdir(char *cmd){
     delete_file(ret);
 
     // odstranim odkaz z nadrazeneho adresare
-    /*
     char *soucasny_obsah = get_file_content(pwd);
     printf("soucasnost=%s\n", soucasny_obsah);
 
@@ -131,7 +130,7 @@ void func_rmdir(char *cmd){
 
             strcat(buffer, curLine);
         }
-        printf("CURLINE = %s\n", curLine);
+        //printf("CURLINE = %s\n", curLine);
 
         if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
         curLine = nextLine ? (nextLine + 1) : NULL;
@@ -139,7 +138,7 @@ void func_rmdir(char *cmd){
     }
 
     printf("BUFÍK=%s\n", buffer);
-*/
+
     printf("OK\n");
 }
 
@@ -366,7 +365,7 @@ void func_incp(char *cmd){
     // tady uz mohu bezpecne zpracovavat
     printf("-- Vyparsovana cesta: %d\n", ret);
 
-    vytvor_soubor_z_pc(ret, nazev, pc_file);
+    vytvor_soubor(ret, nazev, read_file_from_pc(pc_file));
 }
 
 
