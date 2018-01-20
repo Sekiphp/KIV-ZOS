@@ -385,8 +385,8 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         }
     }
 
-    if (k != potreba_clusteru){
-        printf("ERROR - NOT ENOUGH CLUSTERS (%d)\n", k);
+    if (j != potreba_clusteru){
+        printf("ERROR - NOT ENOUGH CLUSTERS (%d)\n", j);
         return;
     }
 
@@ -397,26 +397,8 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         if (i == 0){
             // zpracovavam prvni argument - najdu v PC
 
-            strncpy(pom, cmd, strlen(cmd));
-            f = fopen(pom, "r");
-            if (f == NULL){
-                printf("FILE %s NOT FOUND\n", pom);
-                return; // -1 means file opening fail
-            }
-
-            fseek(f, 0, SEEK_END);
-            size = ftell(f);
-            printf("size=%d\n", size);
-
-            fseek(f, 0, SEEK_SET);
-            result = (char *)malloc(size+1);
-            if (size != fread(result, sizeof(char), size, f))
-            {
-                printf("OPENING FILE ERROR\n");
-                free((void *) result);
-                return; // -2 means file reading fail
-            }
-            fclose(f);
+            // ziskani size
+            // nacteni obsahu do result
 
             // hledam volne clustery v bitmape
             potreba_clusteru = size / CLUSTER_SIZE + 1;
