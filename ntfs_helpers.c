@@ -57,6 +57,10 @@ int set_cluster_content(int32_t adresa, char *obsah) {
     return -1;
 }
 
+int set_file_content(int file_uid) {
+
+}
+
 /*
     Ziska obsah vsech fragmentu patricich do clusteru
     @param fragment Struktura fragmentu, kterou chceme cist
