@@ -84,7 +84,7 @@ void loader(char filename[]){
                     printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table.uid);
                 }
                 else{
-                    pridej_prvek(mft_table.uid, mft_table);
+                    pridej_prvek_mft(mft_table.uid, mft_table);
 
                     printf("\t\t\tUID: %d\n", mft_table.uid);
                     printf("\t\t\tIsDirectory: %d\n", mft_table.isDirectory);

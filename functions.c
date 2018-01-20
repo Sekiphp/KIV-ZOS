@@ -230,7 +230,7 @@ int zaloz_novou_slozku(int pwd, char *name){
                 // prvek mam pripraveny
                 // zaktualizuji si globalni pole a bitmapu
                 ntfs_bitmap[bitmap_free_index] = 1;
-                pridej_prvek(bitmap_free_index, mfti);
+                pridej_prvek_mft(bitmap_free_index, mfti);
 
                 // zapisu do souboru
                 fw = fopen(output_file, "r+b");
@@ -465,7 +465,7 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
                 // prvek mam pripraveny
                 // zaktualizuji si globalni pole a bitmapu
                 ntfs_bitmap[bitmap_free_index] = 1;
-                pridej_prvek(bitmap_free_index, mfti);
+                pridej_prvek_mft(bitmap_free_index, mfti);
 
                 // zapisu do souboru
                 fw = fopen(output_file, "r+b");

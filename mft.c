@@ -6,7 +6,7 @@
 #include "mft.h"
 
 /* Alokuje prvek mft listu - vcetne testovani na dostatek pameti */
-MFT_LIST *alokuj_prvek(struct mft_item mfti) {
+MFT_LIST *alokuj_prvek_mft(struct mft_item mfti) {
     MFT_LIST *ml;
     if ((ml = (MFT_LIST *) malloc(sizeof(MFT_LIST))) == NULL) {
         printf("Out of memory - MFT_LIST\n");
@@ -19,10 +19,10 @@ MFT_LIST *alokuj_prvek(struct mft_item mfti) {
 }
 
 /* Prida prvek mft na prislusny index do globalniho mft pole */
-void pridej_prvek(int uid, struct mft_item mfti) {
+void pridej_prvek_mft(int uid, struct mft_item mfti) {
     //printf("Pridavam prvek do mft UID=%d\n", uid);
 
-    MFT_LIST *pom = alokuj_prvek(mfti);
+    MFT_LIST *pom = alokuj_prvek_mft(mfti);
 
     if(mft_seznam[uid] == NULL){
         pom->ij = 55;
