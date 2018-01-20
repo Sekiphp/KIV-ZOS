@@ -12,21 +12,27 @@
 extern int pwd;
 extern char output_file[100];
 
+/*
+    Zkopiruje s1 do s2
+*/
 void func_cp(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
+    while((cmd = strtok(NULL, " \n")) != NULL){
         printf("Ostatni: %s\n", cmd);
     }
 }
 
-
+/*
+    Presune s1 do s2
+*/
 void func_mv(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
+    while((cmd = strtok(NULL, " \n")) != NULL){
         printf("Ostatni: %s\n", cmd);
     }
 }
 
-
-
+/*
+    Smaze soubor s1
+*/
 void func_rm(char *cmd){
     int ret, i;
     char buffer[CLUSTER_SIZE];
@@ -82,7 +88,10 @@ void func_rm(char *cmd){
 }
 
 
-/* validni: mkdir neco, mkdir /var/www/neco, ale /var/www uz musi existovat */
+/*
+    Vytvori adresar a1
+    validni: mkdir neco, mkdir /var/www/neco, ale /var/www uz musi existovat
+*/
 void func_mkdir(char *cmd){
     int ret;
 
