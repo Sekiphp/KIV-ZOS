@@ -184,7 +184,7 @@ void clear_bitmap(struct mft_fragment fragment) {
     FILE *fw;
 
     // podle adresy pozname ID clusteru
-    index_s = (bootr->data_start_address - fragment.fragment_start_address) / CLUSTER_SIZE;
+    index_s = (fragment.fragment_start_address - bootr->data_start_address) / CLUSTER_SIZE;
     index_e = index_s + fragment.fragment_count;
 
     printf("-- Index bitmapy pro vynulovani je %d\n", index_s);

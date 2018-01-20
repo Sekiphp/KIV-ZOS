@@ -8,6 +8,7 @@
     int is_name_unique(char *newname, int uid_pwd);
     void ls_printer(char *p_c);
     void ls(int uid);
+    int is_empty_dir(int file_uid);
     void vytvor_soubor_z_pc(int cilova_slozka, char *pc_soubor);
     int get_backlink(int uid_pwd);
 

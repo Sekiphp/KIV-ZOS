@@ -315,6 +315,27 @@ void ls_printer(char *p_c) {
     printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
 }
 
+int is_empty_dir(int file_uid) {
+    char *curLine = get_file_content(file_uid);
+    int i = 0;
+
+    // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
+    while (curLine){
+        char * nextLine = strchr(curLine, '\n');
+        if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
+
+        i++;
+
+        if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
+        curLine = nextLine ? (nextLine + 1) : NULL;
+    }
+
+    if (i <= 1) {
+        return 1;
+    }
+
+    return 0;
+}
 
 
 void vytvor_soubor_z_pc(int cilova_slozka, char *pc_soubor){

@@ -81,6 +81,16 @@ void func_rmdir(char *cmd){
         return;
     }
 
+    if (mft_seznam[ret]->item.isDirectory == 0){
+        printf("NOT A DIRECTORY\n");
+        return;
+    }
+
+    if (is_empty_dir(ret) == 0){
+        printf("NOT EMPTY\n");
+        return;
+    }
+
     delete_file(ret);
 }
 
