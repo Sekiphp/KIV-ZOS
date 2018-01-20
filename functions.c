@@ -338,7 +338,7 @@ int is_empty_dir(int file_uid) {
 }
 
 
-void vytvor_soubor_z_pc(int cilova_slozka, char *pc_soubor){
+void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
  /*   int i, j, k, size, ret, potreba_clusteru, adresa;
     char * result;
     FILE *f;

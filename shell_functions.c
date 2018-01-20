@@ -275,9 +275,11 @@ void func_info(char *cmd){
 
 
 void func_incp(char *cmd){
-    int i, ret;
+    int i, ret, delka;
     FILE *f;
     char pc_file[100];
+    char *nazev;
+    char *jen_cesta;
 
     i = 0;
 
@@ -295,11 +297,28 @@ void func_incp(char *cmd){
         }
         else {
             // najdu cilove misto pro ulozeni
-            printf("Cesta k parsovani je: --%s--\n", cmd);
 
-            ret = parsuj_pathu(cmd, 1);
+            nazev = strrchr(cmd, '/');
+            if (nazev != NULL) {
+                nazev++;
+
+                delka = strlen(cmd) - strlen(nazev);
+                jen_cesta = (char *) malloc(delka);
+                strncpy(jen_cesta, cmd, delka - 1);
+            }
+            else {
+                delka = strlen(cmd);
+                nazev = (char *) malloc(delka);
+                jen_cesta = (char *) malloc(delka);
+                strncpy(nazev, cmd, delka);
+                strncpy(jen_cesta, "/", 1);
+            }
+
+            printf("-- Full path: %s\n-- Filename: %s\n-- Path to dir: %s\n", cmd, nazev, jen_cesta);
+
+            ret = parsuj_pathu(jen_cesta, 1);
             if (ret == -1){
-                printf("PATH %s NOT FOUND\n", cmd);
+                printf("PATH %s NOT FOUND\n", jen_cesta);
                 return;
             }
         }
@@ -315,7 +334,7 @@ void func_incp(char *cmd){
     // tady uz mohu bezpecne zpracovavat
     printf("-- Vyparsovana cesta: %d\n", ret);
 
-    vytvor_soubor_z_pc(ret, pc_file);
+    vytvor_soubor_z_pc(ret, nazev, pc_file);
 }
 
 
