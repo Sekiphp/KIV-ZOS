@@ -390,54 +390,7 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         return;
     }
 
-
-
-/*
-    while((cmd = strtok(NULL, " \n")) != NULL){
-        if (i == 0){
-            // zpracovavam prvni argument - najdu v PC
-
-            // ziskani size
-            // nacteni obsahu do result
-
-            // hledam volne clustery v bitmape
-            potreba_clusteru = size / CLUSTER_SIZE + 1;
-            int volne_clustery[potreba_clusteru];
-
-            printf("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
-
-            k = 0;
-            for (j = 0; j < CLUSTER_COUNT; j++) {
-                if (ntfs_bitmap[j] == 0) {
-                    // volna
-                    volne_clustery[k] = j;
-                    k++;
-                }
-
-                if (k == potreba_clusteru) {
-                    break;
-                }
-            }
-
-            if (k != potreba_clusteru){
-                printf("ERROR - NOT ENOUGH CLUSTERS (%d)\n", k);
-                return;
-            }
-
-                printf("OK\n");
-
-            FILE *fw;
-            fw = fopen(output_file, "r+b");
-            if(fw != NULL){
-                // aktualizuji bitmapu v souboru
-                // + zapnim virtualni clustery (nactene ze souboru)
-                for (j = 0; j < k; j++){
-                    ntfs_bitmap[volne_clustery[j]] = 1;
-                }
-                fseek(fw, bootr->bitmap_start_address, SEEK_SET);
-                fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
-
-                // reseni spojitosti a nespojitosti bitmapy
+    // reseni spojitosti a nespojitosti bitmapy
                 int spoj_len = 1;
                 int starter = 0;
 
@@ -464,6 +417,29 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
                 if(spoj_len != 1){
                     printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
                 }
+
+
+/*
+    while((cmd = strtok(NULL, " \n")) != NULL){
+        if (i == 0){
+            // zpracovavam prvni argument - najdu v PC
+
+            // ziskani size
+            // nacteni obsahu do result
+            // ziskani volnych clusteru
+
+            FILE *fw;
+            fw = fopen(output_file, "r+b");
+            if(fw != NULL){
+                // aktualizuji bitmapu v souboru
+                // + zapnim virtualni clustery (nactene ze souboru)
+                for (j = 0; j < k; j++){
+                    ntfs_bitmap[volne_clustery[j]] = 1;
+                }
+                fseek(fw, bootr->bitmap_start_address, SEEK_SET);
+                fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
+
+// reseni nespojitosti bitmapy
 
                 // prace s mft
     if (bitmap_free_index != -1){
