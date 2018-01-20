@@ -523,6 +523,9 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         sprintf(pom, "%d", volne_uid);
         append_file_content(cilova_slozka, pom);
 
+        // samozrejme nesmim zapomenout vlozit obsah noveho souboru
+        append_file_content(obsah_z_pc, volne_uid);
+
         fclose(fw);
     }
 }
