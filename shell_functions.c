@@ -81,6 +81,7 @@ void func_rmdir(char *cmd){
         return;
     }
 
+    delete_file(ret);
 }
 
 
