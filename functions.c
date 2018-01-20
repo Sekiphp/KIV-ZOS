@@ -499,8 +499,8 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         mftf.fragment_count = 0;
 
         // zacinam od jednicky
-        for (i = l; i < MFT_FRAG_COUNT; i++){
-            mfti->fragments[i] = mftf;
+        for (j = l; j < MFT_FRAG_COUNT; j++){
+            mfti.fragments[j] = mftf;
         }
 
         // aktualizuji bitmapu vsude
