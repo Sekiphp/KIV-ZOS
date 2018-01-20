@@ -65,6 +65,7 @@ int delete_file(int file_uid) {
     MFT_LIST* mft_itemy;
     struct mft_item mfti;
     struct mft_fragment mftf;
+    int j;
 
     // najdu vsechny mfti
     if (mft_seznam[file_uid] != NULL){
@@ -94,6 +95,8 @@ int delete_file(int file_uid) {
         // vycistim mft (virtualne i v souboru)
         clear_mft(file_uid);
     }
+
+    return 1;
 }
 
 /*
@@ -107,7 +110,6 @@ void clear_mft(file_uid) {
     char obsah[sizeof(struct mft_item)];
 
     // vynuluji z listu (virtualne)
-    free((void *) mft_seznam[file_uid]->item);
     mft_seznam[file_uid] = NULL;
 
     fw = fopen(output_file, "r+b");
@@ -185,7 +187,7 @@ void clear_bitmap(struct mft_fragment fragment) {
     index_s = (bootr->data_start_address - fragment.fragment_start_address) / CLUSTER_SIZE;
     index_e = index_s + fragment.fragment_count;
 
-    printf("-- Index bitmapy pro vynulovani je %d\n", adresa);
+    printf("-- Index bitmapy pro vynulovani je %d\n", index_s);
 
     // updatuju virtualni bitmapu
     for (i = index_s; i < index_e; i++) {
