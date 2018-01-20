@@ -345,7 +345,6 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
     char pom[100], buffer[CLUSTER_SIZE];
     char *obsah_z_pc;
 
-    i = 0;
     size = 0;
 
     // pracuji se souborem z vnejsi
@@ -367,6 +366,29 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         fclose(fr);
     }
 
+    // kolik budu potrebovat najit clusteru
+    potreba_clusteru = size / CLUSTER_SIZE + 1;
+    int volne_clustery[potreba_clusteru];
+
+    printf("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
+
+    j = 0;
+    for (i = 0; i < CLUSTER_COUNT; i++) {
+        if (ntfs_bitmap[i] == 0) {
+            // volna
+            volne_clustery[j] = i;
+            j++;
+        }
+
+        if (j == potreba_clusteru) {
+            break;
+        }
+    }
+
+    if (k != potreba_clusteru){
+        printf("ERROR - NOT ENOUGH CLUSTERS (%d)\n", k);
+        return;
+    }
 
 
 
