@@ -4,10 +4,12 @@
     /* Hlavicky funkci ze souboru ntfs_helpers.c -> komentare jsou tam */
     char* get_cluster_content(int32_t adresa);
     int set_cluster_content(int32_t adresa, char *obsah);
-    int set_fragment_content(struct mft_fragment fragment);
+    void clear_bitmap(struct mft_fragment fragment);
+    void clear_mft(file_uid);
+    void clear_fragment_content(struct mft_fragment fragment);
     char* get_fragment_content(struct mft_fragment fragment);
     char* get_file_content(int file_uid);
-    int set_file_content(int file_uid);
+    int delete_file(int file_uid);
     int update_filesize(int file_uid, int length);
     int append_file_content(int file_uid, char *append);
 

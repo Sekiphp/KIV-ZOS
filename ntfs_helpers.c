@@ -12,7 +12,7 @@
 
 extern int pwd;
 extern char output_file[100];
-
+extern int ntfs_bitmap[]; // v loader.c
 
 /*
     Ziska data z jednoho clusteru
@@ -58,10 +58,10 @@ int set_cluster_content(int32_t adresa, char *obsah) {
 }
 
 /*
-    Smaze data ve vsech clusterech patricich k danemu souboru
+    Smaze data ve vsech clusterech patricich k danemu souboru a uklidi po danem souboru
     @param file_uid UID souboru ke smazani
 */
-int set_file_content(int file_uid) {
+int delete_file(int file_uid) {
     MFT_LIST* mft_itemy;
     struct mft_item mfti;
     struct mft_fragment mftf;
@@ -79,16 +79,55 @@ int set_file_content(int file_uid) {
                 mftf = mfti.fragments[j];
 
                 if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
-                    // prepisu data
+                    // prepisu data - smazu clustery v souboru
+                    clear_fragment_content(mftf);
 
+                    // vymazu bitmapu (virtualne i v souboru)
+                    clear_bitmap(mftf);
                 }
             }
 
             // prehodim se na dalsi prvek
             mft_itemy = mft_itemy->dalsi;
         }
+
+        // vycistim mft (virtualne i v souboru)
+        clear_mft(file_uid);
     }
 }
+
+/*
+    Smaze zaznam z mtf
+    @param file_uid
+*/
+void clear_mft(file_uid) {
+    MFT_LIST* mft_itemy;
+    struct mft_item mfti;
+    FILE *fw;
+    int i, adresa;
+    char obsah[sizeof(mft_item)];
+
+    // vynuluji z listu (virtualne)
+    free((void *) mft_seznam[file_uid]->item);
+    mft_seznam[file_uid] = NULL;
+
+    fw = fopen(output_file, "r+b");
+    if(fw != NULL) {
+        for(i = 0; i < CLUSTER_COUNT; i++) {
+            if (i == file_uid) {
+                // prepisu mfti prazdnem
+                adresa = sizeof(boot_record) + sizeof(mft_item) * file_uid;
+                memset(obsah, 0, sizeof(mft_item));
+                printf("-- MFTI chci zapisovat na adresu %u\n", adresa);
+                fseek(fw, adresa, SEEK_SET);
+                fwrite(obsah, 1, sizeof(mft_item), fw);
+            }
+        }
+
+        fclose(fw);
+    }
+}
+
 /*
     Ziska obsah vsech fragmentu patricich do clusteru
     @param fragment Struktura fragmentu, kterou chceme cist
@@ -113,8 +152,56 @@ char* get_fragment_content(struct mft_fragment fragment) {
     return ret;
 }
 
-int set_fragment_content(struct mft_fragment fragment) {
+/*
+    Vynuluje obsah zadaneho fragmentu
+    @param fragment Struktura fragmentu, ktery chceme prepsat
+*/
+void clear_fragment_content(struct mft_fragment fragment) {
+    int adresa, bloku, i;
+    char obsah[CLUSTER_SIZE];
 
+    adresa = fragment.fragment_start_address;
+    bloku = fragment.fragment_count;
+
+    memset(obsah, 0, CLUSTER_SIZE);
+
+    if (adresa != 0) {
+        for (i = 0; i < bloku; i++) {
+            set_cluster_content(adresa, obsah);
+
+            adresa = adresa + CLUSTER_SIZE;
+        }
+    }
+}
+
+/*
+    Vynuluje obsah zadaneho fragmentu
+    @param fragment Struktura fragmentu, ktey chceme prepsat
+*/
+void clear_bitmap(struct mft_fragment fragment) {
+    int index_s, index_e, i;
+    FILE *fw;
+
+    // podle adresy pozname ID clusteru
+    index_s = (bootr->data_start_address - fragment.fragment_start_address) / CLUSTER_SIZE;
+    index_e = index_s + fragment.fragment_count;
+
+    printf("-- Index bitmapy pro vynulovani je %d\n", adresa);
+
+    // updatuju virtualni bitmapu
+    for (i = index_s; i < index_e; i++) {
+        ntfs_bitmap[i] = 0;
+    }
+
+    // prepisu celou bitmapu v souboru
+    fw = fopen(output_file, "r+b");
+    if(fw != NULL){
+        printf("-- Bitmapu chci zapisovat na adresu %u\n", bootr->bitmap_start_address);
+        fseek(fw, bootr->bitmap_start_address, SEEK_SET);
+        fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
+
+        fclose(fw);
+    }
 }
 
 /*
