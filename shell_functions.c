@@ -282,7 +282,7 @@ void func_incp(char *cmd){
     i = 0;
 
     // postupne cteni argumentu
-    while((cmd = strtok(NULL, " ")) != NULL){
+    while((cmd = strtok(NULL, " \n")) != NULL){
         if (i == 0){
             // soubor k presunu z pocitace
             // overim jeho existenci
@@ -321,18 +321,11 @@ void func_incp(char *cmd){
 
 
 void func_outcp(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
+    while((cmd = strtok(NULL, " \n")) != NULL){
         printf("Ostatni: %s\n", cmd);
     }
 }
 
-
-
-void func_load(char *cmd){
-    while((cmd = strtok(NULL, " ")) != NULL){
-        printf("Ostatni: %s\n", cmd);
-    }
-}
 
 void func_defrag(){
 
