@@ -93,7 +93,7 @@ void func_mkdir(char *cmd){
         return;
     }
     else {
-        ret = parsuj_pathu(cmd, 0);
+        ret = parsuj_pathu(cmd, 1);
     }
 
     // zkusim si tu cestu projit
