@@ -6,9 +6,9 @@
 #include "mft.h"
 #include "shell_functions.h"
 #include "boot_record.h"
+#include "ntfs_helpers.h"
 #include "functions.h"
 #include "parametr.h"
-#include "ntfs_helpers.h"
 
 extern int pwd;
 extern char output_file[100];
@@ -509,9 +509,10 @@ void vytvor_soubor_z_pc(int cilova_slozka, char *filename, char *pc_soubor){
         fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
         // odkaz na slozku do nadrazeneho adresare
-        printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, pwd);
+        printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
         sprintf(pom, "%d", volne_uid);
-        append_obsah_souboru(pwd, pom);
+        append_obsah_souboru(cilova_slozka, pom);
 
         fclose(fw);
     }
+}
