@@ -401,7 +401,7 @@ char* read_file_from_pc(char *pc_soubor){
 /*
     Vytvori soubor z pocitace (incp)
 */
-void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir){
+void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir, int odkaz){
     int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
     FILE *fw;
     char pom[20];
@@ -533,9 +533,11 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
         // odkaz na slozku do nadrazeneho adresare
-        printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
-        sprintf(pom, "%d", volne_uid);
-        append_file_content(cilova_slozka, pom);
+        if (odkaz == 1) {
+            printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
+            sprintf(pom, "%d", volne_uid);
+            append_file_content(cilova_slozka, pom);
+        }
 
         // samozrejme nesmim zapomenout vlozit obsah noveho souboru
         append_file_content(volne_uid, text);
