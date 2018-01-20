@@ -2,6 +2,7 @@
 #define FUNC_H
 
     /* Hlavicky funkci ze souboru functions.c -> komentare jsou tam */
+    int get_volne_uid();
     int parsuj_pathu(char *patha, int cd);
     int zaloz_novou_slozku(int pwd, char *name);
     int get_uid_by_name(char *dir_name, int uid_pwd, int debug);

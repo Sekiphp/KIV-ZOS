@@ -103,7 +103,7 @@ int delete_file(int file_uid) {
     Smaze zaznam z mtf
     @param file_uid
 */
-void clear_mft(file_uid) {
+void clear_mft(int file_uid) {
     MFT_LIST* mft_itemy;
     FILE *fw;
     int i, adresa;
