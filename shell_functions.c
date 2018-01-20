@@ -28,7 +28,8 @@ void func_mv(char *cmd){
 
 
 void func_rm(char *cmd){
-    int ret;
+    int ret, i;
+    char buffer[CLUSTER_SIZE];
 
     cmd = strtok(NULL, " \n");
 
