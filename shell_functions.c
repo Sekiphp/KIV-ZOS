@@ -139,7 +139,7 @@ void func_rmdir(char *cmd){
 
     printf("BUFÍK=%s\n", buffer);
     // UID se musi zachovat kvuli linkum
-    edit_file_content(pwd, buffer, mft_seznam[ret]->item.item_name, mft_seznam[ret]->item.uid){
+    edit_file_content(pwd, buffer, mft_seznam[ret]->item.item_name, mft_seznam[ret]->item.uid);
 
     printf("OK\n");
 }
