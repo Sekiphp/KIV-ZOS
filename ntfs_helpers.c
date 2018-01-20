@@ -57,10 +57,38 @@ int set_cluster_content(int32_t adresa, char *obsah) {
     return -1;
 }
 
+/*
+    Smaze data ve vsech clusterech patricich k danemu souboru
+    @param file_uid UID souboru ke smazani
+*/
 int set_file_content(int file_uid) {
+    MFT_LIST* mft_itemy;
+    struct mft_item mfti;
+    struct mft_fragment mftf;
 
+    // najdu vsechny mfti
+    if (mft_seznam[file_uid] != NULL){
+        mft_itemy = mft_seznam[file_uid];
+
+        // iteruji mfti
+        while (mft_itemy != NULL){
+            mfti = mft_itemy->item;
+
+            // najdu vsechny mftf
+            for (j = 0; j < MFT_FRAG_COUNT; j++){
+                mftf = mfti.fragments[j];
+
+                if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
+                    // prepisu data
+
+                }
+            }
+
+            // prehodim se na dalsi prvek
+            mft_itemy = mft_itemy->dalsi;
+        }
+    }
 }
-
 /*
     Ziska obsah vsech fragmentu patricich do clusteru
     @param fragment Struktura fragmentu, kterou chceme cist
@@ -83,6 +111,10 @@ char* get_fragment_content(struct mft_fragment fragment) {
     }
 
     return ret;
+}
+
+int set_fragment_content(struct mft_fragment fragment) {
+
 }
 
 /*
