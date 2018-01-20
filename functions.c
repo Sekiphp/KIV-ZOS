@@ -336,8 +336,8 @@ void ls(int uid) {
 void ls_printer(char *p_c) {
     struct mft_item mfti;
 
-    mfti = mft_seznam[atoi(p_c)]->item;
-    if (mfti != NULL){
+    if (mft_seznam[atoi(p_c)] != NULL){
+        mfti = mft_seznam[atoi(p_c)]->item;
 
         printf(" ");
         if (mfti.isDirectory == 1){
