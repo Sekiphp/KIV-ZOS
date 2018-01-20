@@ -367,7 +367,7 @@ void func_incp(char *cmd){
                 nazev++;
 
                 delka = strlen(cmd) - strlen(nazev);
-                jen_cesta = (char *) malloc(delka);
+                jen_cesta = (char *) malloc(delka - 1);
                 strncpy(jen_cesta, cmd, delka - 1);
 
                 ret = parsuj_pathu(jen_cesta, 1);
