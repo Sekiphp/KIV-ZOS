@@ -107,7 +107,9 @@ void func_mv(char *cmd){
 
     // prejmenovani
     if (strcmp(nazev_zdroj, nazev_cil) != 0) {
+        printf("-- Soubor bude prejmenovan\n");
 
+        strcpy(mft_seznam[zdroj_uid]->item.item_name, nazev_cil);
     }
 
     free((void *) part1);
