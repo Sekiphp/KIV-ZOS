@@ -323,7 +323,7 @@ void ls_printer(int uid) {
     // prvni odkaz je odkaz na nadrazenou slozku
 
     while((p_c = strtok(NULL, "\n")) != NULL){
-        //if (mft_seznam[atoi(p_c)] != NULL){
+        if (mft_seznam[atoi(p_c)] != NULL){
             mfti = mft_seznam[atoi(p_c)]->item;
 
             printf(" ");
@@ -334,7 +334,7 @@ void ls_printer(int uid) {
                 printf("-");
             }
             printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
-        //}
+        }
 
         i++;
     }
