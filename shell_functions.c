@@ -40,6 +40,10 @@ void func_mv(char *cmd){
     char *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
     char *part1, *part2;
     char buffer[CLUSTER_SIZE];
+    char pom2[100];
+    struct mft_item *mpom;
+    int mft_size = sizeof(struct mft_item);
+    FILE *fw;
 
     // part 1
     cmd = strtok(NULL, " \n");
@@ -106,6 +110,7 @@ void func_mv(char *cmd){
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
             printf("-- RET CIL: %d\n", ret_cil);
 
+
     // odstranim odkaz z nadrazeneho adresare
     char *soucasny_obsah_zdroj = get_file_content(ret_zdroj);
     printf("soucasnost=%s\n", soucasny_obsah_zdroj);
@@ -136,11 +141,27 @@ void func_mv(char *cmd){
     // UID se musi zachovat kvuli linkum
     edit_file_content(ret_zdroj, buffer, mft_seznam[ret_zdroj]->item.item_name, ret_zdroj);
 
+
+    // zapisu odkaz na soubor do noveho nadrazeneho adresare
+    sprintf(pom2, "%d", zdroj_uid);
+    append_file_content(ret_cil, pom2, 1);
+
     // prejmenovani
     if (strcmp(nazev_zdroj, nazev_cil) != 0) {
         printf("-- Soubor bude prejmenovan\n");
 
         strcpy(mft_seznam[zdroj_uid]->item.item_name, nazev_cil);
+
+        mpom = malloc(mft_size);
+
+        // zapisu mft
+        mpom = &mft_seznam[zdroj_uid]->item;
+        fw = fopen(output_file, "r+b");
+        if (fw != NULL) {
+            fseek(fw, bootr->mft_start_address + zdroj_uid * mft_size, SEEK_SET);
+            fwrite(mpom, mft_size, 1, fw);
+        }
+        free((void *) mpom);
     }
 
     free((void *) part1);
