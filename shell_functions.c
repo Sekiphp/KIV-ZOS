@@ -36,7 +36,7 @@ void func_cp(char *cmd){
 */
 void func_mv(char *cmd){
     int i = 0;
-    int ret_zdroj, ret_cil, delka;
+    int ret_zdroj, ret_cil, delka, zdroj_uid;
     char *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
     char *part1, *part2;
 
@@ -73,8 +73,12 @@ void func_mv(char *cmd){
 
                 ret_zdroj = pwd;
             }
+
+            zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj, 0);
+
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
-            printf("-- RET ZDROJ: %d\n\n", ret_zdroj);
+            printf("-- RET ZDROJ: %d\n", ret_zdroj);
+            printf("-- ZDROJ UID: %d\n\n", zdroj_uid);
 
 
     // part 2
