@@ -84,6 +84,13 @@ void func_cp(char *cmd){
             }
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
             printf("-- RET CIL: %d\n", ret_cil);
+
+    // nactu obsah kopirovaneho souboru
+    char *obsah_kopirovaneho_souboru = get_file_content(zdroj_uid);
+    printf("obsah_kopirovaneho_souboru=%s\n", obsah_kopirovaneho_souboru);
+
+    // vytvorim si novy soubor
+    vytvor_soubor(ret_cil, mft_seznam[zdroj_uid]->item.item_name, obsah_kopirovaneho_souboru, -1, 0, 1);
 }
 
 /*
