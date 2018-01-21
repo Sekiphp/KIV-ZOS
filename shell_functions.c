@@ -80,7 +80,7 @@ void func_rm(char *cmd){
     }
 
     // odstranim odkaz z nadrazeneho adresare
-    char *soucasny_obsah = get_file_content(pwd);
+    char *soucasny_obsah = get_file_content(ret);
     printf("soucasnost=%s\n", soucasny_obsah);
 
     char *curLine = soucasny_obsah;
@@ -107,7 +107,7 @@ void func_rm(char *cmd){
 
     printf("BUFÍK=%s\n", buffer);
     // UID se musi zachovat kvuli linkum
-    edit_file_content(pwd, buffer, mft_seznam[pwd]->item.item_name, pwd);
+    edit_file_content(ret, buffer, mft_seznam[ret]->item.item_name, ret);
 
     delete_file(kesmazani);
 
