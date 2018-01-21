@@ -36,7 +36,7 @@ void func_cp(char *cmd){
 */
 void func_mv(char *cmd){
     int i = 0;
-    int ret, delka;
+    int ret_zdroj, ret_cil, delka;
     char *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
     char *part1, *part2;
 
@@ -61,7 +61,7 @@ void func_mv(char *cmd){
                 jen_cesta_zdroj = (char *) malloc(delka - 1);
                 strncpy(jen_cesta_zdroj, part1, delka - 1);
 
-                ret = parsuj_pathu(jen_cesta_zdroj, 1);
+                ret_zdroj = parsuj_pathu(jen_cesta_zdroj, 1);
             }
             else {
                 delka = strlen(part1);
@@ -71,10 +71,10 @@ void func_mv(char *cmd){
                 jen_cesta_zdroj = (char *) malloc(1);
                 strncpy(jen_cesta_zdroj, "/", 1);
 
-                ret = pwd;
+                ret_zdroj = pwd;
             }
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
-            printf("-- RET ZDROJ: %d\n\n", ret);
+            printf("-- RET ZDROJ: %d\n\n", ret_zdroj);
 
 
     // part 2
@@ -86,7 +86,7 @@ void func_mv(char *cmd){
                 jen_cesta_cil = (char *) malloc(delka - 1);
                 strncpy(jen_cesta_cil, part2, delka - 1);
 
-                ret = parsuj_pathu(jen_cesta_cil, 1);
+                ret_cil = parsuj_pathu(jen_cesta_cil, 1);
             }
             else {
                 delka = strlen(part2);
@@ -96,14 +96,14 @@ void func_mv(char *cmd){
                 jen_cesta_cil = (char *) malloc(1);
                 strncpy(jen_cesta_cil, "/", 1);
 
-                ret = pwd;
+                ret_cil = pwd;
             }
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
-            printf("-- RET CIL: %d\n", ret);
+            printf("-- RET CIL: %d\n", ret_cil);
 
     // prejmenovani
     if (strcmp(nazev_zdroj, nazev_cil) != 0) {
-        
+
     }
 
     free((void *) part1);

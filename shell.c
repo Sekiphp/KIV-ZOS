@@ -39,6 +39,8 @@ void *shell(void *arg){
                 fclose(fr);
                 use_file = 0;
             }
+
+            printf("%s", command);
         }
 
         p_c = strtok(command, " ");
