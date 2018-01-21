@@ -60,6 +60,10 @@ void func_cp(char *cmd){
             printf("-- RET ZDROJ: %d\n", ret_zdroj);
             printf("-- ZDROJ UID: %d\n\n", zdroj_uid);
 
+    if (ret_zdroj == -1) {
+        printf("FILE NOT FOUND\n");
+        return;
+    }
 
     // part 2
             nazev_cil = strrchr(part2, '/');
@@ -85,12 +89,19 @@ void func_cp(char *cmd){
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
             printf("-- RET CIL: %d\n", ret_cil);
 
+    if (ret_cil == -1){
+        printf("PATH NOT FOUND\n");
+        return;
+    }
+
     // nactu obsah kopirovaneho souboru
     char *obsah_kopirovaneho_souboru = get_file_content(zdroj_uid);
     printf("obsah_kopirovaneho_souboru=%s\n", obsah_kopirovaneho_souboru);
 
     // vytvorim si novy soubor
     vytvor_soubor(ret_cil, nazev_zdroj, obsah_kopirovaneho_souboru, -1, 0, 1);
+
+    printf("OK\n");
 }
 
 /*
