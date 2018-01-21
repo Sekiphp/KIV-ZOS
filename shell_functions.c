@@ -39,6 +39,7 @@ void func_mv(char *cmd){
     int ret_zdroj, ret_cil, delka, zdroj_uid;
     char *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
     char *part1, *part2;
+    char buffer[CLUSTER_SIZE];
 
     // part 1
     cmd = strtok(NULL, " \n");
@@ -104,6 +105,36 @@ void func_mv(char *cmd){
             }
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
             printf("-- RET CIL: %d\n", ret_cil);
+
+    // odstranim odkaz z nadrazeneho adresare
+    char *soucasny_obsah_zdroj = get_file_content(ret_zdroj);
+    printf("soucasnost=%s\n", soucasny_obsah);
+
+    char *curLine = soucasny_obsah_zdroj;
+
+    // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
+    i = 0;
+    strcpy(buffer, "");
+    while (curLine){
+        char * nextLine = strchr(curLine, '\n');
+        if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
+
+        if (atoi(curLine) != zdroj_uid){
+            if (i != 0)
+                strcat(buffer, "\n");
+
+            strcat(buffer, curLine);
+        }
+        //printf("CURLINE = %s\n", curLine);
+
+        if (nextLine) *nextLine = '\n';  // then restore newline-char, just to be tidy
+        curLine = nextLine ? (nextLine + 1) : NULL;
+        i++;
+    }
+
+    printf("BUFÍK=%s\n", buffer);
+    // UID se musi zachovat kvuli linkum
+    edit_file_content(ret_zdroj, buffer, mft_seznam[ret_zdroj]->item.item_name, ret_zdroj);
 
     // prejmenovani
     if (strcmp(nazev_zdroj, nazev_cil) != 0) {
