@@ -7,8 +7,7 @@
     int zaloz_novou_slozku(int pwd, char *name);
     int get_uid_by_name(char *dir_name, int uid_pwd, int debug);
     int is_name_unique(char *newname, int uid_pwd);
-    void ls_printer(char *p_c);
-    void ls(int uid);
+    void ls_printer(int uid);
     int is_empty_dir(int file_uid);
     char* read_file_from_pc(char *pc_soubor);
     void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir, int odkaz);

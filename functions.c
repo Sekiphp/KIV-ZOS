@@ -303,10 +303,11 @@ int zaloz_novou_slozku(int pwd, char *name){
 }
 
 /* Ziskani informaci o souborech ve slozce */
-void ls(int uid) {
+void ls_printer(int uid) {
     char buffer[1024];
     char *p_c;
     int i = 0;
+    struct mft_item mfti;
 
     // chci vypsat obsah aktualniho adresare
     strncpy(buffer, get_file_content(uid), 1024);
@@ -318,35 +319,27 @@ void ls(int uid) {
     // iteruji pro kazdou polozku z adresare a hledam jeji nazev
     p_c = strtok(buffer, "\n");
     printf("ID nadrazene slozky je %s\n", p_c);
-    /* prvni odkaz je odkaz na nadrazenou slozku
-    if (p_c != NULL){
-        ls_printer(p_c);
-        i++;
-    }*/
+
+    // prvni odkaz je odkaz na nadrazenou slozku
+
     while((p_c = strtok(NULL, "\n")) != NULL){
-        ls_printer(p_c);
+        //if (mft_seznam[atoi(p_c)] != NULL){
+            mfti = mft_seznam[atoi(p_c)]->item;
+
+            printf(" ");
+            if (mfti.isDirectory == 1){
+                printf("+");
+            }
+            else{
+                printf("-");
+            }
+            printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
+        //}
+
         i++;
     }
 
     printf("-- Celkem souboru: %d --\n", i);
-}
-
-/* Pro konkretni UID vypise info o souboru (prikaz ls) */
-void ls_printer(char *p_c) {
-    struct mft_item mfti;
-
-    //if (mft_seznam[atoi(p_c)] != NULL){
-        mfti = mft_seznam[atoi(p_c)]->item;
-
-        printf(" ");
-        if (mfti.isDirectory == 1){
-            printf("+");
-        }
-        else{
-            printf("-");
-        }
-        printf(" %-15s %-7d %d\n", mfti.item_name, mfti.item_size, mfti.uid);
-    //}
 }
 
 int is_empty_dir(int file_uid) {

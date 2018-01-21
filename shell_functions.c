@@ -207,7 +207,7 @@ void func_ls(char *cmd){
         return;
     }
 
-    ls(ret);
+    ls_printer(ret);
 
     //printf("ls ret = %d\n", ret);
 }
