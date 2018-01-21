@@ -17,7 +17,8 @@ extern char output_file[100];
 */
 void func_cp(char *cmd){
     int i = 0;
-    char *part1, *part2;
+    char *part1, *part2, *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
+    int delka, ret_zdroj, ret_cil;
 
     // part 1
     cmd = strtok(NULL, " \n");
@@ -30,6 +31,59 @@ void func_cp(char *cmd){
     part2 = (char *) malloc(strlen(cmd));
     strcpy(part2, cmd);
     printf("PART 2: %s=%s\n", cmd, part2);
+
+    // part 1
+            nazev_zdroj = strrchr(part1, '/');
+            if (nazev_zdroj != NULL) {
+                nazev_zdroj++;
+
+                delka = strlen(part1) - strlen(nazev_zdroj);
+                jen_cesta_zdroj = (char *) malloc(delka - 1);
+                strncpy(jen_cesta_zdroj, part1, delka - 1);
+
+                ret_zdroj = parsuj_pathu(jen_cesta_zdroj, 1);
+            }
+            else {
+                delka = strlen(part1);
+
+                nazev_zdroj = part1;
+
+                jen_cesta_zdroj = (char *) malloc(1);
+                strncpy(jen_cesta_zdroj, "/", 1);
+
+                ret_zdroj = pwd;
+            }
+
+            zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj, 0);
+
+            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
+            printf("-- RET ZDROJ: %d\n", ret_zdroj);
+            printf("-- ZDROJ UID: %d\n\n", zdroj_uid);
+
+
+    // part 2
+            nazev_cil = strrchr(part2, '/');
+            if (nazev_cil != NULL) {
+                nazev_cil++;
+
+                delka = strlen(part2) - strlen(nazev_cil);
+                jen_cesta_cil = (char *) malloc(delka - 1);
+                strncpy(jen_cesta_cil, part2, delka - 1);
+
+                ret_cil = parsuj_pathu(jen_cesta_cil, 1);
+            }
+            else {
+                delka = strlen(part2);
+
+                nazev_cil = part2;
+
+                jen_cesta_cil = (char *) malloc(1);
+                strncpy(jen_cesta_cil, "/", 1);
+
+                ret_cil = pwd;
+            }
+            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
+            printf("-- RET CIL: %d\n", ret_cil);
 }
 
 /*
