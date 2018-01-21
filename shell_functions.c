@@ -137,7 +137,7 @@ void func_mkdir(char *cmd){
         // --- zde vytvorime slozku ---
         // dle bitmapy najdu prvni volny cluster a vypoctu si jeho adresu, fragment_count zvolim na 1
         // do prvniho fragmentu polozky mft_seznam[ret]->item zapisu nakonec UID noveho adresare
-        zaloz_novou_slozku(ret, cmd);
+        zaloz_novou_slozku(ret, nazev);
     }
 
     printf("ls ret = %d\n", ret);
