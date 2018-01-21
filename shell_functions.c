@@ -121,7 +121,7 @@ void func_rm(char *cmd){
     validni: mkdir neco, mkdir /var/www/neco, ale /var/www uz musi existovat
 */
 void func_mkdir(char *cmd){
-    int ret, delka;
+    int ret, delka, pom;
     char *nazev;
     char *jen_cesta;
 
@@ -135,6 +135,7 @@ void func_mkdir(char *cmd){
     // pripravim si cestu a nazev souboru pro vytvoreni
     nazev = strrchr(cmd, '/');
     if (nazev != NULL) {
+        pom = 0;
         nazev++;
 
         delka = strlen(cmd) - strlen(nazev);
@@ -144,10 +145,13 @@ void func_mkdir(char *cmd){
         ret = parsuj_pathu(jen_cesta, 1);
     }
     else {
+        pom = 1;
         delka = strlen(cmd);
+
         nazev = (char *) malloc(delka - 1);
-        jen_cesta = (char *) malloc(1);
         strncpy(nazev, cmd, delka);
+
+        jen_cesta = (char *) malloc(1);
         strncpy(jen_cesta, "/", 1);
 
         ret = pwd;
@@ -168,7 +172,9 @@ void func_mkdir(char *cmd){
         zaloz_novou_slozku(ret, nazev);
     }
 
-    //free((void *) nazev);
+    if (pom == 1)
+        free((void *) nazev);
+
     free((void *) jen_cesta);
 
     printf("ls ret = %d\n", ret);
