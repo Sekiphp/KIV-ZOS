@@ -1,8 +1,8 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-    #define CLUSTER_COUNT 10
-    #define CLUSTER_SIZE 1024
+    #define CLUSTER_COUNT 20
+    #define CLUSTER_SIZE 100
 
     int ntfs_bitmap[CLUSTER_COUNT];
     int32_t pwd;
