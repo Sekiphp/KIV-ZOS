@@ -36,7 +36,7 @@ void func_cp(char *cmd){
 */
 void func_mv(char *cmd){
     int i = 0;
-    int ret;
+    int ret, delka;
     char *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
 
     while((cmd = strtok(NULL, " \n")) != NULL){
@@ -64,6 +64,7 @@ void func_mv(char *cmd){
                 ret = pwd;
             }
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev_zdroj, jen_cesta_zdroj);
+            printf("-- RET ZDROJ: %d\n", ret);
 
         }
         else {
@@ -90,6 +91,7 @@ void func_mv(char *cmd){
                 ret = pwd;
             }
             printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev_cil, jen_cesta_cil);
+            printf("-- RET CIL: %d\n", ret);
 
         }
 
