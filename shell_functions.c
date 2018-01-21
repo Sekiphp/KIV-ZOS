@@ -140,7 +140,7 @@ void func_mkdir(char *cmd){
         zaloz_novou_slozku(ret, nazev);
     }
 
-    free((void *) nazev);
+    //free((void *) nazev);
     free((void *) jen_cesta);
 
     printf("ls ret = %d\n", ret);
