@@ -460,8 +460,8 @@ void func_outcp(char *cmd){
         if (i == 0){
             printf("K presunu z FS\n");
             // soubor k presunu z FS
-            jen_cesta = (char *) malloc(strlen(cmd) - 1);
-            strncpy(jen_cesta, cmd, strlen(cmd) - 1);
+            jen_cesta = (char *) malloc(strlen(cmd));
+            strncpy(jen_cesta, cmd, strlen(cmd));
             ret = parsuj_pathu(jen_cesta, 1);
 
             if (ret == -1){
@@ -497,6 +497,8 @@ void func_outcp(char *cmd){
         printf("TOO FEW ARGS\n");
         return;
     }
+
+    free((void *) jen_cesta);
 }
 
 
