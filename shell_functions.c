@@ -462,7 +462,7 @@ void func_outcp(char *cmd){
             // soubor k presunu z FS
             jen_cesta = (char *) malloc(strlen(cmd) - 1);
             strncpy(jen_cesta, cmd, strlen(cmd) - 1);
-            ret = parsuj_pathu(cmd, 1);
+            ret = parsuj_pathu(jen_cesta, 1);
 
             if (ret == -1){
                 printf("PATH NOT FOUND\n");
