@@ -90,7 +90,7 @@ void func_cp(char *cmd){
     printf("obsah_kopirovaneho_souboru=%s\n", obsah_kopirovaneho_souboru);
 
     // vytvorim si novy soubor
-    vytvor_soubor(ret_cil, mft_seznam[zdroj_uid]->item.item_name, obsah_kopirovaneho_souboru, -1, 0, 1);
+    vytvor_soubor(ret_cil, nazev_zdroj, obsah_kopirovaneho_souboru, -1, 0, 1);
 }
 
 /*
