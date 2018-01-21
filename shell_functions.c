@@ -16,8 +16,18 @@ extern char output_file[100];
     Zkopiruje s1 do s2
 */
 void func_cp(char *cmd){
+    int i = 0;
+
     while((cmd = strtok(NULL, " \n")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+        if (i == 0) {
+            printf("PART 1: %s\n", cmd);
+
+        }
+        else {
+            printf("PART 2: %s\n", cmd);
+        }
+
+        i++;
     }
 }
 
@@ -25,8 +35,18 @@ void func_cp(char *cmd){
     Presune s1 do s2
 */
 void func_mv(char *cmd){
+    int i = 0;
+
     while((cmd = strtok(NULL, " \n")) != NULL){
-        printf("Ostatni: %s\n", cmd);
+        if (i == 0) {
+            printf("PART 1: %s\n", cmd);
+
+        }
+        else {
+            printf("PART 2: %s\n", cmd);
+        }
+
+        i++;
     }
 }
 
@@ -293,7 +313,6 @@ void func_cat(char *cmd){
     printf("%s\n", get_file_content(ret));
 }
 
-
 /*
     Posun v adresarich
 */
@@ -315,7 +334,6 @@ void func_cd(char *cmd){
         return;
     }
 }
-
 
 /*
     Print working directory
@@ -349,7 +367,6 @@ void func_pwd(){
     }
     //printf("PWD = %d\n", pwd);
 }
-
 
 /*
     Vypise informace z FS o danem souboru
@@ -530,11 +547,18 @@ void func_outcp(char *cmd){
     free((void *) jen_cesta);
 }
 
-
+/*
+    Provede defragmentaci
+    Soubory se budou skladat pouze z jednoho fragmentu
+*/
 void func_defrag(){
 
 }
 
+/*
+    Kontrola konzistence
+    -> zkontroluje jeslti jsou soubory neposkozene (velikost souboru odpovida poctu alokovanych datovych bloku)
+ */
 void func_consist(){
 
 }
