@@ -34,7 +34,7 @@ void func_mv(char *cmd){
     Smaze soubor s1
 */
 void func_rm(char *cmd){
-    int ret, i, delka;
+    int ret, i, delka, kesmazani;
     char buffer[CLUSTER_SIZE];
     char *nazev;
     char *jen_cesta;
@@ -56,7 +56,7 @@ void func_rm(char *cmd){
     else {
         delka = strlen(cmd);
         nazev = (char *) malloc(delka - 1);
-        jen_cesta = (char *) malloc(delka);
+        jen_cesta = (char *) malloc(delka - 1);
         strncpy(nazev, cmd, delka);
         strncpy(jen_cesta, "/", 1);
 
@@ -65,16 +65,16 @@ void func_rm(char *cmd){
     printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev, jen_cesta);
 
 
-    ret = parsuj_pathu(cmd, 1);
+    kesmazani = parsuj_pathu(cmd, 1);
 
-    printf("RET %d\n", ret);
+    printf("RET %d, KESMAZANI %d\n", ret, kesmazani);
 
     if (ret == -1){
         printf("PATH NOT FOUND\n");
         return;
     }
 
-    if (mft_seznam[ret]->item.isDirectory == 1){
+    if (mft_seznam[kesmazani]->item.isDirectory == 1){
         printf("NOT A FILE\n");
         return;
     }
@@ -92,7 +92,7 @@ void func_rm(char *cmd){
         char * nextLine = strchr(curLine, '\n');
         if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
 
-        if (atoi(curLine) != ret){
+        if (atoi(curLine) != kesmazani){
             if (i != 0)
                 strcat(buffer, "\n");
 
@@ -109,7 +109,7 @@ void func_rm(char *cmd){
     // UID se musi zachovat kvuli linkum
     edit_file_content(pwd, buffer, mft_seznam[pwd]->item.item_name, pwd);
 
-    delete_file(ret);
+    delete_file(kesmazani);
 
     free((void *) jen_cesta);
     printf("OK\n");
