@@ -117,7 +117,7 @@ void func_mkdir(char *cmd){
     }
     else {
         delka = strlen(cmd);
-        nazev = (char *) malloc(delka);
+        nazev = (char *) malloc(delka + 1);
         jen_cesta = (char *) malloc(delka);
         strncpy(nazev, cmd, delka);
         strncpy(jen_cesta, "/", 1);
