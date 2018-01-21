@@ -18,7 +18,7 @@ extern char output_file[100];
 void func_cp(char *cmd){
     int i = 0;
     char *part1, *part2, *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
-    int delka, ret_zdroj, ret_cil;
+    int delka, ret_zdroj, ret_cil, zdroj_uid;
 
     // part 1
     cmd = strtok(NULL, " \n");
