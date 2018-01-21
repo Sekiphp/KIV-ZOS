@@ -456,7 +456,7 @@ void func_outcp(char *cmd){
     i = 0;
 
     // postupne cteni argumentu
-    while((cmd = strtok(NULL, " ")) != NULL){
+    while((cmd = strtok(NULL, " \n")) != NULL){
         if (i == 0){
             printf("K presunu z FS\n");
             // soubor k presunu z FS
