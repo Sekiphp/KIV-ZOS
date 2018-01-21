@@ -93,7 +93,9 @@ void func_rm(char *cmd){
     validni: mkdir neco, mkdir /var/www/neco, ale /var/www uz musi existovat
 */
 void func_mkdir(char *cmd){
-    int ret;
+    int ret, delka;
+    char *nazev;
+    char *jen_cesta;
 
     // zpracujeme si zadanou cestu
     cmd = strtok(NULL, " \n");
@@ -101,9 +103,30 @@ void func_mkdir(char *cmd){
         printf("PATH NOT FOUND\n");
         return;
     }
-    else {
-        ret = parsuj_pathu(cmd, 1);
+
+    // pripravim si cestu a nazev souboru pro vytvoreni
+    nazev = strrchr(cmd, '/');
+    if (nazev != NULL) {
+        nazev++;
+
+        delka = strlen(cmd) - strlen(nazev);
+        jen_cesta = (char *) malloc(delka - 1);
+        strncpy(jen_cesta, cmd, delka - 1);
+
+        ret = parsuj_pathu(jen_cesta, 1);
     }
+    else {
+        delka = strlen(cmd);
+        nazev = (char *) malloc(delka);
+        jen_cesta = (char *) malloc(delka);
+        strncpy(nazev, cmd, delka);
+        strncpy(jen_cesta, "/", 1);
+
+        ret = pwd;
+    }
+
+    printf("-- Full path: %s\n-- Filename: %s\n-- Path to dir: %s\n", cmd, nazev, jen_cesta);
+
 
     // zkusim si tu cestu projit
     if (ret == -1){
