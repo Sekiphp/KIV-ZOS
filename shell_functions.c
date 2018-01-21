@@ -38,65 +38,76 @@ void func_mv(char *cmd){
     int i = 0;
     int ret, delka;
     char *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
+    char *part1, *part2;
 
-    while((cmd = strtok(NULL, " \n")) != NULL){
-        if (i == 0) {
-            printf("PART 1: %s\n", cmd);
+    // part 1
+    cmd = strtok(NULL, " \n");
+    part1 = (char *) malloc(sizeof(strlen(cmd)));
+    strcpy(part1, cmd);
+    //printf("PART 1: %s=%s\n", cmd, part1);
 
-            nazev_zdroj = strrchr(cmd, '/');
+    // part 2
+    cmd = strtok(NULL, " \n");
+    part2 = (char *) malloc(strlen(cmd));
+    strcpy(part2, cmd);
+    //printf("PART 2: %s=%s\n", cmd, part2);
+
+    // part 1
+            nazev_zdroj = strrchr(part1, '/');
             if (nazev_zdroj != NULL) {
                 nazev_zdroj++;
 
-                delka = strlen(cmd) - strlen(nazev_zdroj);
+                delka = strlen(part1) - strlen(nazev_zdroj);
                 jen_cesta_zdroj = (char *) malloc(delka - 1);
-                strncpy(jen_cesta_zdroj, cmd, delka - 1);
+                strncpy(jen_cesta_zdroj, part1, delka - 1);
 
                 ret = parsuj_pathu(jen_cesta_zdroj, 1);
             }
             else {
-                delka = strlen(cmd);
+                delka = strlen(part1);
 
-                nazev_zdroj = cmd;
+                nazev_zdroj = part1;
 
                 jen_cesta_zdroj = (char *) malloc(1);
                 strncpy(jen_cesta_zdroj, "/", 1);
 
                 ret = pwd;
             }
-            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev_zdroj, jen_cesta_zdroj);
-            printf("-- RET ZDROJ: %d\n", ret);
+            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
+            printf("-- RET ZDROJ: %d\n\n", ret);
 
-        }
-        else {
-            printf("PART 2: %s\n", cmd);
 
-            nazev_cil = strrchr(cmd, '/');
+    // part 2
+            nazev_cil = strrchr(part2, '/');
             if (nazev_cil != NULL) {
                 nazev_cil++;
 
-                delka = strlen(cmd) - strlen(nazev_cil);
+                delka = strlen(part2) - strlen(nazev_cil);
                 jen_cesta_cil = (char *) malloc(delka - 1);
-                strncpy(jen_cesta_cil, cmd, delka - 1);
+                strncpy(jen_cesta_cil, part2, delka - 1);
 
                 ret = parsuj_pathu(jen_cesta_cil, 1);
             }
             else {
-                delka = strlen(cmd);
+                delka = strlen(part2);
 
-                nazev_cil = cmd;
+                nazev_cil = part2;
 
                 jen_cesta_cil = (char *) malloc(1);
                 strncpy(jen_cesta_cil, "/", 1);
 
                 ret = pwd;
             }
-            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev_cil, jen_cesta_cil);
+            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
             printf("-- RET CIL: %d\n", ret);
 
-        }
-
-        i++;
+    // prejmenovani
+    if (strcmp(nazev_zdroj, nazev_cil) != 0) {
+        
     }
+
+    free((void *) part1);
+    free((void *) part2);
 }
 
 /*
