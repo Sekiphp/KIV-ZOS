@@ -125,7 +125,7 @@ void func_mkdir(char *cmd){
         ret = pwd;
     }
 
-    printf("-- Full path: %s\n-- Filename: %s\n-- Path to dir: %s\n", cmd, nazev, jen_cesta);
+    printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev, jen_cesta);
 
 
     // zkusim si tu cestu projit
@@ -139,6 +139,9 @@ void func_mkdir(char *cmd){
         // do prvniho fragmentu polozky mft_seznam[ret]->item zapisu nakonec UID noveho adresare
         zaloz_novou_slozku(ret, nazev);
     }
+
+    free((void *) nazev);
+    free((void *) jen_cesta);
 
     printf("ls ret = %d\n", ret);
 }
