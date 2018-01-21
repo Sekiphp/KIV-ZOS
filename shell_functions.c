@@ -34,14 +34,40 @@ void func_mv(char *cmd){
     Smaze soubor s1
 */
 void func_rm(char *cmd){
-    int ret, i;
+    int ret, i, delka;
     char buffer[CLUSTER_SIZE];
+    char *nazev;
+    char *jen_cesta;
 
     cmd = strtok(NULL, " \n");
 
+
+    // pripravim si cestu a nazev souboru pro vytvoreni
+    nazev = strrchr(cmd, '/');
+    if (nazev != NULL) {
+        nazev++;
+
+        delka = strlen(cmd) - strlen(nazev);
+        jen_cesta = (char *) malloc(delka - 1);
+        strncpy(jen_cesta, cmd, delka - 1);
+
+        ret = parsuj_pathu(jen_cesta, 1);
+    }
+    else {
+        delka = strlen(cmd);
+        nazev = (char *) malloc(delka - 1);
+        jen_cesta = (char *) malloc(delka);
+        strncpy(nazev, cmd, delka);
+        strncpy(jen_cesta, "/", 1);
+
+        ret = pwd;
+    }
+    printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev, jen_cesta);
+
+
     ret = parsuj_pathu(cmd, 1);
 
-    printf("RET %d", ret);
+    printf("RET %d\n", ret);
 
     if (ret == -1){
         printf("PATH NOT FOUND\n");
@@ -84,6 +110,8 @@ void func_rm(char *cmd){
     edit_file_content(pwd, buffer, mft_seznam[pwd]->item.item_name, pwd);
 
     delete_file(ret);
+
+    free((void *) jen_cesta);
     printf("OK\n");
 }
 
