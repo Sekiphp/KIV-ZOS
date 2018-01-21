@@ -17,18 +17,19 @@ extern char output_file[100];
 */
 void func_cp(char *cmd){
     int i = 0;
+    char *part1, *part2;
 
-    while((cmd = strtok(NULL, " \n")) != NULL){
-        if (i == 0) {
-            printf("PART 1: %s\n", cmd);
+    // part 1
+    cmd = strtok(NULL, " \n");
+    part1 = (char *) malloc(sizeof(strlen(cmd)));
+    strcpy(part1, cmd);
+    printf("PART 1: %s=%s\n", cmd, part1);
 
-        }
-        else {
-            printf("PART 2: %s\n", cmd);
-        }
-
-        i++;
-    }
+    // part 2
+    cmd = strtok(NULL, " \n");
+    part2 = (char *) malloc(strlen(cmd));
+    strcpy(part2, cmd);
+    printf("PART 2: %s=%s\n", cmd, part2);
 }
 
 /*
