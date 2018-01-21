@@ -468,9 +468,11 @@ void func_outcp(char *cmd){
             obsah = get_file_content(ret);
 
             printf("OUT obsah: %s\n", obsah);
+            printf("RET: %d\n", ret);
         }
         else {
             // ulozim do pc
+            printf("Ulozim soubor do pc\n");
 
             strncpy(pc_file, cmd, strlen(cmd));
             fw = fopen(pc_file, "w");
