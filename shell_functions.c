@@ -15,8 +15,7 @@ extern char output_file[100];
 /*
     Zkopiruje s1 do s2
 */
-void func_cp(char *cmd){
-    int i = 0;
+void func_cp(char *cmd) {
     char *part1, *part2, *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
     int delka, ret_zdroj, ret_cil, zdroj_uid;
 
@@ -99,7 +98,7 @@ void func_cp(char *cmd){
     printf("obsah_kopirovaneho_souboru=%s\n", obsah_kopirovaneho_souboru);
 
     // vytvorim si novy soubor
-    vytvor_soubor(ret_cil, nazev_zdroj, obsah_kopirovaneho_souboru, -1, 0, 1);
+    vytvor_soubor(ret_cil, nazev_cil, obsah_kopirovaneho_souboru, -1, 0, 1);
 
     printf("OK\n");
 }
