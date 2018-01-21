@@ -185,7 +185,10 @@ void func_rmdir(char *cmd){
 }
 
 
-/* ls /var/www/neco je validni prikaz */
+/*
+    Vypise obsah adresare
+    ls /var/www/neco je validni prikaz
+*/
 void func_ls(char *cmd){
     int ret;
 
@@ -344,8 +347,9 @@ void func_info(char *cmd){
     printf("Pocet fragmentu: %d\n", k);
 }
 
-
-
+/*
+    Nahraje soubor z pevneho disku do FS
+*/
 void func_incp(char *cmd){
     int i, ret, delka;
     FILE *f;
@@ -413,8 +417,9 @@ void func_incp(char *cmd){
     vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1, 0, 1);
 }
 
-
-
+/*
+    Nahraje soubor
+*/
 void func_outcp(char *cmd){
     int i, ret;
     FILE *fw;
