@@ -108,7 +108,7 @@ void func_mv(char *cmd){
 
     // odstranim odkaz z nadrazeneho adresare
     char *soucasny_obsah_zdroj = get_file_content(ret_zdroj);
-    printf("soucasnost=%s\n", soucasny_obsah);
+    printf("soucasnost=%s\n", soucasny_obsah_zdroj);
 
     char *curLine = soucasny_obsah_zdroj;
 
