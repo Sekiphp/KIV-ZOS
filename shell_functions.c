@@ -451,6 +451,7 @@ void func_outcp(char *cmd){
     FILE *fw;
     char pc_file[100];
     char *obsah;
+    char *jen_cesta;
 
     i = 0;
 
@@ -459,6 +460,8 @@ void func_outcp(char *cmd){
         if (i == 0){
             printf("K presunu z FS\n");
             // soubor k presunu z FS
+            jen_cesta = (char *) malloc(strlen(cmd) - 1);
+            strncpy(jen_cesta, cmd, strlen(cmd) - 1);
             ret = parsuj_pathu(cmd, 1);
 
             if (ret == -1){
