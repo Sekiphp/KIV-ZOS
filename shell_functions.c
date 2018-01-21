@@ -36,6 +36,7 @@ void func_cp(char *cmd){
 */
 void func_mv(char *cmd){
     int i = 0;
+    int ret;
     char *nazev_zdroj, *nazev_cil, *jen_cesta_zdroj, *jen_cesta_cil;
 
     while((cmd = strtok(NULL, " \n")) != NULL){
