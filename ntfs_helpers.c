@@ -170,7 +170,7 @@ void clear_fragment_content(struct mft_fragment fragment) {
         for (i = 0; i < bloku; i++) {
             set_cluster_content(adresa, obsah);
 
-            adresa = adresa + CLUSTER_SIZE;
+            adresa += CLUSTER_SIZE;
         }
     }
 }
@@ -291,7 +291,6 @@ int update_filesize(int file_uid, int length){
         fwrite(mpom, mft_size, 1, fw);
 
         fclose(fw);
-//        free((void *) mpom);
 
         return 0;
     }
