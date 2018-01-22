@@ -195,7 +195,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         /* Tady bychom meli zapsat obsah ROOT_DIRU */
         /* Zapiseme odkaz na nadrazeny adresar */
         fseek(fw, data_start, SEEK_SET);
-        char odkaz[] = "0"
+        char odkaz[] = "0";
         fwrite(odkaz, 1, 1, fw);
 
         fclose(fw);
