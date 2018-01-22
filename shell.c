@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#include "debugger.h"
 #include "shell.h"
 #include "shell_functions.h"
 #include "mft.h"
@@ -39,6 +40,8 @@ void *shell(void *arg){
                 fclose(fr);
                 use_file = 0;
             }
+
+            printf("%s", command);
         }
 
         p_c = strtok(command, " ");
@@ -46,41 +49,41 @@ void *shell(void *arg){
         if(strncmp(p_c, "cp", 2) == 0){
             func_cp(p_c);
         }
-        if(strncmp(p_c, "mv", 2) == 0){
+        else if(strncmp(p_c, "mv", 2) == 0){
             func_mv(p_c);
         }
-        if(strncmp(p_c, "mkdir", 5) == 0){
+        else if(strncmp(p_c, "mkdir", 5) == 0){
             func_mkdir(p_c);
         }
-        if(strncmp(p_c, "rmdir", 5) == 0){
+        else if(strncmp(p_c, "rmdir", 5) == 0){
             func_rmdir(p_c);
             continue;
         }
-        if(strncmp(p_c, "rm", 2) == 0){
+        else if(strncmp(p_c, "rm", 2) == 0){
             func_rm(p_c);
         }
-        if(strncmp(p_c, "ls", 2) == 0){
+        else if(strncmp(p_c, "ls", 2) == 0){
             func_ls(p_c);
         }
-        if(strncmp(p_c, "cat", 3) == 0){
+        else if(strncmp(p_c, "cat", 3) == 0){
             func_cat(p_c);
         }
-        if(strncmp(p_c, "cd", 2) == 0){
+        else if(strncmp(p_c, "cd", 2) == 0){
             func_cd(p_c);
         }
-        if(strncmp(p_c, "pwd", 3) == 0){
+        else if(strncmp(p_c, "pwd", 3) == 0){
             func_pwd();
         }
-        if(strncmp(p_c, "info", 4) == 0){
+        else if(strncmp(p_c, "info", 4) == 0){
             func_info(p_c);
         }
-        if(strncmp(p_c, "incp", 4) == 0){
+        else if(strncmp(p_c, "incp", 4) == 0){
             func_incp(p_c);
         }
-        if(strncmp(p_c, "outcp", 5) == 0){
+        else if(strncmp(p_c, "outcp", 5) == 0){
             func_outcp(p_c);
         }
-        if(strncmp(p_c, "load", 4) == 0){
+        else if(strncmp(p_c, "load", 4) == 0){
             p_c = strtok(NULL, " \n");
             fr = fopen(p_c, "r");
             if (fr != NULL)
@@ -88,13 +91,13 @@ void *shell(void *arg){
             else
                 printf("FILE NOT FOUND\n");
         }
-        if(strncmp(p_c, "defrag", 6) == 0){
+        else if(strncmp(p_c, "defrag", 6) == 0){
             func_defrag();
         }
-        if(strncmp(p_c, "consist", 7) == 0){
+        else if(strncmp(p_c, "consist", 7) == 0){
             func_consist();
         }
-        if(strncmp(p_c, "exit", 4) == 0){
+        else if(strncmp(p_c, "exit", 4) == 0){
             break;
         }
     }

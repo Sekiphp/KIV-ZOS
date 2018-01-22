@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "debugger.h"
 #include "loader.h"
 #include "shell.h"
 #include "parametr.h"
@@ -37,13 +38,13 @@ int main(int argc, char *argv[]){
     for(i = 0; i < CLUSTER_COUNT; i++){
        mft_seznam[i] = NULL;
     }
-    printf("mft seznam NULL\n");
+    DEBUG_PRINT("mft seznam NULL\n");
 
     // checker - pokud soubor neexistuje, tak ho vytvorim
     loader(argv[1]);
 
     // kontrola nacteni
-    for(i = 0; i < 10; i++){
+    for(i = 0; i < CLUSTER_COUNT; i++){
         printf("ntfs_bitmap[%d]=%d\n", i, ntfs_bitmap[i]);
     }
 

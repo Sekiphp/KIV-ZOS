@@ -1,9 +1,9 @@
 #ifndef MFT_H
 #define MFT_H
 
-#define MFT_FRAG_COUNT 32
+#define MFT_FRAG_COUNT 5
 #define UID_ITEM_FREE -1
-#define CLUSTER_COUNT 10
+#define CLUSTER_COUNT 20 // je i v loader.h
 
 // item muze mit 1 az X techto fragmentu
 // +---+---+---+---+---+---+---+---+

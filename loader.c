@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <errno.h>
 
+#include "debugger.h"
 #include "loader.h"
 #include "boot_record.h"
 #include "mft.h"
@@ -171,7 +172,7 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         mfti->item_order = 1;
         mfti->item_order_total = 1;
         strcpy(mfti->item_name, "ROOT_DIR");
-        mfti->item_size = 1; // zatim tam nic neni, takze nula (je tam backlink)
+        mfti->item_size = 1; // je tam backlink
 
         // zapisu prvni "plny" fragment (ROOT_DIR)
         mftf.fragment_start_address = data_start; // start adresa ve VFS
@@ -195,9 +196,8 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         /* Tady bychom meli zapsat obsah ROOT_DIRU */
         /* Zapiseme odkaz na nadrazeny adresar */
         fseek(fw, data_start, SEEK_SET);
-        char neco[CLUSTER_SIZE];
-        strcpy(neco, "0"); // backlink - \n prida appender
-        fwrite(neco, 1, CLUSTER_SIZE, fw);
+        char odkaz[] = "0";
+        fwrite(odkaz, 1, 1, fw);
 
         fclose(fw);
     }
