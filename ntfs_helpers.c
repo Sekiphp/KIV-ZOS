@@ -300,10 +300,9 @@ int update_filesize(int file_uid, int length){
     @param append Retezec pro pripojeni nakonec souboru
 */
 int append_file_content(int file_uid, char *append, int dir){
-    int i, j, adresa, delka;
+    int i, j, adresa, delka, mftf_adr;
     char *ret;
     MFT_LIST* mft_itemy;
-    struct mft_fragment mftf;
     FILE *fw;
 
     ret = (char *) malloc(CLUSTER_SIZE);
@@ -328,11 +327,12 @@ int append_file_content(int file_uid, char *append, int dir){
 
                 // precteme vsechny fragmenty z daneho mft itemu (maximalne je jich: MFT_FRAG_COUNT)
                 for (j = 0; j < MFT_FRAG_COUNT; j++){
-                    mftf = mft_itemy->item.fragments[j];
+                    mftf_adr = mft_itemy->item.fragments[j].fragment_start_address;
 
                     // najdu si posledni fragment s adresou
-                    if (mftf.fragment_start_address != 0) {
-                        adresa = mftf.fragment_start_address;
+                    if (mftf_adr != 0) {
+                        printf("-- MFTF adr = %d\n", mftf_adr);
+                        adresa = mftf_adr;
                     }
                 }
 
@@ -367,6 +367,8 @@ int append_file_content(int file_uid, char *append, int dir){
 
         fclose(fw);
     }
+
+    free((void *) ret);
 
     return 1;
 }
