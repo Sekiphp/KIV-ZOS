@@ -466,6 +466,8 @@ void func_ls(char *cmd){
         ret = parsuj_pathu(cmd, 1);
     }
 
+    printf("ls RET = %d\n", ret);
+
     // cesta neexistuje, nelze splnit pozadavek
     if (ret == -1){
         printf("PATH NOT FOUND\n");
@@ -473,8 +475,6 @@ void func_ls(char *cmd){
     }
 
     ls_printer(ret);
-
-    //printf("ls ret = %d\n", ret);
 }
 
 /*
