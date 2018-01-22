@@ -1,0 +1,15 @@
+ls
+mkdir var
+mkdir home
+mkdir etc
+cd var
+mkdir www
+cd ..
+cd home
+mkdir lubos
+mkdir standa
+cd standa
+pwd
+cd ../..
+ls
+incp s1.txt home/s1.txt

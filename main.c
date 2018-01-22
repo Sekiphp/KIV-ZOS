@@ -5,13 +5,15 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "debugger.h"
 #include "loader.h"
 #include "shell.h"
 #include "parametr.h"
 #include "boot_record.h"
-#include "createExample.h"
+#include "mft.h"
 
-const int32_t UID_ITEM_FREE = 0;
+extern int ntfs_bitmap[]; // v loader.c
+char output_file[100];
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
@@ -30,22 +32,34 @@ int main(int argc, char *argv[]){
     // priprava sdilenych atributu pro vsechny vlakna
     pamet.mutex = &mutex;
     strcpy(pamet.soubor, argv[1]);
+    strcpy(output_file, argv[1]);
 
-    // NTFS loader from file
-    rc = pthread_create(&pt[0], NULL, create_example, (void *) &pamet);
-    assert(0 == rc);
-sleep(1);
-    printf("boot main: %s\n",boot->signature);
+    // mft seznam na null
+    for(i = 0; i < CLUSTER_COUNT; i++){
+       mft_seznam[i] = NULL;
+    }
+    DEBUG_PRINT("mft seznam NULL\n");
+
+    // checker - pokud soubor neexistuje, tak ho vytvorim
+    loader(argv[1]);
+
+    // kontrola nacteni
+    for(i = 0; i < CLUSTER_COUNT; i++){
+        printf("ntfs_bitmap[%d]=%d\n", i, ntfs_bitmap[i]);
+    }
 
     // prikazovy interpret
     rc = pthread_create(&pt[1], NULL, shell, (void *) &pamet);
     assert(0 == rc);
 
     // Cekam na dokonceni vsech vlaken
-    for(i = 0; i < 2; i++){
+    for(i = 1; i < 2; i++){
         rc = pthread_join(pt[i], NULL);
         assert(0 == rc);
     }
+
+    // uvolneni pameti
+    free((void *) bootr);
 
     printf("NTFS end\n");
     return 0;

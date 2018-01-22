@@ -1,4 +1,4 @@
 all:
 	clear
-	gcc *.c -o ntfs -pthread -Wall
-	./ntfs ntfs.dat
+	gcc *.c -o pseudontfs -pthread -Wall
+	./pseudontfs ntfs.dat
