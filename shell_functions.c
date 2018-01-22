@@ -24,13 +24,13 @@ void func_cp(char *cmd) {
     cmd = strtok(NULL, " \n");
     part1 = (char *) malloc(sizeof(strlen(cmd)));
     strcpy(part1, cmd);
-    printf("PART 1: %s=%s\n", cmd, part1);
+    DEBUG_PRINT("PART 1: %s=%s\n", cmd, part1);
 
     // part 2
     cmd = strtok(NULL, " \n");
     part2 = (char *) malloc(strlen(cmd));
     strcpy(part2, cmd);
-    printf("PART 2: %s=%s\n", cmd, part2);
+    DEBUG_PRINT("PART 2: %s=%s\n", cmd, part2);
 
     // part 1
             nazev_zdroj = strrchr(part1, '/');
@@ -56,9 +56,9 @@ void func_cp(char *cmd) {
 
             zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj, 0);
 
-            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
-            printf("-- RET ZDROJ: %d\n", ret_zdroj);
-            printf("-- ZDROJ UID: %d\n\n", zdroj_uid);
+            DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
+            DEBUG_PRINT("-- RET ZDROJ: %d\n", ret_zdroj);
+            DEBUG_PRINT("-- ZDROJ UID: %d\n\n", zdroj_uid);
 
     if (ret_zdroj == -1) {
         printf("FILE NOT FOUND\n");
@@ -86,8 +86,8 @@ void func_cp(char *cmd) {
 
                 ret_cil = pwd;
             }
-            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
-            printf("-- RET CIL: %d\n", ret_cil);
+            DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
+            DEBUG_PRINT("-- RET CIL: %d\n", ret_cil);
 
     if (ret_cil == -1){
         printf("PATH NOT FOUND\n");
@@ -96,7 +96,7 @@ void func_cp(char *cmd) {
 
     // nactu obsah kopirovaneho souboru
     char *obsah_kopirovaneho_souboru = get_file_content(zdroj_uid);
-    printf("obsah_kopirovaneho_souboru=%s\n", obsah_kopirovaneho_souboru);
+    DEBUG_PRINT("obsah_kopirovaneho_souboru=%s\n", obsah_kopirovaneho_souboru);
 
     // vytvorim si novy soubor
     vytvor_soubor(ret_cil, nazev_cil, obsah_kopirovaneho_souboru, -1, 0, 1);
@@ -154,9 +154,9 @@ void func_mv(char *cmd){
 
             zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj, 0);
 
-            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
-            printf("-- RET ZDROJ: %d\n", ret_zdroj);
-            printf("-- ZDROJ UID: %d\n\n", zdroj_uid);
+            DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
+            DEBUG_PRINT("-- RET ZDROJ: %d\n", ret_zdroj);
+            DEBUG_PRINT("-- ZDROJ UID: %d\n\n", zdroj_uid);
 
 
     // part 2
@@ -180,13 +180,13 @@ void func_mv(char *cmd){
 
                 ret_cil = pwd;
             }
-            printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
-            printf("-- RET CIL: %d\n", ret_cil);
+            DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part2, delka, nazev_cil, jen_cesta_cil);
+            DEBUG_PRINT("-- RET CIL: %d\n", ret_cil);
 
 
     // odstranim odkaz z nadrazeneho adresare
     char *soucasny_obsah_zdroj = get_file_content(ret_zdroj);
-    printf("soucasnost=%s\n", soucasny_obsah_zdroj);
+    DEBUG_PRINT("soucasnost=%s\n", soucasny_obsah_zdroj);
 
     char *curLine = soucasny_obsah_zdroj;
 
@@ -210,7 +210,7 @@ void func_mv(char *cmd){
         i++;
     }
 
-    printf("BUFÍK=%s\n", buffer);
+    DEBUG_PRINT("BUFÍK=%s\n", buffer);
     // UID se musi zachovat kvuli linkum
     edit_file_content(ret_zdroj, buffer, mft_seznam[ret_zdroj]->item.item_name, ret_zdroj);
 
@@ -221,7 +221,7 @@ void func_mv(char *cmd){
 
     // prejmenovani
     if (strcmp(nazev_zdroj, nazev_cil) != 0) {
-        printf("-- Soubor bude prejmenovan\n");
+        DEBUG_PRINT("-- Soubor bude prejmenovan\n");
 
         strcpy(mft_seznam[zdroj_uid]->item.item_name, nazev_cil);
 
@@ -273,12 +273,12 @@ void func_rm(char *cmd){
 
         ret = pwd;
     }
-    printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev, jen_cesta);
+    DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev, jen_cesta);
 
 
     kesmazani = parsuj_pathu(cmd, 1);
 
-    printf("RET %d, KESMAZANI %d\n", ret, kesmazani);
+    DEBUG_PRINT("RET %d, KESMAZANI %d\n", ret, kesmazani);
 
     if (ret == -1){
         printf("PATH NOT FOUND\n");
@@ -292,7 +292,7 @@ void func_rm(char *cmd){
 
     // odstranim odkaz z nadrazeneho adresare
     char *soucasny_obsah = get_file_content(ret);
-    printf("soucasnost=%s\n", soucasny_obsah);
+    DEBUG_PRINT("soucasnost=%s\n", soucasny_obsah);
 
     char *curLine = soucasny_obsah;
 
@@ -316,7 +316,7 @@ void func_rm(char *cmd){
         i++;
     }
 
-    printf("BUFÍK=%s\n", buffer);
+    DEBUG_PRINT("BUFÍK=%s\n", buffer);
     // UID se musi zachovat kvuli linkum
     edit_file_content(ret, buffer, mft_seznam[ret]->item.item_name, ret);
 
@@ -365,7 +365,7 @@ void func_mkdir(char *cmd){
         ret = pwd;
     }
 
-    printf("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev, jen_cesta);
+    DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", cmd, delka, nazev, jen_cesta);
 
 
     // zkusim si tu cestu projit
@@ -383,7 +383,7 @@ void func_mkdir(char *cmd){
 
     free((void *) jen_cesta);
 
-    printf("ls ret = %d\n", ret);
+    DEBUG_PRINT("ls ret = %d\n", ret);
 }
 
 
@@ -398,7 +398,7 @@ void func_rmdir(char *cmd){
 
     ret = parsuj_pathu(cmd, 1);
 
-    printf("RET %d", ret);
+    DEBUG_PRINT("RET %d", ret);
 
     if (ret == -1){
         printf("PATH NOT FOUND\n");
@@ -417,7 +417,7 @@ void func_rmdir(char *cmd){
 
     // odstranim odkaz z nadrazeneho adresare
     char *soucasny_obsah = get_file_content(pwd);
-    printf("soucasnost=%s\n", soucasny_obsah);
+    DEBUG_PRINT("soucasnost=%s\n", soucasny_obsah);
 
     char *curLine = soucasny_obsah;
 
@@ -441,7 +441,7 @@ void func_rmdir(char *cmd){
         i++;
     }
 
-    printf("BUFÍK=%s\n", buffer);
+    DEBUG_PRINT("BUFÍK=%s\n", buffer);
     // UID se musi zachovat kvuli linkum
     edit_file_content(pwd, buffer, mft_seznam[pwd]->item.item_name, pwd);
 
@@ -467,7 +467,7 @@ void func_ls(char *cmd){
         ret = parsuj_pathu(cmd, 1);
     }
 
-    printf("ls RET = %d\n", ret);
+    DEBUG_PRINT("ls RET = %d\n", ret);
 
     // cesta neexistuje, nelze splnit pozadavek
     if (ret == -1){
@@ -487,7 +487,7 @@ void func_cat(char *cmd){
     cmd = strtok(NULL, " \n");
 
     ret = parsuj_pathu(cmd, 1);
-    printf("vyparsovano: %d\n", ret);
+    DEBUG_PRINT("vyparsovano: %d\n", ret);
 
     // cesta neexistuje, nelze splnit pozadavek
     if (ret == -1){
@@ -518,7 +518,7 @@ void func_cd(char *cmd){
     if (kam != -1){
         pwd = kam;
         printf("OK\n");
-        printf("-- menim kurzor pwd: %d\n", kam);
+        DEBUG_PRINT("-- menim kurzor pwd: %d\n", kam);
     }
     else {
         printf("PATH NOT FOUND\n");
@@ -657,7 +657,7 @@ void func_incp(char *cmd){
                 ret = pwd;
             }
 
-            printf("-- Full path: %s\n-- Filename: %s\n-- Path to dir: %s\n", cmd, nazev, jen_cesta);
+            DEBUG_PRINT("-- Full path: %s\n-- Filename: %s\n-- Path to dir: %s\n", cmd, nazev, jen_cesta);
 
             if (ret == -1){
                 printf("PATH %s NOT FOUND\n", jen_cesta);
@@ -674,7 +674,7 @@ void func_incp(char *cmd){
     }
 
     // tady uz mohu bezpecne zpracovavat
-    printf("-- Vyparsovana cesta: %d\n", ret);
+    DEBUG_PRINT("-- Vyparsovana cesta: %d\n", ret);
 
     vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1, 0, 1);
 }
@@ -694,7 +694,7 @@ void func_outcp(char *cmd){
     // postupne cteni argumentu
     while((cmd = strtok(NULL, " \n")) != NULL){
         if (i == 0){
-            printf("K presunu z FS\n");
+            DEBUG_PRINT("K presunu z FS\n");
             // soubor k presunu z FS
             jen_cesta = (char *) malloc(strlen(cmd));
             strncpy(jen_cesta, cmd, strlen(cmd));
@@ -707,12 +707,12 @@ void func_outcp(char *cmd){
 
             obsah = get_file_content(ret);
 
-            printf("OUT obsah: %s\n", obsah);
-            printf("RET: %d\n", ret);
+            DEBUG_PRINT("OUT obsah: %s\n", obsah);
+            DEBUG_PRINT("RET: %d\n", ret);
         }
         else {
             // ulozim do pc
-            printf("Ulozim soubor do pc\n");
+            DEBUG_PRINT("Ulozim soubor do pc\n");
 
             strncpy(pc_file, cmd, strlen(cmd));
             fw = fopen(pc_file, "w");

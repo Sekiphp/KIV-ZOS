@@ -23,7 +23,7 @@ int get_volne_uid() {
     // pochazim potencionalni list a hledam prvni volny index
     for (i = 0; i < CLUSTER_COUNT; i++) {
         if (mft_seznam[i] == NULL){
-            printf("-- Volne UID je: %d\n", i);
+            DEBUG_PRINT("-- Volne UID je: %d\n", i);
             return i;
         }
     }
@@ -38,7 +38,7 @@ int get_volne_uid() {
     @param dir_name Jmeno adresare pro preklad
     @param uid_pwd Soucasna slozka, kde se nachazim (ze ktere vychazim)
 */
-int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
+int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
     int hledane, i, dir_len, cmp_len;
 
@@ -54,8 +54,8 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
 
     //printf("EXISTN _%s_\n", dirname);
 
-    //if (debug == 1) printf("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
-    printf("\tget_uid_by_name: Obsah clusteru: %s \n----------\n", curLine);
+    // DEBUG_PRINT("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
+    DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
     i = 0;
@@ -66,29 +66,29 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
         if (i != 0){
             // skip prvni radky v clusteru - je tam backlink
             hledane = atoi(curLine);
-            if (debug == 1) printf("\tnactene UID z clusteru %s (int=%d)\n", curLine, hledane);
+            DEBUG_PRINT("\tnactene UID z clusteru %s (int=%d)\n", curLine, hledane);
 
             // tady si roparsuji MFT a zjistim jestli se shoduje nazev
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
                 cmp_len = strlen(mfti.item_name);
 
-                if (debug == 1) printf("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, cmp_len);
+                DEBUG_PRINT("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, cmp_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
                 // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
                 if (strncmp(mfti.item_name, dirname, cmp_len) == 0) {
-                    if (debug == 1) printf("\t\tSHODA\n");
+                    DEBUG_PRINT("\t\tSHODA\n");
                     return mfti.uid;
                 }
             }
         }
         else {
             // ../../ relativni cesty
-            if (debug == 1) printf("\tBacklink teto slozky je %s\n", curLine);
+            DEBUG_PRINT("\tBacklink teto slozky je %s\n", curLine);
 
             if (strncmp(dirname, "..", 2) == 0){
-                printf("Vracim se zpatky\n");
+                DEBUG_PRINT("Vracim se zpatky\n");
                 return atoi(curLine);
             }
         }
@@ -129,7 +129,7 @@ int get_backlink(int uid_pwd) {
         char * nextLine = strchr(curLine, '\n');
         if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
 
-        printf("\tBacklink slozky (UID=%d) je %s = %d\n", uid_pwd, curLine, atoi(curLine));
+        DEBUG_PRINT("\tBacklink slozky (UID=%d) je %s = %d\n", uid_pwd, curLine, atoi(curLine));
 
         return atoi(curLine);
 
@@ -159,7 +159,7 @@ int parsuj_pathu(char *patha, int cd){
     else {
         start_dir = pwd;
     }
-    printf("START DIR = %d\n", start_dir);
+    DEBUG_PRINT("START DIR = %d\n", start_dir);
 
     if(strcmp(patha, "") != 0) {
         if (strchr(patha, '/') != NULL){
@@ -184,7 +184,7 @@ int parsuj_pathu(char *patha, int cd){
         else {
     	   if (cd == 1) {
                 // pouziva ce pro prikaz cd
-                printf("V ceste neni /\n");
+                DEBUG_PRINT("V ceste neni /\n");
                 uid_pom = get_uid_by_name(patha, start_dir, 1); // pokusim se prevest nazev na UID
 
                 if (uid_pom == -1) return -1;
@@ -217,7 +217,7 @@ int zaloz_novou_slozku(int pwd, char *name){
 
     sprintf(pom, "%d", pwd);
 
-    printf("-- NAME OF NEW DIR=%s\n", name);
+    DEBUG_PRINT("-- NAME OF NEW DIR=%s\n", name);
 
     // najdu volne UID
     volne_uid = get_volne_uid();
@@ -226,7 +226,7 @@ int zaloz_novou_slozku(int pwd, char *name){
     bitmap_free_index = -1;
     for (i = 0; i < CLUSTER_COUNT; i++){
         if (ntfs_bitmap[i] == 0){
-            printf("index volne bitmapy je %d\n", i);
+            DEBUG_PRINT("index volne bitmapy je %d\n", i);
             bitmap_free_index = i;
             break;
         }
@@ -271,23 +271,23 @@ int zaloz_novou_slozku(int pwd, char *name){
                 if(fw != NULL){
                     // mfti
                     mpom = &mfti;
-                    printf("-- MFTI chci zapsat na adresu %lu\n", sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item));
+                    DEBUG_PRINT("-- MFTI chci zapsat na adresu %lu\n", sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item));
                     fseek(fw, sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item), SEEK_SET);
                     fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
                     // bitmap
-                    printf("-- Bitmapu chci zapisovat na adresu %u\n", bootr->bitmap_start_address);
+                    DEBUG_PRINT("-- Bitmapu chci zapisovat na adresu %u\n", bootr->bitmap_start_address);
                     fseek(fw, bootr->bitmap_start_address, SEEK_SET);
                     fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
                     // odkaz na slozku do nadrazeneho adresare (zapis do clusteru)
-                    printf("-- Zapisuji odkaz na adresar %d do adresare %d\n", volne_uid, pwd);
+                    DEBUG_PRINT("-- Zapisuji odkaz na adresar %d do adresare %d\n", volne_uid, pwd);
                     sprintf(pomocnik2, "%d", volne_uid);
                     append_file_content(pwd, pomocnik2, 1);
 
                     // odkaz na nadrazenou slozku do teto slozky - backlink
                     // budou to prvni zapsana data v teto slozce
-                    printf("-- Zapisuji backlink na adresar %d do adresare %d, adresa je %d\n", pwd, volne_uid, bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE);
+                    DEBUG_PRINT("-- Zapisuji backlink na adresar %d do adresare %d, adresa je %d\n", pwd, volne_uid, bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE);
                     fseek(fw, bootr->data_start_address + bitmap_free_index * CLUSTER_SIZE, SEEK_SET);
                     fwrite(pom, 1, strlen(pom), fw);
 
@@ -310,14 +310,14 @@ void ls_printer(int uid) {
 
     // chci vypsat obsah aktualniho adresare
     char *buffer = get_file_content(uid);
-    printf("obsah bufferu je: %s\n", buffer);
+    DEBUG_PRINT("obsah bufferu je: %s\n", buffer);
 
     printf("-- Napoveda: + slozka, - soubor --\n");
     printf("--- NAZEV ----- VELIKOST - UID ---\n");
 
     // iteruji pro kazdou polozku z adresare a hledam jeji nazev
     p_c = strtok(buffer, "\n");
-    printf("ID nadrazene slozky je %s\n", p_c);
+    DEBUG_PRINT("ID nadrazene slozky je %s\n", p_c);
 
     // prvni odkaz je odkaz na nadrazenou slozku
 
@@ -375,13 +375,13 @@ char* read_file_from_pc(char *pc_soubor){
         size = ftell(fr);
 
         ret = (char *) malloc(size);
-        printf("-- size souboru %s je=%d\n", pc_soubor, size);
+        DEBUG_PRINT("-- size souboru %s je=%d\n", pc_soubor, size);
 
         // prectu soubor do promenne
         fseek(fr, 0, SEEK_SET);
         fread(ret, 1, size, fr);
 
-        printf("-- nacteno z pocitace: %s\n", ret);
+        DEBUG_PRINT("-- nacteno z pocitace: %s\n", ret);
 
         fclose(fr);
     }
@@ -416,14 +416,14 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     potreba_clusteru = size / CLUSTER_SIZE + 1;
     int volne_clustery[potreba_clusteru];
 
-    printf("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
+    DEBUG_PRINT("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
 
     j = 0;
     for (i = 0; i < CLUSTER_COUNT; i++) {
         if (ntfs_bitmap[i] == 0) {
             // volna
             volne_clustery[j] = i;
-            printf("-- Volny cluster: %d\n", i);
+            DEBUG_PRINT("-- Volny cluster: %d\n", i);
             j++;
         }
 
@@ -466,7 +466,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             else {
                 if (spoj_len != 1) {
                     //printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
-                    printf("f(%d, %d)\n", starter, spoj_len);
+                    DEBUG_PRINT("f(%d, %d)\n", starter, spoj_len);
 
                     mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
                     mftf.fragment_count = spoj_len;
@@ -475,7 +475,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                     l++;
                 }
                 else {
-                    printf("f(%d, %d)\n", volne_clustery[j], spoj_len);
+                    DEBUG_PRINT("f(%d, %d)\n", volne_clustery[j], spoj_len);
 
                     mftf.fragment_start_address = bootr->data_start_address + volne_clustery[j] * CLUSTER_SIZE; // adresa do VFS do clusteru
                     mftf.fragment_count = spoj_len;
@@ -491,7 +491,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
         if (spoj_len != 1) {
             //printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
-            printf("f(%d, %d)\n", starter, spoj_len);
+            DEBUG_PRINT("f(%d, %d)\n", starter, spoj_len);
 
             mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
             mftf.fragment_count = spoj_len;
@@ -520,13 +520,13 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         pridej_prvek_mft(volne_uid, mfti);
         mpom = malloc(sizeof(struct mft_item));
         mpom = &mfti;
-        printf("-- MFTI chci zapsat na adresu %lu\n", sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item));
+        DEBUG_PRINT("-- MFTI chci zapsat na adresu %lu\n", sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item));
         fseek(fw, sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item), SEEK_SET);
         fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
         // odkaz na slozku do nadrazeneho adresare
         if (odkaz == 1) {
-            printf("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
+            DEBUG_PRINT("-- Zapisuji odkaz na soubor %d do adresare %d\n", volne_uid, cilova_slozka);
             sprintf(pom, "%d", volne_uid);
             append_file_content(cilova_slozka, pom, 1);
         }
