@@ -223,7 +223,6 @@ char* get_file_content(int file_uid) {
     strcpy(ret, "");
 
 
-
     if (mft_seznam[file_uid] != NULL){
         mft_itemy = mft_seznam[file_uid];
 
@@ -254,8 +253,10 @@ char* get_file_content(int file_uid) {
                         if (tmp == NULL) return "ERROR";
                     }
 
-                    printf("get_fragment_content(mftf)=%s\n", get_fragment_content(mftf));
-                    strcat(ret, get_fragment_content(mftf));
+                    char *fragc = get_fragment_content(mftf);
+
+                    printf("get_fragment_content(mftf)=%s\n", fragc);
+                    strncat(ret, fragc, strlen(fragc));
                     //printf("ret: %s\n", ret);
                 }
             }
