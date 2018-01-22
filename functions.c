@@ -41,8 +41,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
     struct mft_item mfti;
     int hledane, i, dir_len, cmp_len;
 
-    char *obsah = get_file_content(uid_pwd);
-    char *curLine = obsah;
+    char *curLine = get_file_content(uid_pwd);
 
     dir_len = strlen(dir_name);
 
@@ -55,7 +54,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd, int debug){
     //printf("EXISTN _%s_\n", dirname);
 
     //if (debug == 1) printf("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
-    //if (debug == 1) printf("\tObsah clusteru: %s \n----------\n", obsah);
+    printf("\tget_uid_by_name: Obsah clusteru: %s \n----------\n", curLine);
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
     i = 0;
