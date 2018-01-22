@@ -54,7 +54,7 @@ void func_cp(char *cmd) {
                 ret_zdroj = pwd;
             }
 
-            zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj, 0);
+            zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj);
 
             DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
             DEBUG_PRINT("-- RET ZDROJ: %d\n", ret_zdroj);
@@ -152,7 +152,7 @@ void func_mv(char *cmd){
                 ret_zdroj = pwd;
             }
 
-            zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj, 0);
+            zdroj_uid = get_uid_by_name(nazev_zdroj, ret_zdroj);
 
             DEBUG_PRINT("-- Full path: %s(%d)\n-- Filename: %s\n-- Path to dir: %s\n", part1, delka, nazev_zdroj, jen_cesta_zdroj);
             DEBUG_PRINT("-- RET ZDROJ: %d\n", ret_zdroj);

@@ -110,7 +110,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     @param uid_pwd Pracovni adresar, ve kterem hledame
 */
 int is_name_unique(char *newname, int uid_pwd){
-    if (get_uid_by_name(newname, uid_pwd, 0) == -1) {
+    if (get_uid_by_name(newname, uid_pwd) == -1) {
         return 1;
     }
 
@@ -167,14 +167,14 @@ int parsuj_pathu(char *patha, int cd){
             // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
             p_c = strtok(path, "/");
             if (p_c != NULL){
-                uid_pom = get_uid_by_name(p_c, start_dir, 1); // pokusim se prevest nazev na UID
+                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
                 //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
                 if (uid_pom == -1) return -1;
                 start_dir = uid_pom; // jdu o slozku niz
             }
             while((p_c = strtok(NULL, "/")) != NULL){
-                uid_pom = get_uid_by_name(p_c, start_dir, 1); // pokusim se prevest nazev na UID
+                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
                 //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
                 if (uid_pom == -1) return -1;
@@ -185,7 +185,7 @@ int parsuj_pathu(char *patha, int cd){
     	   if (cd == 1) {
                 // pouziva ce pro prikaz cd
                 DEBUG_PRINT("V ceste neni /\n");
-                uid_pom = get_uid_by_name(patha, start_dir, 1); // pokusim se prevest nazev na UID
+                uid_pom = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
 
                 if (uid_pom == -1) return -1;
                 start_dir = uid_pom;
