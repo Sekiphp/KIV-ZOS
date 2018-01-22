@@ -368,7 +368,7 @@ int append_file_content(int file_uid, char *append, int dir){
         fclose(fw);
     }
 
-    free((void *) ret);
+    //free((void *) ret);
 
     return 1;
 }
