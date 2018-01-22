@@ -129,7 +129,7 @@ int get_backlink(int uid_pwd) {
         char * nextLine = strchr(curLine, '\n');
         if (nextLine) *nextLine = '\0';  // temporarily terminate the current line
 
-        printf("\tBacklink teto slozky je %s\n", curLine);
+        printf("\tBacklink slozky (UID=%d) je %s = %d\n", uid_pwd, curLine, atoi(curLine));
 
         return atoi(curLine);
 

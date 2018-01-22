@@ -532,28 +532,27 @@ void func_pwd(){
     char link[20], full_link[200], pom[200];
     int link_int;
 
-    if (pwd >= 0) {
-        if (pwd == 0) {
-            printf("/\n");
+    if (pwd == 0) {
+        printf("/\n");
+    }
+    else if (pwd >= 0) {
+        link_int = pwd;
+
+        while (link_int > 0) {
+            // /alservis, /www, /var
+            strcpy(link, "/");
+            strcat(link, mft_seznam[link_int]->item.item_name);
+
+            // to co uz ve stringu je dam na konec
+            strcpy(pom, full_link);
+            strcpy(full_link, link);
+            strcat(full_link, pom);
+
+            // najdu si backlink dalsiho adresare v poradi
+            link_int = get_backlink(link_int);
         }
-        else {
-            link_int = pwd;
 
-            while(link_int > 0){
-                // /alservis, /www, /var
-                strcpy(link, "/");
-                strcat(link, mft_seznam[link_int]->item.item_name);
-
-                // to co uz ve stringu je dam na konec
-                strcpy(pom, full_link);
-                strcpy(full_link, link);
-                strcat(full_link, pom);
-
-                link_int = get_backlink(link_int);
-            }
-
-            printf("%s\n", full_link);
-        }
+        printf("%s\n", full_link);
     }
     //printf("PWD = %d\n", pwd);
 }
