@@ -220,6 +220,7 @@ char* get_file_content(int file_uid) {
     ret = (char*) malloc(CLUSTER_SIZE);
 
 
+
     if (mft_seznam[file_uid] != NULL){
         mft_itemy = mft_seznam[file_uid];
 
@@ -250,6 +251,7 @@ char* get_file_content(int file_uid) {
                         if (tmp == NULL) return "ERROR";
                     }
 
+                    printf("get_fragment_content(mftf)=%s\n", get_fragment_content(mftf));
                     strcat(ret, get_fragment_content(mftf));
                     //printf("ret: %s\n", ret);
                 }
