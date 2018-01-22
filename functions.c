@@ -303,13 +303,12 @@ int zaloz_novou_slozku(int pwd, char *name){
 
 /* Ziskani informaci o souborech ve slozce */
 void ls_printer(int uid) {
-    char buffer[1024];
     char *p_c;
     int i = 0;
     struct mft_item mfti;
 
     // chci vypsat obsah aktualniho adresare
-    strncpy(buffer, get_file_content(uid), 1024);
+    char *buffer = get_file_content(uid);
     printf("obsah bufferu je: %s\n", buffer);
 
     printf("-- Napoveda: + slozka, - soubor --\n");
