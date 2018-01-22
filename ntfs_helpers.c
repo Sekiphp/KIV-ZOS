@@ -142,12 +142,13 @@ char* get_fragment_content(struct mft_fragment fragment) {
     adresa = fragment.fragment_start_address;
     bloku = fragment.fragment_count;
     ret = (char*) malloc(bloku * CLUSTER_SIZE);
+    strcpy(ret, "");
 
     if (adresa != 0) {
         for (i = 0; i < bloku; i++) {
             strcat(ret, get_cluster_content(adresa));
 
-            adresa = adresa + CLUSTER_SIZE;
+            adresa += CLUSTER_SIZE;
         }
     }
 
