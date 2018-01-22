@@ -342,6 +342,7 @@ int append_file_content(int file_uid, char *append, int dir){
         }
 
         if (adresa != 0){
+            printf("OBSAH = %s\n", get_cluster_content(adresa));
             // nactu obsah daneho clusteru
             strcat(ret, get_cluster_content(adresa));
 
