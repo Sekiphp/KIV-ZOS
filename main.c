@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "debugger.h"
 #include "loader.h"
 #include "shell.h"
 #include "parametr.h"

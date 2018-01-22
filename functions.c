@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "debugger.h"
 #include "loader.h"
 #include "mft.h"
 #include "shell_functions.h"

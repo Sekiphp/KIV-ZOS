@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "debugger.h"
 #include "parametr.h"
 
-struct boot_record *boot; 
+struct boot_record *boot;

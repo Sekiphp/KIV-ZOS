@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "debugger.h"
 #include "mft.h"
 #include "ntfs_helpers.h"
 #include "loader.h"
@@ -116,7 +117,7 @@ void clear_mft(int file_uid) {
                 // prepisu mfti prazdnem
                 adresa = sizeof(struct boot_record) + sizeof(struct mft_item) * file_uid;
                 memset(obsah, 0, sizeof(struct mft_item));
-                printf("-- MFTI chci zapisovat na adresu %u\n", adresa);
+                DEBUG_PRINT("-- MFTI chci zapisovat na adresu %u\n", adresa);
                 fseek(fw, adresa, SEEK_SET);
                 fwrite(obsah, 1, sizeof(struct mft_item), fw);
             }
@@ -125,7 +126,7 @@ void clear_mft(int file_uid) {
         fclose(fw);
     }
 
-    printf("clear mft success\n");
+    DEBUG_PRINT("clear mft success\n");
 }
 
 /*
@@ -187,7 +188,7 @@ void clear_bitmap(struct mft_fragment fragment) {
     index_s = (fragment.fragment_start_address - bootr->data_start_address) / CLUSTER_SIZE;
     index_e = index_s + fragment.fragment_count;
 
-    printf("-- Index bitmapy pro vynulovani je %d\n", index_s);
+    DEBUG_PRINT("-- Index bitmapy pro vynulovani je %d\n", index_s);
 
     // updatuju virtualni bitmapu
     for (i = index_s; i < index_e; i++) {
@@ -197,7 +198,7 @@ void clear_bitmap(struct mft_fragment fragment) {
     // prepisu celou bitmapu v souboru
     fw = fopen(output_file, "r+b");
     if(fw != NULL){
-        printf("-- Bitmapu chci zapisovat na adresu %u\n", bootr->bitmap_start_address);
+        DEBUG_PRINT("-- Bitmapu chci zapisovat na adresu %u\n", bootr->bitmap_start_address);
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
         fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
@@ -225,7 +226,7 @@ char* get_file_content(int file_uid) {
     if (mft_seznam[file_uid] != NULL){
         mft_itemy = mft_seznam[file_uid];
 
-        printf("get_file_content - stoji za zminku %d\n", mft_itemy->ij);
+        DEBUG_PRINT("get_file_content - stoji za zminku %d\n", mft_itemy->ij);
 
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
@@ -236,7 +237,7 @@ char* get_file_content(int file_uid) {
             mfti = mft_itemy->item;
             i++;
 
-            printf("[%d] Nacteny item s UID=%d ma nazev %s\n", i, mfti.uid, mfti.item_name);
+            DEBUG_PRINT("[%d] Nacteny item s UID=%d ma nazev %s\n", i, mfti.uid, mfti.item_name);
 
             // precteme vsechny fragmenty z daneho mft itemu (je jich: MFT_FRAG_COUNT)
             for (j = 0; j < MFT_FRAG_COUNT; j++){
@@ -244,7 +245,7 @@ char* get_file_content(int file_uid) {
 
                 if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
                     k++;
-                    printf("-- Fragment %d ze souboru s UID %d, start=%d, count=%d\n", j, mfti.uid, mftf.fragment_start_address, mftf.fragment_count);
+                    DEBUG_PRINT("-- Fragment %d ze souboru s UID %d, start=%d, count=%d\n", j, mfti.uid, mftf.fragment_start_address, mftf.fragment_count);
 
                     // prubezne je potreba realokovat oblast tak, aby se mi podarilo nacist cely soubor
                     if (k != 1){
@@ -254,7 +255,7 @@ char* get_file_content(int file_uid) {
 
                     char *fragc = get_fragment_content(mftf);
 
-                    printf("get_fragment_content(mftf)=%s\n", fragc);
+                    DEBUG_PRINT("get_fragment_content(mftf)=%s\n", fragc);
                     strncat(ret, fragc, strlen(fragc));
                     //printf("ret: %s\n", ret);
                 }
@@ -313,7 +314,7 @@ int append_file_content(int file_uid, char *append, int dir){
     //char *soucasny_obsah = get_file_content(file_uid);
 
     //printf("Soucasny obsah souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
-    printf("Chci appendnout: %s\n", append);
+    DEBUG_PRINT("Chci appendnout: %s\n", append);
 
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
@@ -327,7 +328,7 @@ int append_file_content(int file_uid, char *append, int dir){
             i = 0;
             while (mft_itemy != NULL){
                 i++;
-                printf("-- [%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_itemy->item.uid, mft_itemy->item.item_name);
+                DEBUG_PRINT("-- [%d] Nacteny item s UID=%d ma nazev %s\n", i, mft_itemy->item.uid, mft_itemy->item.item_name);
 
                 // precteme vsechny fragmenty z daneho mft itemu (maximalne je jich: MFT_FRAG_COUNT)
                 for (j = 0; j < MFT_FRAG_COUNT; j++){
@@ -335,7 +336,7 @@ int append_file_content(int file_uid, char *append, int dir){
 
                     // najdu si posledni fragment s adresou
                     if (mftf_adr != 0) {
-                        printf("-- MFTF adr = %d\n", mftf_adr);
+                        DEBUG_PRINT("-- MFTF adr = %d\n", mftf_adr);
                         adresa = mftf_adr;
                     }
                 }
@@ -348,7 +349,7 @@ int append_file_content(int file_uid, char *append, int dir){
         if (adresa != 0){
             // nactu obsah daneho clusteru
             strcpy(ret, get_cluster_content(adresa));
-            printf("OBSAH = %s\n", ret);
+            DEBUG_PRINT("OBSAH = %s\n", ret);
 
             // pripojim k nemu co potrebuji
             if (dir == 1)
@@ -364,7 +365,7 @@ int append_file_content(int file_uid, char *append, int dir){
             // zaktualizuji virtualni mft i mft v souboru
             update_filesize(file_uid, delka);
 
-            printf("Dokoncuji editaci clusteru /%s/; strlen=%d\n", ret, delka);
+            DEBUG_PRINT("Dokoncuji editaci clusteru /%s/; strlen=%d\n", ret, delka);
         }
         else {
             return -1;
@@ -385,8 +386,7 @@ int append_file_content(int file_uid, char *append, int dir){
     @param text Cely (novy) obsah
  */
 void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid){
-    printf("EDIT FILE (int file_uid=%d, char *text=%s, char *filename=%s, int puvodni_uid=%d)\n", file_uid, text, filename, puvodni_uid);
-
+    DEBUG_PRINT("EDIT FILE (int file_uid=%d, char *text=%s, char *filename=%s, int puvodni_uid=%d)\n", file_uid, text, filename, puvodni_uid);
 
     delete_file(file_uid);
     vytvor_soubor(pwd, filename, text, puvodni_uid, 1, 0);

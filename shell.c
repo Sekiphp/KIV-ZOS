@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#include "debugger.h"
 #include "shell.h"
 #include "shell_functions.h"
 #include "mft.h"

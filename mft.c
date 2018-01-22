@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "debugger.h"
 #include "loader.h"
 #include "boot_record.h"
 #include "mft.h"

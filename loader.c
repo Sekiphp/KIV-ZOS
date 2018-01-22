@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <errno.h>
 
+#include "debugger.h"
 #include "loader.h"
 #include "boot_record.h"
 #include "mft.h"
