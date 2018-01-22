@@ -218,6 +218,7 @@ char* get_file_content(int file_uid) {
 
     // alokujeme si zakladni velikost pro jeden cluster
     ret = (char*) malloc(CLUSTER_SIZE);
+    strcpy(ret, "");
 
 
 
