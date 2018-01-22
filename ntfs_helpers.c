@@ -33,8 +33,6 @@ char* get_cluster_content(int32_t adresa) {
         fclose(fr);
     }
 
-    printf("GET cluster content: %s\n", ret);
-
     return ret;
 }
 
