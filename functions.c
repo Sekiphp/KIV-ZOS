@@ -146,7 +146,7 @@ int get_backlink(int uid_pwd) {
 */
 int parsuj_pathu(char *patha, int cd){
     char *p_c;
-    int start_dir, uid_pom;
+    int start_dir;
     char path[100];
 
     // Nelze pracovat primo s arg: https://stackoverflow.com/questions/8957829/strtok-segmentation-fault
@@ -161,27 +161,27 @@ int parsuj_pathu(char *patha, int cd){
     }
     DEBUG_PRINT("START DIR = %d\n", start_dir);
 
-    if(strcmp(patha, "") != 0) {
+    if (strcmp(patha, "") != 0) {
         if (strchr(patha, '/') != NULL){
             // zde parsuji cestu zacinajici lomenem
             // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
             p_c = strtok(path, "/");
-            while ((p_c = strtok(NULL, "/")) != NULL) {
-                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
+            while( p_c != NULL ) {
+                start_dir = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
-                //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
-                if (uid_pom == -1) return -1;
-                start_dir = uid_pom; // jdu o slozku niz
+                if (start_dir == -1) return -1;
+                // jdu o slozku niz
+
+                p_c = strtok(NULL, "/");
             }
         }
         else {
     	   if (cd == 1) {
                 // pouziva ce pro prikaz cd
                 DEBUG_PRINT("V ceste neni /\n");
-                uid_pom = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
+                start_dir = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
 
-                if (uid_pom == -1) return -1;
-                start_dir = uid_pom;
+                if (start_dir == -1) return -1;
             }
         }
     }
