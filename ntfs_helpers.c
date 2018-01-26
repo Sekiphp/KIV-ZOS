@@ -314,7 +314,7 @@ int append_file_content(int file_uid, char *append, int dir){
     //char *soucasny_obsah = get_file_content(file_uid);
 
     //printf("Soucasny obsah souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
-    DEBUG_PRINT("Chci appendnout: %s\n", append);
+    DEBUG_PRINT("Chci appendnout %d znaku: %s\n", strlen(append), append);
 
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
