@@ -456,17 +456,17 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                     DEBUG_PRINT("f(%d, %d)\n", starter, spoj_len);
 
                     mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
-                    set_fragment_content(mftf, text);
                 }
                 else {
                     DEBUG_PRINT("f(%d, %d)\n", volne_clustery[j], spoj_len);
 
                     mftf.fragment_start_address = bootr->data_start_address + volne_clustery[j] * CLUSTER_SIZE; // adresa do VFS do clusteru
-                    set_fragment_content(mftf, text);
                 }
 
                 mftf.fragment_count = spoj_len;
                 mfti.fragments[l] = mftf;
+
+                text = set_fragment_content(mftf, text);
 
                 l++;
 
@@ -485,7 +485,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             mfti.fragments[l] = mftf;
             l++;
 
-            set_fragment_content(mftf, text);
+            text = set_fragment_content(mftf, text);
         }
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
