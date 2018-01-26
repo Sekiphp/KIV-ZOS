@@ -66,7 +66,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
         if (i != 0){
             // skip prvni radky v clusteru - je tam backlink
             hledane = atoi(curLine);
-            DEBUG_PRINT("\tnactene UID z clusteru %s (int=%d)\n", curLine, hledane);
+            //DEBUG_PRINT("\tnactene UID z clusteru %s (int=%d)\n", curLine, hledane);
 
             // tady si roparsuji MFT a zjistim jestli se shoduje nazev
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
@@ -177,8 +177,7 @@ int parsuj_pathu(char *patha, int cd){
         }
         else {
     	   if (cd == 1) {
-                // pouziva ce pro prikaz cd
-                DEBUG_PRINT("V ceste neni /\n");
+                // pouziva se pro prikaz cd
                 start_dir = get_uid_by_name(patha, start_dir); // pokusim se prevest nazev na UID
 
                 if (start_dir == -1) return -1;
