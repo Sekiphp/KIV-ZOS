@@ -166,14 +166,7 @@ int parsuj_pathu(char *patha, int cd){
             // zde parsuji cestu zacinajici lomenem
             // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
             p_c = strtok(path, "/");
-            if (p_c != NULL){
-                uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
-
-                //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
-                if (uid_pom == -1) return -1;
-                start_dir = uid_pom; // jdu o slozku niz
-            }
-            while((p_c = strtok(NULL, "/")) != NULL){
+            while ((p_c = strtok(NULL, "/")) != NULL) {
                 uid_pom = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
                 //printf("get_uid_by_name(%s, %d) = %d\n", p_c, start_dir, uid_pom);
@@ -312,7 +305,6 @@ void ls_printer(int uid) {
     char *buffer = get_file_content(uid);
     DEBUG_PRINT("obsah bufferu je: %s\n", buffer);
 
-    printf("-- Napoveda: + slozka, - soubor --\n");
     printf("--- NAZEV ----- VELIKOST - UID ---\n");
 
     // iteruji pro kazdou polozku z adresare a hledam jeji nazev
@@ -356,11 +348,7 @@ int is_empty_dir(int file_uid) {
         curLine = nextLine ? (nextLine + 1) : NULL;
     }
 
-    if (i <= 1) {
-        return 1;
-    }
-
-    return 0;
+    return i;
 }
 
 char* read_file_from_pc(char *pc_soubor){
