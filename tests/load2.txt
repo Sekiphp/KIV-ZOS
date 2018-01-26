@@ -1,0 +1,11 @@
+mkdir a1
+mkdir a2
+mkdir a3
+mkdir a4
+mkdir a5
+mkdir a6
+mkdir a7
+rmdir a2
+rmdir a3
+rmdir a5
+incp s1.txt s1.txt
