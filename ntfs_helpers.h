@@ -8,6 +8,7 @@
     void clear_mft(int file_uid);
     void clear_fragment_content(struct mft_fragment fragment);
     char* get_fragment_content(struct mft_fragment fragment);
+    char* set_fragment_content(struct mft_fragment fragment, char *zbyvajici_obsah);
     char* get_file_content(int file_uid);
     void delete_file(int file_uid);
     int update_filesize(int file_uid, int length);

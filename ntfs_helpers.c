@@ -155,6 +155,28 @@ char* get_fragment_content(struct mft_fragment fragment) {
 }
 
 /*
+    Naplni clustery z daneho fragmentu
+    @param fragment Informace o fragmentu
+    @param zbyvajici_obsah Obsah pro naplneni
+    @return Vratim zbytek strungu, ktery se sem nevesel
+*/
+char* set_fragment_content(struct mft_fragment fragment, char *zbyvajici_obsah) {
+    int i;
+    int adresa = fragment.fragment_start_address;
+
+    for (i = 0; i < fragment.fragment_count; i++) {
+        DEBUG_PRINT("ZAPISUJI BLOK %d z %d, zbyva obsahu %zd\n", i, fragment.fragment_count, strlen(zbyvajici_obsah));
+
+        set_cluster_content(adresa, zbyvajici_obsah);
+
+        adresa += CLUSTER_SIZE;
+        zbyvajici_obsah += CLUSTER_SIZE;
+    }
+
+    return zbyvajici_obsah;
+}
+
+/*
     Vynuluje obsah zadaneho fragmentu
     @param fragment Struktura fragmentu, ktery chceme prepsat
 */

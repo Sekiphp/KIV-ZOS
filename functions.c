@@ -381,7 +381,7 @@ char* read_file_from_pc(char *pc_soubor){
     Vytvori soubor z pocitace (incp)
 */
 void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir, int odkaz){
-    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
+    int i, j, k, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
     FILE *fw;
     char pom[20];
     struct mft_fragment mftf;
@@ -456,20 +456,19 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                     DEBUG_PRINT("f(%d, %d)\n", starter, spoj_len);
 
                     mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
-                    mftf.fragment_count = spoj_len;
-
-                    mfti.fragments[l] = mftf;
-                    l++;
+                    set_fragment_content(mftf, text);
                 }
                 else {
                     DEBUG_PRINT("f(%d, %d)\n", volne_clustery[j], spoj_len);
 
                     mftf.fragment_start_address = bootr->data_start_address + volne_clustery[j] * CLUSTER_SIZE; // adresa do VFS do clusteru
-                    mftf.fragment_count = spoj_len;
-
-                    mfti.fragments[l] = mftf;
-                    l++;
+                    set_fragment_content(mftf, text);
                 }
+
+                mftf.fragment_count = spoj_len;
+                mfti.fragments[l] = mftf;
+
+                l++;
 
                 spoj_len = 1;
                 starter = 0;
@@ -485,6 +484,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
             mfti.fragments[l] = mftf;
             l++;
+
+            set_fragment_content(mftf, text);
         }
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
@@ -519,7 +520,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         }
 
         // samozrejme nesmim zapomenout vlozit obsah noveho souboru
-        append_file_content(volne_uid, text, 0);
+        //append_file_content(volne_uid, text, 0);
 
         fclose(fw);
     }
