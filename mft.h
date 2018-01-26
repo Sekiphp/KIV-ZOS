@@ -29,7 +29,6 @@ struct mft_item {
 typedef struct mft_list {
     struct mft_item item; // k nested prvkum pristupuji pres tecky
     struct mft_list *dalsi;
-    int ij;
 } MFT_LIST;
 
 MFT_LIST *mft_seznam[CLUSTER_COUNT];
