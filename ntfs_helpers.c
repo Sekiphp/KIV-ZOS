@@ -346,6 +346,7 @@ int append_file_content(int file_uid, char *append, int dir){
             }
         }
 
+        /*
         if (adresa != 0){
             // nactu obsah daneho clusteru
             strcpy(ret, get_cluster_content(adresa));
@@ -369,7 +370,7 @@ int append_file_content(int file_uid, char *append, int dir){
         }
         else {
             return -1;
-        }
+        }*/
 
         fclose(fw);
     }
