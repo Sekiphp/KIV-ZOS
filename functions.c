@@ -466,6 +466,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                 mftf.fragment_count = spoj_len;
                 mfti.fragments[l] = mftf;
 
+                // prubezne (po castech) vkladam obsah noveho souboru
                 text = set_fragment_content(mftf, text);
 
                 l++;
@@ -485,6 +486,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             mfti.fragments[l] = mftf;
             l++;
 
+            // prubezne (po castech) vkladam obsah noveho souboru
             text = set_fragment_content(mftf, text);
         }
 
@@ -518,9 +520,6 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             sprintf(pom, "%d", volne_uid);
             append_file_content(cilova_slozka, pom, 1);
         }
-
-        // samozrejme nesmim zapomenout vlozit obsah noveho souboru
-        //append_file_content(volne_uid, text, 0);
 
         fclose(fw);
     }
