@@ -273,7 +273,7 @@ char* get_file_content(int file_uid) {
 
                     // prubezne je potreba realokovat oblast tak, aby se mi podarilo nacist cely soubor
                     if (k != 1){
-                        int *tmp = realloc(ret, k * CLUSTER_SIZE);
+                        int *tmp = realloc(ret, (k * CLUSTER_SIZE) * sizeof(char));
                         if (tmp == NULL) return "ERROR";
                     }
 
