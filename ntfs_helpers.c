@@ -410,5 +410,22 @@ void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid
 }
 
 int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[]) {
+    int pocet_fragu = sizeof(fpom);
+    int potreba_mfti = pocet_fragu / MFT_FRAG_COUNT;
 
+    DEBUG_PRINT("%d / %d = %d\n", pocet_fragu, MFT_FRAG_COUNT, potreba_mfti);
+    DEBUG_PRINT("%d % %d = %d\n", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu % MFT_FRAG_COUNT);
+
+    struct mft_item mfti;
+
+/*
+            mfti.uid = volne_uid;
+        mfti.isDirectory = is_dir;
+        mfti.item_order = 1;
+        mfti.item_order_total = 1;
+        strcpy(mfti.item_name, filename);
+        mfti.item_size = strlen(text); // zatim tam nic neni, takze nula
+    */
+
+    return 1;
 }

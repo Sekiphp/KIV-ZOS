@@ -385,7 +385,6 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     FILE *fw;
     char pom[20];
     struct mft_fragment mftf;
-    struct mft_item mfti;
     struct mft_item *mpom;
 
     // delka textu
