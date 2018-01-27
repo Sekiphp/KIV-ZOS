@@ -411,10 +411,9 @@ void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid
 
 int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[]) {
     int pocet_fragu = sizeof(fpom);
-    int potreba_mfti = pocet_fragu / MFT_FRAG_COUNT;
+    int potreba_mfti = (pocet_fragu / MFT_FRAG_COUNT) + (pocet_fragu % MFT_FRAG_COUNT);
 
-    DEBUG_PRINT("%d / %d = %d\n", pocet_fragu, MFT_FRAG_COUNT, potreba_mfti);
-    DEBUG_PRINT("%d mod %d = %d\n", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu % MFT_FRAG_COUNT);
+    DEBUG_PRINT("Potreba mfti je %d\n", potreba_mfti);
 
     struct mft_item mfti;
 
