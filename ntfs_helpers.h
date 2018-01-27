@@ -14,5 +14,6 @@
     int update_filesize(int file_uid, int length);
     int append_file_content(int file_uid, char *append, int dir);
     void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid);
+    int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[]);
 
 #endif

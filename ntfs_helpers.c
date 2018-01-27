@@ -408,3 +408,7 @@ void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid
     delete_file(file_uid);
     vytvor_soubor(pwd, filename, text, puvodni_uid, 1, 0);
 }
+
+int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[]) {
+
+}

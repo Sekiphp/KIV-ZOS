@@ -381,7 +381,7 @@ char* read_file_from_pc(char *pc_soubor){
     Vytvori soubor z pocitace (incp)
 */
 void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir, int odkaz){
-    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter, nasobic;
+    int i, j, k, l, size, potreba_clusteru, volne_uid, spoj_len, starter, nasobic;
     FILE *fw;
     char pom[20];
     struct mft_fragment mftf;
@@ -424,22 +424,36 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         return;
     }
 
+    // pomocne pole na fragmenty - prinejhorsim jich bude jako clusteru
+    struct mft_fragment fpom[potreba_clusteru];
+
+    mftf.fragment_start_address = -1;
+    mftf.fragment_count = -1;
+
+    for (i = 0; i < potreba_clusteru; i++) {
+        fpom[i] = mftf;
+    }
+
+
     // otevru si spojeni s nasim fs
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
 
         // pripravim si mft item
+        /*
         mfti.uid = volne_uid;
         mfti.isDirectory = is_dir;
         mfti.item_order = 1;
         mfti.item_order_total = 1;
         strcpy(mfti.item_name, filename);
         mfti.item_size = strlen(text); // zatim tam nic neni, takze nula
+        */
 
         // reseni spojitosti a nespojitosti bitmapy
         spoj_len = 1;
         starter = 0;
         l = 0;
+        k = 0;
         for (j = 0; j < potreba_clusteru; j++) {
             //printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
             if (volne_clustery[j+1] == volne_clustery[j]+1) {
@@ -461,16 +475,18 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
                 mftf.fragment_start_address = bootr->data_start_address + nasobic * CLUSTER_SIZE; // adresa do VFS do clusteru
                 mftf.fragment_count = spoj_len;
+                fpom[k] = mftf;
 
-                DEBUG_PRINT("f(%d, %d)\n", nasobic, spoj_len);
-                DEBUG_PRINT("mftf.fragment_start_address = %d zabira %d bloku\n", mftf.fragment_start_address, spoj_len);
+                //DEBUG_PRINT("f(%d, %d)\n", nasobic, spoj_len);
+                //DEBUG_PRINT("mftf.fragment_start_address = %d zabira %d bloku\n", mftf.fragment_start_address, spoj_len);
 
                 // prubezne (po castech) vkladam obsah noveho souboru
-                text = set_fragment_content(mftf, text);
-                DEBUG_PRINT("\n\n###%s####\n\n", text);
+                //text = set_fragment_content(mftf, text);
+                //DEBUG_PRINT("\n\n###%s####\n\n", text);
 
-                mfti.fragments[l] = mftf;
+                //mfti.fragments[l] = mftf;
                 l++;
+                k++;
 
                 spoj_len = 1;
                 starter = 0;
@@ -483,16 +499,19 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
             mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
             mftf.fragment_count = spoj_len;
+            fpom[k] = mftf;
 
-            mfti.fragments[l] = mftf;
+            //mfti.fragments[l] = mftf;
             l++;
+            k++;
 
             // prubezne (po castech) vkladam obsah noveho souboru
-            text = set_fragment_content(mftf, text);
-            DEBUG_PRINT("\n\n###%s####\n\n", text);
+            //text = set_fragment_content(mftf, text);
+            //DEBUG_PRINT("\n\n###%s####\n\n", text);
         }
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
+        /*
         mftf.fragment_start_address = 0;
         mftf.fragment_count = 0;
 
@@ -500,6 +519,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         for (j = l; j < MFT_FRAG_COUNT; j++){
             mfti.fragments[j] = mftf;
         }
+        */
 
         // aktualizuji bitmapu vsude
         for (j = 0; j < potreba_clusteru; j++){
@@ -508,13 +528,19 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
         fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
+        if (vytvor_soubor_v_mft(fw, volne_uid, filename, text, fpom) == -1) {
+            printf("ERROR");
+        }
+
         // mfti
+        /*
         pridej_prvek_mft(volne_uid, mfti);
         mpom = malloc(sizeof(struct mft_item));
         mpom = &mfti;
         DEBUG_PRINT("-- MFTI chci zapsat na adresu %lu\n", sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item));
         fseek(fw, sizeof(struct boot_record) + volne_uid * sizeof(struct mft_item), SEEK_SET);
         fwrite(mpom, sizeof(struct mft_item), 1, fw);
+        */
 
         // odkaz na slozku do nadrazeneho adresare
         if (odkaz == 1) {
