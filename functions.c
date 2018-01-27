@@ -467,6 +467,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                 mftf.fragment_count = spoj_len;
                 mfti.fragments[l] = mftf;
 
+                DEBUG_PRINT("X) mftf.fragment_start_address = %d\n", mftf.fragment_start_address);
+
                 // prubezne (po castech) vkladam obsah noveho souboru
                 text = set_fragment_content(mftf, text);
 
