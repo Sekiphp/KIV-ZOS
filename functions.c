@@ -381,7 +381,7 @@ char* read_file_from_pc(char *pc_soubor){
     Vytvori soubor z pocitace (incp)
 */
 void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir, int odkaz){
-    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
+    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter, nasobic;
     FILE *fw;
     char pom[20];
     struct mft_fragment mftf;
@@ -451,27 +451,24 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                 }
             }
             else {
+                // nasobic pojitosti
                 if (spoj_len != 1) {
-                    //printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
-                    DEBUG_PRINT("1) f(%d, %d)\n", starter, spoj_len);
-
-                    mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
-                    DEBUG_PRINT("1) mftf.fragment_start_address = %d\n", mftf.fragment_start_address);
+                    nasobic = starter;
                 }
                 else {
-                    DEBUG_PRINT("2) f(%d, %d)\n", volne_clustery[j], spoj_len);
-
-                    mftf.fragment_start_address = bootr->data_start_address + volne_clustery[j] * CLUSTER_SIZE; // adresa do VFS do clusteru
+                    nasobic = volne_clustery[j];
                 }
 
+                mftf.fragment_start_address = bootr->data_start_address + nasobic * CLUSTER_SIZE; // adresa do VFS do clusteru
                 mftf.fragment_count = spoj_len;
-                mfti.fragments[l] = mftf;
 
-                DEBUG_PRINT("X) mftf.fragment_start_address = %d\n", mftf.fragment_start_address);
+                DEBUG_PRINT("f(%d, %d)\n", nasobic, spoj_len);
+                DEBUG_PRINT("mftf.fragment_start_address = %d zabira %d bloku\n", mftf.fragment_start_address, spoj_len);
 
                 // prubezne (po castech) vkladam obsah noveho souboru
                 text = set_fragment_content(mftf, text);
 
+                mfti.fragments[l] = mftf;
                 l++;
 
                 spoj_len = 1;
