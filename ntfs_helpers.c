@@ -236,17 +236,13 @@ void clear_bitmap(struct mft_fragment fragment) {
     @return Obsah celeho souboru
 */
 char* get_file_content(int file_uid) {
-    int i, j, k;
+    int i, j;
     char *ret;
     MFT_LIST* mft_itemy;
     struct mft_item mfti;
     struct mft_fragment mftf;
 
-    // alokujeme si zakladni velikost pro jeden cluster
-    ret = (char*) malloc(CLUSTER_SIZE);
-    strcpy(ret, "");
-
-
+    // existuje takovy item v MFT
     if (mft_seznam[file_uid] != NULL){
         mft_itemy = mft_seznam[file_uid];
 
@@ -256,10 +252,15 @@ char* get_file_content(int file_uid) {
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
         // zacneme iterovar pres ->dalsi
         i = 0;
-        k = 0; // celkovy pocet zopracovanych neprazdnych fragmentu
         while (mft_itemy != NULL){
             mfti = mft_itemy->item;
             i++;
+
+            // alokujeme si celou velikost dle MFT
+            if (i == 1) {
+                ret = (char*) malloc(((mfti.item_size / CLUSTER_SIZE) + 1) * CLUSTER_SIZE);
+                strcpy(ret, "");
+            }
 
             DEBUG_PRINT("[%d] Nacteny item s UID=%d ma nazev %s\n", i, mfti.uid, mfti.item_name);
 
@@ -268,20 +269,12 @@ char* get_file_content(int file_uid) {
                 mftf = mfti.fragments[j];
 
                 if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
-                    k++;
                     DEBUG_PRINT("-- Fragment %d ze souboru s UID %d, start=%d, count=%d\n", j, mfti.uid, mftf.fragment_start_address, mftf.fragment_count);
-
-                    // prubezne je potreba realokovat oblast tak, aby se mi podarilo nacist cely soubor
-                    if (k != 1){
-                        int *tmp = realloc(ret, (k * CLUSTER_SIZE) * sizeof(char));
-                        if (tmp == NULL) return "ERROR";
-                    }
 
                     char *fragc = get_fragment_content(mftf);
 
                     DEBUG_PRINT("get_fragment_content(mftf)=%s\n", fragc);
                     strncat(ret, fragc, strlen(fragc));
-                    //printf("ret: %s\n", ret);
                 }
             }
 
