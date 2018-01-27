@@ -239,6 +239,8 @@ void func_mv(char *cmd){
 
     free((void *) part1);
     free((void *) part2);
+
+    printf("OK\n");
 }
 
 /*
@@ -384,6 +386,8 @@ void func_mkdir(char *cmd){
     free((void *) jen_cesta);
 
     DEBUG_PRINT("ls ret = %d\n", ret);
+
+    printf("OK\n");
 }
 
 
@@ -677,6 +681,7 @@ void func_incp(char *cmd){
     DEBUG_PRINT("-- Vyparsovana cesta: %d\n", ret);
 
     vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1, 0, 1);
+    printf("OK\n");
 }
 
 /*
@@ -735,6 +740,7 @@ void func_outcp(char *cmd){
     }
 
     free((void *) jen_cesta);
+    printf("OK\n");
 }
 
 /*
@@ -743,6 +749,7 @@ void func_outcp(char *cmd){
 */
 void func_defrag(){
 
+    printf("OK\n");
 }
 
 /*
@@ -751,4 +758,5 @@ void func_defrag(){
  */
 void func_consist(){
 
+    printf("OK\n");
 }

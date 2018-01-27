@@ -381,7 +381,7 @@ char* read_file_from_pc(char *pc_soubor){
     Vytvori soubor z pocitace (incp)
 */
 void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir, int odkaz){
-    int i, j, k, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
+    int i, j, l, size, potreba_clusteru, volne_uid, spoj_len, starter;
     FILE *fw;
     char pom[20];
     struct mft_fragment mftf;
