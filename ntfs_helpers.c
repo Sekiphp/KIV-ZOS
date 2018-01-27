@@ -331,7 +331,7 @@ int append_file_content(int file_uid, char *append, int dir){
     //char *soucasny_obsah = get_file_content(file_uid);
 
     //printf("Soucasny obsah souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
-    DEBUG_PRINT("Chci appendnout %d znaku: %s\n", strlen(append), append);
+    DEBUG_PRINT("Chci appendnout %zd znaku: %s\n", strlen(append), append);
 
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
@@ -464,14 +464,13 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
             fseek(fw, adresa_mfti, SEEK_SET);
             fread(mff, sizeof_mft_item, 1, fw);
 
-            if (mff->uid == mft_table.uid == UID_ITEM_FREE) {
+            if (mff->uid == UID_ITEM_FREE) {
                 DEBUG_PRINT("NASEL JSEM FREE SPACE V MFT NA ADR %d\n", adresa_mfti);
                 break;
             }
         }
 
-
-        DEBUG_PRINT("-- MFTI chci zapsat na adresu %lu\n", adresa);
+        DEBUG_PRINT("-- MFTI chci zapsat na adresu %d\n", adresa_mfti);
         fseek(fw, adresa_mfti, SEEK_SET);
         fwrite(mpom, sizeof(struct mft_item), 1, fw);
 
