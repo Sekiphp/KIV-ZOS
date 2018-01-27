@@ -467,6 +467,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
                 // prubezne (po castech) vkladam obsah noveho souboru
                 text = set_fragment_content(mftf, text);
+                DEBUG_PRINT("\n\n###%s####\n\n", text);
 
                 mfti.fragments[l] = mftf;
                 l++;
@@ -488,6 +489,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
             // prubezne (po castech) vkladam obsah noveho souboru
             text = set_fragment_content(mftf, text);
+            DEBUG_PRINT("\n\n###%s####\n\n", text);
         }
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
