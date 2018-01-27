@@ -385,7 +385,6 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     FILE *fw;
     char pom[20];
     struct mft_fragment mftf;
-    struct mft_item *mpom;
 
     // delka textu
     size = strlen(text);
@@ -527,8 +526,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
         fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
-        if (vytvor_soubor_v_mft(fw, volne_uid, filename, text, fpom) == -1) {
-            printf("ERROR");
+        if (vytvor_soubor_v_mft(fw, volne_uid, filename, text, fpom, is_dir) == -1) {
+            printf("ERROR\n");
         }
 
         // mfti

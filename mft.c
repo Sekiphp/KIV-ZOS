@@ -29,9 +29,20 @@ void pridej_prvek_mft(int uid, struct mft_item mfti) {
         mft_seznam[uid] = pom;
     }
     else {
+        MFT_LIST *mpom = mft_seznam[uid];
+        while (mpom != NULL) {
+            if (mpom->dalsi == NULL) {
+                mpom->dalsi = pom;
+                break;
+            }
+
+            mpom = mpom->dalsi;
+        }
+        /*
         MFT_LIST *mpom;
         mpom = mft_seznam[uid];
         pom->dalsi = mpom;
         mft_seznam[uid] = pom;
+        */
     }
 }
