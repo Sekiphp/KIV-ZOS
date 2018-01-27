@@ -454,8 +454,10 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                 if (spoj_len != 1) {
                     //printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
                     DEBUG_PRINT("f(%d, %d)\n", starter, spoj_len);
+                    DEBUG_PRINT("bootr->data_start_address = %d\n", bootr->data_start_address);
 
                     mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
+                    DEBUG_PRINT("mftf.fragment_start_address = %d\n", mftf.fragment_start_address);
                 }
                 else {
                     DEBUG_PRINT("f(%d, %d)\n", volne_clustery[j], spoj_len);

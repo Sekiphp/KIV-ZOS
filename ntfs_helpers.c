@@ -167,7 +167,7 @@ char* set_fragment_content(struct mft_fragment fragment, char *zbyvajici_obsah) 
     //DEBUG_PRINT("-- %s\n", zbyvajici_obsah);
 
     for (i = 0; i < fragment.fragment_count; i++) {
-        DEBUG_PRINT("ZAPISUJI BLOK %d z %d na adresu %d, zbyva obsahu %zd\n", i, fragment.fragment_count, adresa, strlen(zbyvajici_obsah));
+        DEBUG_PRINT("ZAPISUJI BLOK %d z %d na adresu %d, zbyva obsahu %zd\n", i+1, fragment.fragment_count, adresa, strlen(zbyvajici_obsah));
 
         set_cluster_content(adresa, zbyvajici_obsah);
 
