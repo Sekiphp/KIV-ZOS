@@ -467,7 +467,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
             fread(mff, sizeof_mft_item, 1, fw);
 
             DEBUG_PRINT("if (%d == %d); %s\n", mff->uid, UID_ITEM_FREE, mff->item_name);
-            if (mff->uid == UID_ITEM_FRE || strcmp(mff->item_name, "") == 0) {
+            if (mff->uid == UID_ITEM_FREE || strcmp(mff->item_name, "") == 0) {
                 DEBUG_PRINT("-- MFTI chci zapsat na adresu %d\n", adresa_mfti);
 
                 fseek(fw, adresa_mfti, SEEK_SET);
