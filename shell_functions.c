@@ -402,7 +402,7 @@ void func_rmdir(char *cmd){
 
     ret = parsuj_pathu(cmd, 1);
 
-    DEBUG_PRINT("RET %d", ret);
+    DEBUG_PRINT("RET %d\n", ret);
 
     if (ret == -1){
         printf("PATH NOT FOUND\n");
