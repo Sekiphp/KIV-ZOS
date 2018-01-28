@@ -383,6 +383,7 @@ int append_file_content(int file_uid, char *append, int dir){
             update_filesize(file_uid, delka);
 
             DEBUG_PRINT("Dokoncuji editaci clusteru /%s/; strlen=%d\n", ret, delka);
+            DEBUG_PRINT("=========== VYSLEDEK ==========\n%s\n========== /VYSLEDEK ==========\n", get_file_content(file_uid));
         }
         else {
             return -1;
