@@ -421,12 +421,11 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 
     mff = malloc(sizeof(struct mft_item));
 
-    DEBUG_PRINT("(%d / %d) + (%d mod %d)", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT);
-
     int pocet_fragu = sizeof(fpom);
     int potreba_mfti = (pocet_fragu / MFT_FRAG_COUNT) + (pocet_fragu % MFT_FRAG_COUNT);
     int sizeof_mft_item = sizeof(struct mft_item);
 
+    DEBUG_PRINT("(%d / %d) + (%d mod %d)", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT);
     DEBUG_PRINT("Potreba mfti je %d\n", potreba_mfti);
 
     // vytvorim mfti pole o spravne velikosti
