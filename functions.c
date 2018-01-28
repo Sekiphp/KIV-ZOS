@@ -245,8 +245,8 @@ int zaloz_novou_slozku(int pwd, char *name){
                 mfti.fragments[0] = mftf;
 
                 // dalsi fragmenty z budou jen prazdne (pro poradek)
-                mftf.fragment_start_address = 0;
-                mftf.fragment_count = 0;
+                mftf.fragment_start_address = -1;
+                mftf.fragment_count = -1;
 
                 // zacinam od jednicky
                 for (j = 1; j < MFT_FRAG_COUNT; j++){
