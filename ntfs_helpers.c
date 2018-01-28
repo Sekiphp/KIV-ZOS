@@ -421,7 +421,16 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 
     mff = malloc(sizeof(struct mft_item));
 
-    int pocet_fragu = sizeof(fpom);
+    // vypocitam si skutecny pocet fragmentu
+    int pocet_fragu = 0;
+    for (i = 0; i < sizeof(fpom); i++) {
+        if (fpom[i].fragment_start_address != -1) {
+            pocet_fragu++;
+        }
+    }
+
+
+
     int potreba_mfti = (pocet_fragu / MFT_FRAG_COUNT) + (pocet_fragu % MFT_FRAG_COUNT);
     int sizeof_mft_item = sizeof(struct mft_item);
 
