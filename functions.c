@@ -85,10 +85,10 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
         }
         else {
             // ../../ relativni cesty
-            DEBUG_PRINT("\tBacklink teto slozky je %s\n", curLine);
+            //DEBUG_PRINT("\tBacklink teto slozky je %s\n", curLine);
 
             if (strncmp(dirname, "..", 2) == 0){
-                DEBUG_PRINT("Vracim se zpatky\n");
+                //DEBUG_PRINT("Vracim se zpatky\n");
                 return atoi(curLine);
             }
         }
@@ -159,7 +159,7 @@ int parsuj_pathu(char *patha, int cd){
     else {
         start_dir = pwd;
     }
-    DEBUG_PRINT("START DIR = %d\n", start_dir);
+    //DEBUG_PRINT("START DIR = %d\n", start_dir);
 
     if (strcmp(patha, "") != 0) {
         if (strchr(patha, '/') != NULL){

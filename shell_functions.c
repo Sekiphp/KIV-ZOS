@@ -399,10 +399,9 @@ void func_rmdir(char *cmd){
     char buffer[CLUSTER_SIZE];
 
     cmd = strtok(NULL, " \n");
-
     ret = parsuj_pathu(cmd, 1);
 
-    DEBUG_PRINT("RET %d\n", ret);
+    DEBUG_PRINT("RET ke smazani %d\n", ret);
 
     if (ret == -1){
         printf("PATH NOT FOUND\n");
@@ -421,7 +420,7 @@ void func_rmdir(char *cmd){
 
     // odstranim odkaz z nadrazeneho adresare
     char *soucasny_obsah = get_file_content(pwd);
-    DEBUG_PRINT("soucasnost=%s\n", soucasny_obsah);
+    DEBUG_PRINT("soucasny obsah adresare=%s\n", soucasny_obsah);
 
     char *curLine = soucasny_obsah;
 
@@ -445,7 +444,7 @@ void func_rmdir(char *cmd){
         i++;
     }
 
-    DEBUG_PRINT("BUFÍK=%s\n", buffer);
+    DEBUG_PRINT("Novy obsah adresare=%s\n", buffer);
     // UID se musi zachovat kvuli linkum
     edit_file_content(pwd, buffer, mft_seznam[pwd]->item.item_name, pwd);
 
