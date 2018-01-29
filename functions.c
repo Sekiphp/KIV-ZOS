@@ -425,11 +425,10 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     // pomocne pole na fragmenty - prinejhorsim jich bude jako clusteru
     struct mft_fragment fpom[potreba_clusteru];
 
-    mftf.fragment_start_address = -1;
-    mftf.fragment_count = -1;
-
+    // vynulovani
     for (i = 0; i < potreba_clusteru; i++) {
-        fpom[i] = mftf;
+        fpom[i].fragment_start_address = -1;
+        fpom[i].fragment_count = -1;
     }
 
 
@@ -485,15 +484,15 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             k++;
         }
 
-        // debug fragmentu
         for (j = 0; j < potreba_clusteru; j++) {
+            // debug fragmentu
             DEBUG_PRINT("FRAGMENT (start=%d, pocet=%d)\n", fpom[j].fragment_start_address, fpom[j].fragment_count);
-        }
 
-        // aktualizuji bitmapu vsude
-        for (j = 0; j < potreba_clusteru; j++) {
+            // aktualizuji bitmapu virtualne
             ntfs_bitmap[volne_clustery[j]] = 1;
         }
+
+        // aktualizuji bitmapu v souboru
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
         fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
