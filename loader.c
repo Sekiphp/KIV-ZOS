@@ -178,8 +178,8 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
 
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
-        mftf.fragment_start_address = 0;
-        mftf.fragment_count = 0;
+        mftf.fragment_start_address = -1;
+        mftf.fragment_count = -1;
 
         // zacinam od jednicky
         for (i = 1; i < MFT_FRAG_COUNT; i++){
