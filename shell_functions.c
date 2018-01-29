@@ -247,6 +247,7 @@ void func_mv(char *cmd){
     Smaze soubor s1
 */
 void func_rm(char *cmd){
+    DEBUG_PRINT("RM\n");
     int ret, i, delka, kesmazani;
     char buffer[CLUSTER_SIZE];
     char *nazev;
@@ -395,7 +396,7 @@ void func_mkdir(char *cmd){
     Smaze prazdny adresar
 */
 void func_rmdir(char *cmd){
-    DEBUG_PRINT("TRTT\n");
+    DEBUG_PRINT("RMDIR\n");
     int ret, i;
     char buffer[CLUSTER_SIZE];
 
