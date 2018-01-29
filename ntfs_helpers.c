@@ -423,7 +423,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 
     // vypocitam si skutecny pocet fragmentu
     int pocet_fragu = 0;
-    for (i = 0; i < sizeof(fpom); i++) {
+    for (i = 0; i < (sizeof(fpom) / 8); i++) {
         DEBUG_PRINT("OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
         if (fpom[i].fragment_start_address != -1) {
             pocet_fragu++;
