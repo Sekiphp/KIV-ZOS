@@ -431,6 +431,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fpom[i].fragment_count = -1;
     }
 
+    DEBUG_PRINT("SIZEOF(fpom[])=%d\n", sizeof(fpom));
+
 
     // otevru si spojeni s nasim fs
     fw = fopen(output_file, "r+b");
