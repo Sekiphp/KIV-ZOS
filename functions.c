@@ -47,10 +47,10 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     dir_len = strlen(dir_name);
 
     char *dirname;
-    dirname = (char *) malloc(dir_len);
+    dirname = (char *) malloc(dir_len - 1);
 
     //memset(pomocnik, '', 20);
-    strncpy(dirname, dir_name, dir_len);
+    strncpy(dirname, dir_name, dir_len - 1);
 
     //printf("EXISTN _%s_\n", dirname);
 
