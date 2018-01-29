@@ -439,6 +439,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
     DEBUG_PRINT("(%d / %d) + (%d mod %d) = %d\n", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT, potreba_mfti);
 
     // vytvorim mfti pole o spravne velikosti
+    k = 0;
     struct mft_item mfti[potreba_mfti];
     for (i = 0; i < potreba_mfti; i++) {
         mfti[i].uid = volne_uid;
@@ -454,6 +455,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 
             // vkladani textu souboru
             text = set_fragment_content(fpom[k], text);
+            k++;
         }
 
         // pridam ho virtualne
