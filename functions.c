@@ -517,10 +517,18 @@ void *kontrola_konzistence(void *arg) {
 
     printf("Vlakno kontroly konzistence\n");
 
-    pthread_mutex_lock(param->mutex);
-        ke_zpracovani = param->zpracovany_cluster;
-        printf("%d\n", ke_zpracovani);
-    pthread_mutex_unlock(param->mutex);
+    while (1) {
+        pthread_mutex_lock(param->mutex);
+            ke_zpracovani = param->zpracovany_cluster + 1;
+            param->zpracovany_cluster = ke_zpracovani;
+            printf("%d\n", ke_zpracovani);
+        pthread_mutex_unlock(param->mutex);
+
+        if (ke_zpracovani > CLUSTER_COUNT) {
+            DEBUG_PRINT("SKIP\n");
+            break;
+        }
+    }
 
     return NULL;
 }
