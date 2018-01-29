@@ -415,7 +415,7 @@ void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid
     DEBUG_PRINT("------------------------- END edit_file_content() -------------------------\n");
 }
 
-int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[], int is_dir) {
+int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[], int fpom_size, int is_dir) {
     int i, j, k, l, adresa_mfti;
     struct mft_item *mpom, *mff;
 
@@ -423,7 +423,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 
     // vypocitam si skutecny pocet fragmentu
     int pocet_fragu = 0;
-    int prvku = (sizeof(fpom) / sizeof(struct mft_fragment));
+    int prvku = (fpom_size / sizeof(struct mft_fragment));
     DEBUG_PRINT("PRVKU=%d\n", prvku);
     for (i = 0; i < prvku; i++) {
         DEBUG_PRINT("OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
