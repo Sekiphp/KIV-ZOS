@@ -485,8 +485,13 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             k++;
         }
 
+        // debug fragmentu
+        for (j = 0; j < potreba_clusteru; j++) {
+            DEBUG_PRINT("FRAGMENT (start=%d, pocet=%d)\n", fpom[j].fragment_start_address, fpom[j].fragment_count);
+        }
+
         // aktualizuji bitmapu vsude
-        for (j = 0; j < potreba_clusteru; j++){
+        for (j = 0; j < potreba_clusteru; j++) {
             ntfs_bitmap[volne_clustery[j]] = 1;
         }
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
