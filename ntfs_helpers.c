@@ -352,7 +352,7 @@ int append_file_content(int file_uid, char *append, int dir){
                     mftf_adr = mft_itemy->item.fragments[j].fragment_start_address;
 
                     // najdu si posledni fragment s adresou
-                    if (mftf_adr > 0) {
+                    if (mftf_adr > 0 && mft_itemy->item.fragments[j].fragment_count > 0) {
                         DEBUG_PRINT("-- MFTF adr = %d, %d\n", mftf_adr, mft_itemy->item.fragments[j].fragment_count);
                         adresa = mftf_adr;
                     }
