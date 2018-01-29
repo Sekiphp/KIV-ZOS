@@ -524,10 +524,16 @@ void *kontrola_konzistence(void *arg) {
             printf("%d\n", ke_zpracovani);
         pthread_mutex_unlock(param->mutex);
 
-        if (ke_zpracovani > CLUSTER_COUNT) {
+        if (ke_zpracovani >= CLUSTER_COUNT) {
             DEBUG_PRINT("SKIP %d > %d\n", ke_zpracovani, CLUSTER_COUNT);
             break;
         }
+
+        // tady budu zpracovavat data
+
+
+
+        sleep(1);
     }
 
     return NULL;
