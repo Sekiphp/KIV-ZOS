@@ -522,7 +522,6 @@ void *kontrola_konzistence(void *arg) {
         pthread_mutex_lock(param->mutex);
             ke_zpracovani = param->zpracovany_cluster + 1;
             param->zpracovany_cluster = ke_zpracovani;
-            printf("Vlakno %d: %d\n", r, ke_zpracovani);
         pthread_mutex_unlock(param->mutex);
 
         if (ke_zpracovani >= CLUSTER_COUNT) {
@@ -531,6 +530,7 @@ void *kontrola_konzistence(void *arg) {
         }
 
         // tady budu zpracovavat data
+        printf("Vlakno %d: %d\n", r, ke_zpracovani);
 
 
 
