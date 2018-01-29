@@ -283,7 +283,7 @@ void func_rm(char *cmd){
 
     DEBUG_PRINT("RET %d, KESMAZANI %d\n", ret, kesmazani);
 
-    if (ret == -1){
+    if (ret == -1 || kesmazani == -1){
         printf("PATH NOT FOUND\n");
         return;
     }
