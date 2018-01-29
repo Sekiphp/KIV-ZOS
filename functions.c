@@ -52,7 +52,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     //memset(pomocnik, '', 20);
     strncpy(dirname, dir_name, dir_len);
 
-    //printf("EXISTN _%s_\n", dirname);
+    printf("EXISTN _%s_%s_\n", dir_name, dirname);
 
     // DEBUG_PRINT("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
     DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
