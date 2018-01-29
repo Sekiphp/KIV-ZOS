@@ -46,13 +46,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
     dir_len = strlen(dir_name) - 1;
 
-    char *dirname;
-    dirname = (char *) malloc(dir_len);
-
-    //memset(pomocnik, '', 20);
-    strncpy(dirname, dir_name, dir_len);
-
-    printf("EXISTN _%s_%s_\n", dir_name, dirname);
+    printf("EXISTN _%s_\n", dir_name);
 
     // DEBUG_PRINT("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
     DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
@@ -73,11 +67,11 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
                 mfti = mft_seznam[hledane]->item;
                 cmp_len = strlen(mfti.item_name);
 
-                DEBUG_PRINT("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%dNOT NULL\n", hledane, mfti.item_name, dirname, cmp_len);
+                DEBUG_PRINT("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%d, dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, cmp_len, dir_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
                 // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
-                if (strncmp(mfti.item_name, dirname, cmp_len) == 0) {
+                if (strncmp(mfti.item_name, dir_name, cmp_len) == 0) {
                     DEBUG_PRINT("\t\tSHODA\n");
                     return mfti.uid;
                 }
@@ -87,7 +81,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             // ../../ relativni cesty
             //DEBUG_PRINT("\tBacklink teto slozky je %s\n", curLine);
 
-            if (strncmp(dirname, "..", 2) == 0){
+            if (strncmp(dir_name, "..", 2) == 0){
                 //DEBUG_PRINT("Vracim se zpatky\n");
                 return atoi(curLine);
             }
@@ -98,8 +92,6 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
         i++;
     }
-
-    free((void *) dirname);
 
     return -1;
 }
