@@ -514,14 +514,15 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 void *kontrola_konzistence(void *arg) {
     sdilenaPamet *param = (sdilenaPamet *) arg;
     int ke_zpracovani;
+    int r = rand() % 20;
 
-    printf("Vlakno kontroly konzistence\n");
+    printf("Vlakno kontroly konzistence %d\n", r);
 
     while (1) {
         pthread_mutex_lock(param->mutex);
             ke_zpracovani = param->zpracovany_cluster + 1;
             param->zpracovany_cluster = ke_zpracovani;
-            printf("%d\n", ke_zpracovani);
+            printf("Vlakno %d: %d\n", r, ke_zpracovani);
         pthread_mutex_unlock(param->mutex);
 
         if (ke_zpracovani >= CLUSTER_COUNT) {
