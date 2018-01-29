@@ -22,9 +22,6 @@ void shell() {
 
     printf("SHELL booting...\n");
 
-    //pthread_mutex_lock(param->mutex);
-    //pthread_mutex_unlock(param->mutex);
-
     /* infinite loop - cekam na prikazy */
     while(1){
         printf("$ Zadejte prikaz: ");

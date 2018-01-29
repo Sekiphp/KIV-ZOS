@@ -424,7 +424,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fpom[i].fragment_count = -1;
     }
 
-    DEBUG_PRINT("SIZEOF(fpom[])=%d\n", sizeof(fpom));
+    DEBUG_PRINT("SIZEOF(fpom[])=%lo\n", sizeof(fpom));
 
 
     // otevru si spojeni s nasim fs
@@ -513,8 +513,14 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
 void *kontrola_konzistence(void *arg) {
     sdilenaPamet *param = (sdilenaPamet *) arg;
+    int ke_zpracovani;
 
     printf("Vlakno kontroly konzistence\n");
+
+    pthread_mutex_lock(param->mutex);
+        ke_zpracovani = param->zpracovany_cluster;
+        printf("%d\n", ke_zpracovani);
+    pthread_mutex_unlock(param->mutex);
 
     return NULL;
 }
