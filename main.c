@@ -26,7 +26,6 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
-    strcpy(pamet.soubor, argv[1]);
     strcpy(output_file, argv[1]);
 
     // mft seznam na null

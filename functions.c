@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
+#include <assert.h>
 
 #include "debugger.h"
 #include "loader.h"
@@ -509,9 +511,10 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     }
 }
 
-void *kontrola_konzistence(void *arg){
+void *kontrola_konzistence(void *arg) {
     sdilenaPamet *param = (sdilenaPamet *) arg;
 
     printf("Vlakno kontroly konzistence\n");
 
+    return NULL;
 }
