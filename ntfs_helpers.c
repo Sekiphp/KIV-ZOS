@@ -430,12 +430,10 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
         }
     }
 
-
-
     int potreba_mfti = (pocet_fragu / MFT_FRAG_COUNT) + (pocet_fragu % MFT_FRAG_COUNT);
     int sizeof_mft_item = sizeof(struct mft_item);
 
-    DEBUG_PRINT("(%d / %d) + (%d mod %d) = %d\n", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT, potreba_mfti);
+    DEBUG_PRINT("potreba_mfti=(%d / %d) + (%d mod %d) = %d\n", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT, potreba_mfti);
 
     // vytvorim mfti pole o spravne velikosti
     k = 0;

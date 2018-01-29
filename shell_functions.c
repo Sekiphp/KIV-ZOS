@@ -448,8 +448,6 @@ void func_rmdir(char *cmd){
     // UID se musi zachovat kvuli linkum
     edit_file_content(pwd, buffer, mft_seznam[pwd]->item.item_name, pwd);
 
-    delete_file(ret);
-
     printf("OK\n");
 }
 
