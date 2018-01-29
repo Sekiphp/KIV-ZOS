@@ -116,7 +116,6 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
     FILE *fw;
     struct boot_record *bootr;
     struct mft_item *mfti;
-    struct mft_fragment mftf;
     int i, bitmapa[cluster_count];
 
     /* Provedeme si nejake (pomocne) vypocty, vse s dostatecnou rezervou */
@@ -172,20 +171,15 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         mfti->item_size = 1; // je tam backlink
 
         // zapisu prvni "plny" fragment (ROOT_DIR)
-        mftf.fragment_start_address = data_start; // start adresa ve VFS
-        mftf.fragment_count = 1; // pocet clusteru ve VFS od startovaci adresy
-        mfti->fragments[0] = mftf;
-
+        mfti->fragments[0].fragment_start_address = data_start; // start adresa ve VFS
+        mfti->fragments[0].fragment_count = 1; // pocet clusteru ve VFS od startovaci adresy
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
-        mftf.fragment_start_address = 0;
-        mftf.fragment_count = 0;
-
         // zacinam od jednicky
         for (i = 1; i < MFT_FRAG_COUNT; i++){
-            mfti->fragments[i] = mftf;
+            mfti->fragments[i].fragment_start_address = -1;
+            mfti->fragments[i].fragment_count = -1;
         }
-
 
         fwrite(mfti, sizeof(struct mft_item), 1, fw);
         free((void *) mfti);

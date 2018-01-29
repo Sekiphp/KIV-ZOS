@@ -273,7 +273,7 @@ char* get_file_content(int file_uid) {
 
                     char *fragc = get_fragment_content(mftf);
 
-                    DEBUG_PRINT("get_fragment_content(mftf)=%s\n", fragc);
+                    //DEBUG_PRINT("get_fragment_content(mftf)=%s\n", fragc);
                     strncat(ret, fragc, strlen(fragc));
                 }
             }
@@ -331,7 +331,7 @@ int append_file_content(int file_uid, char *append, int dir){
     //char *soucasny_obsah = get_file_content(file_uid);
 
     //printf("Soucasny obsah souboru je: %s a ma delku %zd --- \n", soucasny_obsah, strlen(soucasny_obsah));
-    DEBUG_PRINT("Chci appendnout %d znaku: %s\n", strlen(append), append);
+    DEBUG_PRINT("Chci appendnout %zd znaku: %s\n", strlen(append), append);
 
     fw = fopen(output_file, "r+b");
     if (fw != NULL) {
@@ -352,8 +352,8 @@ int append_file_content(int file_uid, char *append, int dir){
                     mftf_adr = mft_itemy->item.fragments[j].fragment_start_address;
 
                     // najdu si posledni fragment s adresou
-                    if (mftf_adr != 0) {
-                        DEBUG_PRINT("-- MFTF adr = %d\n", mftf_adr);
+                    if (mftf_adr > 0 && mft_itemy->item.fragments[j].fragment_count > 0) {
+                        DEBUG_PRINT("-- MFTF adr = %d, %d\n", mftf_adr, mft_itemy->item.fragments[j].fragment_count);
                         adresa = mftf_adr;
                     }
                 }
@@ -383,6 +383,7 @@ int append_file_content(int file_uid, char *append, int dir){
             update_filesize(file_uid, delka);
 
             DEBUG_PRINT("Dokoncuji editaci clusteru /%s/; strlen=%d\n", ret, delka);
+            //DEBUG_PRINT("=========== VYSLEDEK ==========\n%s\n========== /VYSLEDEK ==========\n", get_file_content(file_uid));
         }
         else {
             return -1;
@@ -405,6 +406,82 @@ int append_file_content(int file_uid, char *append, int dir){
 void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid){
     DEBUG_PRINT("EDIT FILE (int file_uid=%d, char *text=%s, char *filename=%s, int puvodni_uid=%d)\n", file_uid, text, filename, puvodni_uid);
 
+    DEBUG_PRINT("------------------------- DELETE FILE -------------------------\n");
     delete_file(file_uid);
+
+    DEBUG_PRINT("------------------------- VYTVOR SOUBOR -------------------------\n");
     vytvor_soubor(pwd, filename, text, puvodni_uid, 1, 0);
+
+    DEBUG_PRINT("------------------------- END edit_file_content() -------------------------\n");
+}
+
+int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[], int fpom_size, int is_dir) {
+    int i, j, k, l, adresa_mfti;
+    struct mft_item *mpom, *mff;
+
+    mff = malloc(sizeof(struct mft_item));
+
+    // vypocitam si skutecny pocet fragmentu
+    int pocet_fragu = 0;
+    int prvku = (fpom_size / sizeof(struct mft_fragment));
+    DEBUG_PRINT("PRVKU=%d\n", prvku);
+    for (i = 0; i < prvku; i++) {
+        DEBUG_PRINT("OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
+        if (fpom[i].fragment_start_address != -1) {
+            pocet_fragu++;
+        }
+    }
+
+    int potreba_mfti = (pocet_fragu / MFT_FRAG_COUNT) + (pocet_fragu % MFT_FRAG_COUNT);
+    int sizeof_mft_item = sizeof(struct mft_item);
+
+    DEBUG_PRINT("potreba_mfti=(%d / %d) + (%d mod %d) = %d\n", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT, potreba_mfti);
+
+    // vytvorim mfti pole o spravne velikosti
+    k = 0;
+    struct mft_item mfti[potreba_mfti];
+    for (i = 0; i < potreba_mfti; i++) {
+        mfti[i].uid = volne_uid;
+        mfti[i].isDirectory = is_dir;
+        mfti[i].item_order = i + 1;
+        mfti[i].item_order_total = potreba_mfti;
+        strcpy(mfti[i].item_name, filename);
+        mfti[i].item_size = strlen(text);
+
+        // kazdemu z tech prvku napushuju fragmenty co to pujde
+        for (j = 0; j < MFT_FRAG_COUNT; j++) {
+            mfti[i].fragments[j] = fpom[k];
+
+            // vkladani textu souboru
+            text = set_fragment_content(fpom[k], text);
+            k++;
+        }
+
+        // pridam ho virtualne
+        pridej_prvek_mft(volne_uid, mfti[i]);
+
+        // pridam ho do souboru
+        mpom = malloc(sizeof(struct mft_item));
+        mpom = &mfti[i];
+
+        // musim najit adresu v MFT bloku v souboru
+        for (l = 0; l < CLUSTER_COUNT; l++) {
+            adresa_mfti = bootr->mft_start_address + (l * sizeof_mft_item);
+
+            fseek(fw, adresa_mfti, SEEK_SET);
+            fread(mff, sizeof_mft_item, 1, fw);
+
+            DEBUG_PRINT("if (%d == %d) or (%s == '')\n", mff->uid, UID_ITEM_FREE, mff->item_name);
+            if (mff->uid == UID_ITEM_FREE || strcmp(mff->item_name, "") == 0) {
+                DEBUG_PRINT("-- MFTI chci zapsat na adresu %d\n", adresa_mfti);
+
+                fseek(fw, adresa_mfti, SEEK_SET);
+                fwrite(mpom, sizeof(struct mft_item), 1, fw);
+
+                break;
+            }
+        }
+    }
+
+    return 1;
 }
