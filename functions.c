@@ -40,15 +40,13 @@ int get_volne_uid() {
 */
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
-    int hledane, i, dir_len, cmp_len;
+    int hledane, i, dir_len;
 
     char *curLine = get_file_content(uid_pwd);
 
-    dir_len = strlen(dir_name) - 1;
+    dir_len = strlen(dir_name);
 
-    printf("EXISTN _%s_\n", dir_name);
-
-    // DEBUG_PRINT("get_uid_by_name(dirname = %s, uid_pwd = %d)\n", dirname, uid_pwd);
+    //DEBUG_PRINT("EXISTN _%s_\n", dir_name);
     DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
 
     // obsah clusteru daneho adresare si ctu po radcich - co jeden radek to UID jednoho souboru nebo slozky
@@ -65,13 +63,12 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             // tady si roparsuji MFT a zjistim jestli se shoduje nazev
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
-                cmp_len = strlen(mfti.item_name);
 
-                DEBUG_PRINT("\t\tHledane mfti s uid=%d (name=%s) %s cmp_len=%d, dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, cmp_len, dir_len);
+                DEBUG_PRINT("\t\tHledane mfti s uid=%d (name=%s) %s, dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, dir_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
                 // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
-                if (strncmp(mfti.item_name, dir_name, cmp_len) == 0) {
+                if (strncmp(mfti.item_name, dir_name, dir_len) == 0) {
                     DEBUG_PRINT("\t\tSHODA\n");
                     return mfti.uid;
                 }
