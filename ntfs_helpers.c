@@ -273,7 +273,7 @@ char* get_file_content(int file_uid) {
 
                     char *fragc = get_fragment_content(mftf);
 
-                    DEBUG_PRINT("get_fragment_content(mftf)=%s\n", fragc);
+                    //DEBUG_PRINT("get_fragment_content(mftf)=%s\n", fragc);
                     strncat(ret, fragc, strlen(fragc));
                 }
             }
