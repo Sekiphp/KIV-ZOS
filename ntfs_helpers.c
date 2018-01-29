@@ -435,11 +435,9 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
     int potreba_mfti = (pocet_fragu / MFT_FRAG_COUNT) + (pocet_fragu % MFT_FRAG_COUNT);
     int sizeof_mft_item = sizeof(struct mft_item);
 
-    DEBUG_PRINT("(%d / %d) + (%d mod %d)", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT);
-    DEBUG_PRINT("Potreba mfti je %d\n", potreba_mfti);
+    DEBUG_PRINT("(%d / %d) + (%d mod %d) = %d\n", pocet_fragu, MFT_FRAG_COUNT, pocet_fragu, MFT_FRAG_COUNT, potreba_mfti);
 
     // vytvorim mfti pole o spravne velikosti
-    k = 0;
     struct mft_item mfti[potreba_mfti];
     for (i = 0; i < potreba_mfti; i++) {
         mfti[i].uid = volne_uid;
@@ -451,21 +449,10 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 
         // kazdemu z tech prvku napushuju fragmenty co to pujde
         for (j = 0; j < MFT_FRAG_COUNT; j++) {
-            if (k < pocet_fragu) {
-                mfti[i].fragments[j] = fpom[k];
+            mfti[i].fragments[j] = fpom[k];
 
-                // vkladani textu souboru
-                text = set_fragment_content(fpom[k], text);
-            }
-            else {
-                // prazdne fragmenty
-                mftf.fragment_start_address = 0;
-                mftf.fragment_count = 0;
-
-                mfti[i].fragments[j] = mftf;
-            }
-
-            k++;
+            // vkladani textu souboru
+            text = set_fragment_content(fpom[k], text);
         }
 
         // pridam ho virtualne
@@ -482,7 +469,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
             fseek(fw, adresa_mfti, SEEK_SET);
             fread(mff, sizeof_mft_item, 1, fw);
 
-            DEBUG_PRINT("if (%d == %d); %s\n", mff->uid, UID_ITEM_FREE, mff->item_name);
+            DEBUG_PRINT("if (%d == %d) or (%s == '')\n", mff->uid, UID_ITEM_FREE, mff->item_name);
             if (mff->uid == UID_ITEM_FREE || strcmp(mff->item_name, "") == 0) {
                 DEBUG_PRINT("-- MFTI chci zapsat na adresu %d\n", adresa_mfti);
 
