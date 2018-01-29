@@ -336,6 +336,8 @@ int is_empty_dir(int file_uid) {
         curLine = nextLine ? (nextLine + 1) : NULL;
     }
 
+    DEBUG_PRINT("is empty=%d\n", i);
+
     return i;
 }
 
