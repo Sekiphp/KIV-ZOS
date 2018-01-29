@@ -239,12 +239,15 @@ void func_mv(char *cmd){
 
     free((void *) part1);
     free((void *) part2);
+
+    printf("OK\n");
 }
 
 /*
     Smaze soubor s1
 */
 void func_rm(char *cmd){
+    DEBUG_PRINT("RM\n");
     int ret, i, delka, kesmazani;
     char buffer[CLUSTER_SIZE];
     char *nazev;
@@ -280,7 +283,7 @@ void func_rm(char *cmd){
 
     DEBUG_PRINT("RET %d, KESMAZANI %d\n", ret, kesmazani);
 
-    if (ret == -1){
+    if (ret == -1 || kesmazani == -1){
         printf("PATH NOT FOUND\n");
         return;
     }
@@ -384,6 +387,8 @@ void func_mkdir(char *cmd){
     free((void *) jen_cesta);
 
     DEBUG_PRINT("ls ret = %d\n", ret);
+
+    printf("OK\n");
 }
 
 
@@ -391,33 +396,33 @@ void func_mkdir(char *cmd){
     Smaze prazdny adresar
 */
 void func_rmdir(char *cmd){
+    DEBUG_PRINT("RMDIR\n");
     int ret, i;
     char buffer[CLUSTER_SIZE];
 
     cmd = strtok(NULL, " \n");
-
     ret = parsuj_pathu(cmd, 1);
 
-    DEBUG_PRINT("RET %d", ret);
+    DEBUG_PRINT("RET ke smazani %d\n", ret);
 
     if (ret == -1){
         printf("PATH NOT FOUND\n");
         return;
     }
 
-    if (mft_seznam[ret]->item.isDirectory == 0){
+    if (mft_seznam[ret]->item.isDirectory == 0) {
         printf("NOT A DIRECTORY\n");
         return;
     }
 
-    if (is_empty_dir(ret) == 0){
+    if (is_empty_dir(ret) > 1) {
         printf("NOT EMPTY\n");
         return;
     }
 
     // odstranim odkaz z nadrazeneho adresare
     char *soucasny_obsah = get_file_content(pwd);
-    DEBUG_PRINT("soucasnost=%s\n", soucasny_obsah);
+    DEBUG_PRINT("soucasny obsah adresare=%s\n", soucasny_obsah);
 
     char *curLine = soucasny_obsah;
 
@@ -441,10 +446,11 @@ void func_rmdir(char *cmd){
         i++;
     }
 
-    DEBUG_PRINT("BUFÍK=%s\n", buffer);
+    DEBUG_PRINT("Novy obsah adresare=%s\n", buffer);
     // UID se musi zachovat kvuli linkum
     edit_file_content(pwd, buffer, mft_seznam[pwd]->item.item_name, pwd);
 
+    // smazu pozadovany soubor na disku
     delete_file(ret);
 
     printf("OK\n");
@@ -511,7 +517,7 @@ void func_cd(char *cmd){
     int kam;
 
     cmd = strtok(NULL, " \n");
-    printf("_%s_%zd\n", cmd, strlen(cmd));
+    DEBUG_PRINT("_%s_%zd\n", cmd, strlen(cmd));
 
     kam = parsuj_pathu(cmd, 1);
 
@@ -677,6 +683,7 @@ void func_incp(char *cmd){
     DEBUG_PRINT("-- Vyparsovana cesta: %d\n", ret);
 
     vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1, 0, 1);
+    printf("OK\n");
 }
 
 /*
@@ -735,6 +742,7 @@ void func_outcp(char *cmd){
     }
 
     free((void *) jen_cesta);
+    printf("OK\n");
 }
 
 /*
@@ -743,6 +751,7 @@ void func_outcp(char *cmd){
 */
 void func_defrag(){
 
+    printf("OK\n");
 }
 
 /*
@@ -751,4 +760,5 @@ void func_defrag(){
  */
 void func_consist(){
 
+    printf("OK\n");
 }

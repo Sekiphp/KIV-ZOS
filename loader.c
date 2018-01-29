@@ -12,7 +12,6 @@
 #include "boot_record.h"
 #include "mft.h"
 
-//extern MFT_LIST *mft_list[]; // v mft.h
 extern int pwd;
 
 /* Nacte NTFS ze souboru */
@@ -27,7 +26,6 @@ void loader(char filename[]){
     printf("LOADER starting...\n");
     printf("\tZkousim otevrit soubor: %s\n", filename);
 
-    bootr = malloc(sizeof(struct boot_record));
     fr = fopen(filename, "rb");
     if (fr == NULL) {
         // nepodarilo se otevrit soubory, tak jej zalozim
@@ -39,15 +37,14 @@ void loader(char filename[]){
         printf("\t\tVelikost clusteru je %d\n", CLUSTER_SIZE);
 
         zaloz_soubor(CLUSTER_SIZE, CLUSTER_COUNT, filename);
-    }
-    else {
-        fclose(fr);
+        fr = fopen(filename, "rb");
     }
 
+
     // nactu data ze souboru - ted uz mam jistotu, ze existuje
-    fr = fopen(filename, "rb");
     if (fr != NULL) {
         // nactu data ze souboru
+        bootr = malloc(sizeof(struct boot_record));
 
         printf("\tSoubor %s byl uspesne otevren\n", filename);
 
@@ -73,7 +70,7 @@ void loader(char filename[]){
             pocet_mft_bloku = sirka_mft / sizeof_mft_item;
             printf("\t\t\tpocet mft bloku je: %d\n", pocet_mft_bloku);
 
-            for(i = 0; i < pocet_mft_bloku; i++){
+            for (i = 0; i < pocet_mft_bloku; i++) {
                 fseek(fr, bootr->mft_start_address + i *sizeof_mft_item, SEEK_SET);
                 fread(mff, sizeof_mft_item, 1, fr);
                 mft_table = *mff;
@@ -81,10 +78,10 @@ void loader(char filename[]){
                 printf("\t\t\t--------------------------\n");
                 printf("\t\t\tfread cte z pozice %d \n", (bootr->mft_start_address + i * sizeof_mft_item));
 
-                if (ntfs_bitmap[i] == 0 || mft_table.uid == UID_ITEM_FREE){
+                if (ntfs_bitmap[i] == 0 || mft_table.uid == UID_ITEM_FREE) {
                     printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table.uid);
                 }
-                else{
+                else {
                     pridej_prvek_mft(mft_table.uid, mft_table);
 
                     printf("\t\t\tUID: %d\n", mft_table.uid);
@@ -95,7 +92,7 @@ void loader(char filename[]){
                     printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table.item_size);
                     printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table.fragments) / sizeof(struct mft_fragment));
 
-                    if(i == 0) {
+                    if (i == 0) {
                         pwd = mft_table.uid;
                     }
                 }
@@ -119,7 +116,6 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
     FILE *fw;
     struct boot_record *bootr;
     struct mft_item *mfti;
-    struct mft_fragment mftf;
     int i, bitmapa[cluster_count];
 
     /* Provedeme si nejake (pomocne) vypocty, vse s dostatecnou rezervou */
@@ -133,12 +129,12 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
 
     /* Zacneme zapisovat do souboru */
     fw = fopen(filename, "wb");
-    if(fw != NULL){
+    if (fw != NULL) {
         /* Zapiseme boot record */
         bootr = malloc(sizeof(struct boot_record));
 
         strcpy(bootr->signature, "Hubacek");
-        strcpy(bootr->volume_descriptor, "pseudo NTFS 2017");
+        strcpy(bootr->volume_descriptor, "pseudo NTFS 2017-2018");
         bootr->disk_size = cluster_size * cluster_count; // 10 * 1024
         bootr->cluster_size = cluster_size; // 1024
         bootr->cluster_count = cluster_count; // 10
@@ -175,20 +171,15 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         mfti->item_size = 1; // je tam backlink
 
         // zapisu prvni "plny" fragment (ROOT_DIR)
-        mftf.fragment_start_address = data_start; // start adresa ve VFS
-        mftf.fragment_count = 1; // pocet clusteru ve VFS od startovaci adresy
-        mfti->fragments[0] = mftf;
-
+        mfti->fragments[0].fragment_start_address = data_start; // start adresa ve VFS
+        mfti->fragments[0].fragment_count = 1; // pocet clusteru ve VFS od startovaci adresy
 
         // dalsi fragmenty z budou jen prazdne (pro poradek)
-        mftf.fragment_start_address = 0;
-        mftf.fragment_count = 0;
-
         // zacinam od jednicky
         for (i = 1; i < MFT_FRAG_COUNT; i++){
-            mfti->fragments[i] = mftf;
+            mfti->fragments[i].fragment_start_address = -1;
+            mfti->fragments[i].fragment_count = -1;
         }
-
 
         fwrite(mfti, sizeof(struct mft_item), 1, fw);
         free((void *) mfti);

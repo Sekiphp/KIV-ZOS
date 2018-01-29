@@ -1,9 +1,9 @@
 #ifndef MFT_H
 #define MFT_H
 
-#define MFT_FRAG_COUNT 5
+#define MFT_FRAG_COUNT 2
 #define UID_ITEM_FREE -1
-#define CLUSTER_COUNT 20 // je i v loader.h
+#define CLUSTER_COUNT 20 // je i v loader.h; celkovy pocet clusteru v FS
 
 // item muze mit 1 az X techto fragmentu
 // +---+---+---+---+---+---+---+---+
@@ -29,7 +29,6 @@ struct mft_item {
 typedef struct mft_list {
     struct mft_item item; // k nested prvkum pristupuji pres tecky
     struct mft_list *dalsi;
-    int ij;
 } MFT_LIST;
 
 MFT_LIST *mft_seznam[CLUSTER_COUNT];
