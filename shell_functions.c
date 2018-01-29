@@ -395,6 +395,7 @@ void func_mkdir(char *cmd){
     Smaze prazdny adresar
 */
 void func_rmdir(char *cmd){
+    DEBUG_PRINT("TRTT\n");
     int ret, i;
     char buffer[CLUSTER_SIZE];
 
