@@ -417,7 +417,6 @@ void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid
 
 int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[], int is_dir) {
     int i, j, k, l, adresa_mfti;
-    struct mft_fragment mftf;
     struct mft_item *mpom, *mff;
 
     mff = malloc(sizeof(struct mft_item));
@@ -425,7 +424,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
     // vypocitam si skutecny pocet fragmentu
     int pocet_fragu = 0;
     for (i = 0; i < sizeof(fpom); i++) {
-        DEBUG_PRINT("OVERUJI start=%d\n", fpom[i].fragment_start_address);
+        DEBUG_PRINT("OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
         if (fpom[i].fragment_start_address != -1) {
             pocet_fragu++;
         }
