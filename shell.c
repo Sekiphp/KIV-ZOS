@@ -14,8 +14,7 @@
 #define MAX 200
 
 /* Posloucha prikazy pro ovladani virtualniho operacniho systemu */
-void *shell(void *arg){
-    //sdilenaPamet *param = (sdilenaPamet *) arg;
+void shell() {
     FILE *fr;
     char command[MAX];
     char *p_c;

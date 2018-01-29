@@ -17,10 +17,7 @@ char output_file[100];
 
 // hlavni vstupni trida aplikace
 int main(int argc, char *argv[]){
-    pthread_t pt[2];
-    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-    sdilenaPamet pamet;
-    int i, rc;
+    int i;
     boot = malloc(sizeof(struct boot_record));
 
     // kontrola poctu parametru
@@ -29,13 +26,11 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
-    // priprava sdilenych atributu pro vsechny vlakna
-    pamet.mutex = &mutex;
     strcpy(pamet.soubor, argv[1]);
     strcpy(output_file, argv[1]);
 
     // mft seznam na null
-    for(i = 0; i < CLUSTER_COUNT; i++){
+    for (i = 0; i < CLUSTER_COUNT; i++) {
        mft_seznam[i] = NULL;
     }
     DEBUG_PRINT("mft seznam NULL\n");
@@ -49,14 +44,7 @@ int main(int argc, char *argv[]){
     }
 
     // prikazovy interpret
-    rc = pthread_create(&pt[1], NULL, shell, (void *) &pamet);
-    assert(0 == rc);
-
-    // Cekam na dokonceni vsech vlaken
-    for(i = 1; i < 2; i++){
-        rc = pthread_join(pt[i], NULL);
-        assert(0 == rc);
-    }
+    shell();
 
     // uvolneni pameti
     free((void *) bootr);

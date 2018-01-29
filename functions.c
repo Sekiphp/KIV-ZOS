@@ -508,3 +508,10 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fclose(fw);
     }
 }
+
+void *kontrola_konzistence(void *arg){
+    sdilenaPamet *param = (sdilenaPamet *) arg;
+
+    printf("Vlakno kontroly konzistence\n");
+
+}

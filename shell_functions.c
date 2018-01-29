@@ -759,6 +759,27 @@ void func_defrag(){
     -> zkontroluje jeslti jsou soubory neposkozene (velikost souboru odpovida poctu alokovanych datovych bloku)
  */
 void func_consist(){
+    int i, rc;
+    int pocet_vlaken = 2;
+
+    pthread_t pt[pocet_vlaken];
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+    sdilenaPamet pamet;
+
+    pamet.mutex = &mutex;
+    pamet.zpracovany_cluster = -1;
+
+    // start vlaken
+    for (i = 0; i < pocet_vlaken; i++) {
+        rc = pthread_create(&pt[i], NULL, kontrola_konzistence, (void *) &pamet);
+        assert(0 == rc);
+    }
+
+    // Cekam na dokonceni vsech vlaken
+    for (i = 0; i < pocet_vlaken; i++) {
+        rc = pthread_join(pt[i], NULL);
+        assert(0 == rc);
+    }
 
     printf("OK\n");
 }
