@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include "debugger.h"
+#include "parametr.h"
 #include "loader.h"
 #include "mft.h"
 #include "shell_functions.h"
