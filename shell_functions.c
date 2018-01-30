@@ -631,8 +631,8 @@ void func_incp(char *cmd){
     i = 0;
 
     // postupne cteni argumentu
-    while((cmd = strtok(NULL, " \n")) != NULL){
-        if (i == 0){
+    while((cmd = strtok(NULL, " \n")) != NULL) {
+        if (i == 0) {
             // soubor k presunu z pocitace
             // overim jeho existenci
             strncpy(pc_file, cmd, strlen(cmd));
@@ -651,6 +651,7 @@ void func_incp(char *cmd){
                 nazev++;
 
                 delka = strlen(cmd) - strlen(nazev);
+                DEBUG_PRINT("strlen(cmd) - strlen(nazev) => strlen(%s) - strlen(%s)\n", cmd, nazev);
                 jen_cesta = (char *) malloc(delka - 1);
                 strncpy(jen_cesta, cmd, delka - 1);
 
@@ -686,6 +687,8 @@ void func_incp(char *cmd){
     DEBUG_PRINT("-- Vyparsovana cesta: %d\n", ret);
 
     vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1, 0, 1);
+
+    free((void *) jen_cesta);
     printf("OK\n");
 }
 
