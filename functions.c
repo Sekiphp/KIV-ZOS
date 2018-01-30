@@ -525,7 +525,7 @@ void *kontrola_konzistence(void *arg) {
         pthread_mutex_unlock(param->mutex);
 
         if (ke_zpracovani >= CLUSTER_COUNT) {
-            DEBUG_PRINT("SKIP %d > %d\n", ke_zpracovani, CLUSTER_COUNT);
+            //DEBUG_PRINT("SKIP %d > %d\n", ke_zpracovani, CLUSTER_COUNT);
             break;
         }
 
@@ -570,4 +570,6 @@ void *kontrola_konzistence(void *arg) {
             }
         }
     }
+
+    return NULL;
 }

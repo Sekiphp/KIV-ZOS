@@ -99,5 +99,4 @@ void shell() {
     }
 
     printf("SHELL ending\n");
-    return NULL;
 }
