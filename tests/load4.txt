@@ -13,3 +13,4 @@ pwd
 cd ../..
 ls
 incp s1.txt home/s1.txt
+

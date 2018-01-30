@@ -40,9 +40,9 @@ void func_cp(char *cmd) {
             if (nazev_zdroj != NULL) {
                 nazev_zdroj++;
 
-                delka = strlen(part1) - strlen(nazev_zdroj);
-                jen_cesta_zdroj = (char *) malloc(delka - 1);
-                strncpy(jen_cesta_zdroj, part1, delka - 1);
+                delka = strlen(part1) - strlen(nazev_zdroj) - 1;
+                jen_cesta_zdroj = (char *) malloc(delka * sizeof(char *));
+                strncpy(jen_cesta_zdroj, part1, delka);
 
                 ret_zdroj = parsuj_pathu(jen_cesta_zdroj, 1);
             }
@@ -650,11 +650,10 @@ void func_incp(char *cmd){
             if (nazev != NULL) {
                 nazev++;
 
-                delka = strlen(cmd) - strlen(nazev);
-                DEBUG_PRINT("strlen(cmd) - strlen(nazev) => strlen(%s) - strlen(%s)\n", cmd, nazev);
-                jen_cesta = (char *) malloc(delka - 1);
-                strncpy(jen_cesta, cmd, delka - 1);
-                strcat(jen_cesta, "\0");
+                delka = strlen(cmd) - strlen(nazev) - 1;
+                DEBUG_PRINT("strlen(cmd) - strlen(nazev) => strlen(%s) - strlen(%s)=%d\n", cmd, nazev, delka);
+                jen_cesta = (char *) malloc(delka * sizeof(char *));
+                strncpy(jen_cesta, cmd, delka);
 
                 ret = parsuj_pathu(jen_cesta, 1);
             }
