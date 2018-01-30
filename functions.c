@@ -95,6 +95,8 @@ printf("cau");
         i++;
     }
 
+    DEBUG_PRINT("RET -1\n");
+
     return -1;
 }
 
