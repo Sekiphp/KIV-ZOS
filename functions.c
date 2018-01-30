@@ -558,18 +558,15 @@ void *kontrola_konzistence(void *arg) {
                 // prehodim se na dalsi prvek
                 mft_itemy = mft_itemy->dalsi;
             }
-        }
 
-        printf("Soubor %s", mft_seznam[ke_zpracovani]->item.item_name);
-        if (delka != mft_seznam[ke_zpracovani]->item.item_size) {
-            printf("NENI KONZISTENTNI (%d != %d) !!!\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
-        }
-        else {
-            printf("JE V PORADKU (%d == %d)\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
-        }
 
-        sleep(1);
+            printf("Soubor %s ", mft_seznam[ke_zpracovani]->item.item_name);
+            if (delka != mft_seznam[ke_zpracovani]->item.item_size) {
+                printf("NENI KONZISTENTNI (%d != %d) !!!\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
+            }
+            else {
+                printf("JE V PORADKU (%d == %d)\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
+            }
+        }
     }
-
-    return NULL;
 }
