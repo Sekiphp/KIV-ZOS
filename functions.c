@@ -43,10 +43,10 @@ int get_volne_uid() {
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
     int hledane, i, dir_len;
-
-    for(i = 0; i < strlen(dir_name); i++)
-        DEBUG_PRINT("--%s--\n", dir_name[i]);
-
+printf("ahoj");
+    //for(i = 0; i < strlen(dir_name); i++)
+     //   DEBUG_PRINT("--%s--\n", dir_name[i]);
+printf("cau");
     char *curLine = get_file_content(uid_pwd);
 
     dir_len = strlen(dir_name);

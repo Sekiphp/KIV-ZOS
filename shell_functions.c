@@ -63,7 +63,7 @@ void func_cp(char *cmd) {
             DEBUG_PRINT("-- RET ZDROJ: %d\n", ret_zdroj);
             DEBUG_PRINT("-- ZDROJ UID: %d\n\n", zdroj_uid);
 
-    if (ret_zdroj == -1) {
+    if (ret_zdroj == -1 || zdroj_uid == -1) {
         printf("FILE NOT FOUND\n");
         return;
     }
