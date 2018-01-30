@@ -532,7 +532,41 @@ void *kontrola_konzistence(void *arg) {
         // tady budu zpracovavat data
         printf("Vlakno %d: %d\n", r, ke_zpracovani);
 
+        MFT_LIST* mft_itemy;
+        struct mft_item mfti;
+        struct mft_fragment mftf;
+        int j;
+        int delka = 0;
 
+        // najdu vsechny mfti
+        if (mft_seznam[ke_zpracovani] != NULL){
+            mft_itemy = mft_seznam[ke_zpracovani];
+
+            // iteruji mfti
+            while (mft_itemy != NULL){
+                mfti = mft_itemy->item;
+
+                // najdu vsechny mftf
+                for (j = 0; j < MFT_FRAG_COUNT; j++){
+                    mftf = mfti.fragments[j];
+
+                    if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
+                        delka += strlen(get_fragment_content(mftf));
+                    }
+                }
+
+                // prehodim se na dalsi prvek
+                mft_itemy = mft_itemy->dalsi;
+            }
+        }
+
+        printf("Soubor %s", mft_seznam[ke_zpracovani]->item.item_name);
+        if (delka != mft_seznam[ke_zpracovani]->item.item_size) {
+            printf("NENI KONZISTENTNI (%d != %d) !!!\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
+        }
+        else {
+            printf("JE V PORADKU (%d == %d)\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
+        }
 
         sleep(1);
     }
