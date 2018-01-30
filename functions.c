@@ -514,9 +514,9 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 void *kontrola_konzistence(void *arg) {
     sdilenaPamet *param = (sdilenaPamet *) arg;
     int ke_zpracovani;
-    int r = rand() % 20;
 
-    printf("Vlakno kontroly konzistence %d\n", r);
+    //int r = rand() % 20;
+    //printf("Vlakno kontroly konzistence %d\n", r);
 
     while (1) {
         pthread_mutex_lock(param->mutex);
@@ -530,7 +530,7 @@ void *kontrola_konzistence(void *arg) {
         }
 
         // tady budu zpracovavat data
-        printf("Vlakno %d: %d\n", r, ke_zpracovani);
+        //printf("Vlakno %d: %d\n", r, ke_zpracovani);
 
         MFT_LIST* mft_itemy;
         struct mft_item mfti;
@@ -551,6 +551,7 @@ void *kontrola_konzistence(void *arg) {
                     mftf = mfti.fragments[j];
 
                     if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
+                        DEBUG_PRINT("===\n%s\n===\n", get_fragment_content(mftf));
                         delka += strlen(get_fragment_content(mftf));
                     }
                 }
