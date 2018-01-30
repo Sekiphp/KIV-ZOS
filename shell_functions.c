@@ -654,6 +654,7 @@ void func_incp(char *cmd){
                 DEBUG_PRINT("strlen(cmd) - strlen(nazev) => strlen(%s) - strlen(%s)\n", cmd, nazev);
                 jen_cesta = (char *) malloc(delka - 1);
                 strncpy(jen_cesta, cmd, delka - 1);
+                strcat(jen_cesta, '\0');
 
                 ret = parsuj_pathu(jen_cesta, 1);
             }
