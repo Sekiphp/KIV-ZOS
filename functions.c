@@ -46,7 +46,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
     char *curLine = get_file_content(uid_pwd);
 
-    dir_len = strlen(dir_name);
+    dir_len = strlen(dir_name) - 1;
 
     //DEBUG_PRINT("EXISTN _%s_\n", dir_name);
     DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
@@ -66,7 +66,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                DEBUG_PRINT("\t\tHledane mfti s uid=%d (name=%s) %s, dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, dir_len);
+                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s), dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, dir_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
                 // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
