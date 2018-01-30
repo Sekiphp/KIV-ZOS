@@ -46,7 +46,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
     char *curLine = get_file_content(uid_pwd);
 
-    dir_len = strlen(dir_name) - 1;
+    dir_len = strlen(dir_name);
 
     //DEBUG_PRINT("EXISTN _%s_\n", dir_name);
     DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
@@ -158,6 +158,7 @@ int parsuj_pathu(char *patha, int cd){
             // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
             p_c = strtok(path, "/");
             while( p_c != NULL ) {
+                DEBUG_PRINT("p_c=%s\n", p_c);
                 start_dir = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
                 if (start_dir == -1) return -1;
