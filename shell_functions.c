@@ -811,8 +811,10 @@ void func_defrag(){
 
             // nactu si obsah souboru
             strcpy(output_file, new);
+            DEBUG_PRINT("output_file=%s\n", output_file);
             char *cely_soubor = get_file_content(i);
             strcpy(output_file, puvodni);
+            DEBUG_PRINT("output_file=%s\n", output_file);
 
             DEBUG_PRINT("/%s/\n", cely_soubor);
 
@@ -844,6 +846,8 @@ void func_defrag(){
                 else {
                         fseek(fw, adresa, SEEK_SET);
                         fwrite(cely_soubor, CLUSTER_SIZE, 1, fw);
+                        cely_soubor += CLUSTER_SIZE;
+                        DEBUG_PRINT("Zbyva zapsat %d\n", strlen(cely_soubor));
                 }
 
                 mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
