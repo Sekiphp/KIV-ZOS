@@ -837,7 +837,7 @@ void func_defrag(){
                     p_clusteru = -1;
                 }
                 else {
-                    fw = fopen(output_file, "wb");
+                    fw = fopen(output_file, "r+b");
                     if (fw != NULL) {
                         fseek(fw, adresa, SEEK_SET);
                         fwrite(cely_soubor, CLUSTER_SIZE, 1, fw);
@@ -861,7 +861,7 @@ void func_defrag(){
     }
 
     // vytvorim novy soubor
-    fw = fopen(output_file, "wb");
+    fw = fopen(output_file, "r+b");
     if (fw != NULL) {
         /* Zapiseme boot record */
         fseek(fw, 0, SEEK_SET);
