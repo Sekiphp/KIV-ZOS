@@ -806,64 +806,64 @@ void func_defrag(){
     // provedu prislusne operace defragmentace
     fw = fopen(output_file, "wb");
     if (fw != NULL) {
-    zpracovany = 0; // zpracovany cluster
-    for (i = 0; i < CLUSTER_COUNT; i++) {
-        if (mft_seznam[i] != NULL){
-            // soubor stoji za zpracovani
+        zpracovany = 0; // zpracovany cluster
+        for (i = 0; i < CLUSTER_COUNT; i++) {
+            if (mft_seznam[i] != NULL){
+                // soubor stoji za zpracovani
 
-            // nactu si obsah souboru
-            strcpy(output_file, new);
-            DEBUG_PRINT("output_file=%s\n", output_file);
-            char *cely_soubor = get_file_content(i);
-            strcpy(output_file, puvodni);
-            DEBUG_PRINT("output_file=%s\n", output_file);
+                // nactu si obsah souboru
+                strcpy(output_file, new);
+                DEBUG_PRINT("output_file=%s\n", output_file);
+                char *cely_soubor = get_file_content(i);
+                strcpy(output_file, puvodni);
+                DEBUG_PRINT("output_file=%s\n", output_file);
 
-            DEBUG_PRINT("/%s/\n", cely_soubor);
+                DEBUG_PRINT("/%s/\n", cely_soubor);
 
-            clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
-            DEBUG_PRINT("+ Pro soubor %s (%d) potrebuji clusteru %d a ma delku %d\n", mft_seznam[i]->item.item_name, mft_seznam[i]->item.uid, clusteru, strlen(cely_soubor));
+                clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
+                DEBUG_PRINT("+ Pro soubor %s (%d) potrebuji clusteru %d a ma delku %d\n", mft_seznam[i]->item.item_name, mft_seznam[i]->item.uid, clusteru, strlen(cely_soubor));
 
-            // zapisu si do bitmapy
-            DEBUG_PRINT("zpracovany + clusteru = %d + %d = %d\n", zpracovany, clusteru, zpracovany+clusteru);
-            for (j = zpracovany; j < zpracovany + clusteru; j++) {
-                nova_bitmapa[j] = 1;
-                DEBUG_PRINT("ALOKUJI PRVEK %d V BITMAPE\n", j);
-            }
-
-            // aktualizace mfti
-            mft_seznam[i]->item.item_order = 1;
-            mft_seznam[i]->item.item_order_total = 1;
-            mft_seznam[i]->item.item_size = strlen(cely_soubor);
-
-            // pripravim si fragmenty
-            adresa = bootr->data_start_address + zpracovany * CLUSTER_SIZE;
-            for (k = 0; k < MFT_FRAG_COUNT; k++) {
-                p_clusteru = clusteru;
-
-                // uz jsem zapsal prvni fragment
-                if (k == 1) {
-                    adresa = -1;
-                    p_clusteru = -1;
-                }
-                else {
-                        fseek(fw, adresa, SEEK_SET);
-                        fwrite(cely_soubor, strlen(cely_soubor), 1, fw);
+                // zapisu si do bitmapy
+                DEBUG_PRINT("zpracovany + clusteru = %d + %d = %d\n", zpracovany, clusteru, zpracovany+clusteru);
+                for (j = zpracovany; j < zpracovany + clusteru; j++) {
+                    nova_bitmapa[j] = 1;
+                    DEBUG_PRINT("ALOKUJI PRVEK %d V BITMAPE\n", j);
                 }
 
-                mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
-                mft_seznam[i]->item.fragments[k].fragment_count = p_clusteru;
-                DEBUG_PRINT("pripravim si fragmenty: (%d, %d)\n", adresa, p_clusteru);
+                // aktualizace mfti
+                mft_seznam[i]->item.item_order = 1;
+                mft_seznam[i]->item.item_order_total = 1;
+                mft_seznam[i]->item.item_size = strlen(cely_soubor);
+
+                // pripravim si fragmenty
+                adresa = bootr->data_start_address + zpracovany * CLUSTER_SIZE;
+                for (k = 0; k < MFT_FRAG_COUNT; k++) {
+                    p_clusteru = clusteru;
+
+                    // uz jsem zapsal prvni fragment
+                    if (k == 1) {
+                        adresa = -1;
+                        p_clusteru = -1;
+                    }
+                    else {
+                            fseek(fw, adresa, SEEK_SET);
+                            fwrite(cely_soubor, strlen(cely_soubor), 1, fw);
+                    }
+
+                    mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
+                    mft_seznam[i]->item.fragments[k].fragment_count = p_clusteru;
+                    DEBUG_PRINT("pripravim si fragmenty: (%d, %d)\n", adresa, p_clusteru);
+                }
+
+                DEBUG_PRINT("----------------------------------------------------\n");
+
+                // zrusim odkaz na dalsi prvek pameti
+                mft_seznam[i]->dalsi = NULL;
+
+                zpracovany += clusteru;
             }
-
-            DEBUG_PRINT("----------------------------------------------------\n");
-
-            // zrusim odkaz na dalsi prvek pameti
-            mft_seznam[i]->dalsi = NULL;
-
-            zpracovany += clusteru;
         }
-    }
-    fclose(fw);
+        fclose(fw);
     }
 
     // vytvorim novy soubor
