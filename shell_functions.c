@@ -816,8 +816,8 @@ void func_defrag(){
                     clusteru = -1;
                 }
 
-                mft_seznam[i]->item.fragments[k]->fragment_start_address = adresa;
-                mft_seznam[i]->item.fragments[k]->fragment_count = clusteru;
+                mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
+                mft_seznam[i]->item.fragments[k].fragment_count = clusteru;
             }
 
             // zrusim odkaz na dalsi prvek pameti
