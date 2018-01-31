@@ -786,10 +786,13 @@ void func_outcp(char *cmd){
     Soubory se budou skladat pouze z jednoho fragmentu
 */
 void func_defrag(){
-    int i, clusteru;
+    int i, j, k, clusteru, zpracovany;
     MFT_LIST *novy_mft_seznam[CLUSTER_COUNT];
     int nova_bitmapa[CLUSTER_COUNT];
+    struct mft_item mfti;
+    struct mft_fragment mftf;
 
+    zpracovany = 0; // zpracovany cluster
     for (i = 0; i < CLUSTER_COUNT; i++) {
         if (mft_seznam[i] != NULL){
             // soubor stoji za zpracovani
@@ -798,20 +801,42 @@ void func_defrag(){
             char *cely_soubor = get_file_content(mft_seznam[i]->item.uid);
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
 
-            DEBUG_PRINT("%s: strlen=%d, clusteru=%d\n", mft_seznam[i]->item.item_name, strlen(cely_soubor), clusteru);
+            // zapisu si do bitmapy
+            for (j = zpracovany; j < zpracovany + clusteru; j++) {
+                nova_bitmapa[j] = 1;
+            }
 
-            //DEBUG_PRINT("%s : %s\n", mft_seznam[i]->item.item_name, cely_soubor);
+            mft_seznam[i]->item.item_order = 1;
+            mft_seznam[i]->item.item_order_total = 1;
+            mft_seznam[i]->item.item_size = strlen(cely_soubor);
 
-            // vymazu MFTLIST
-            //mft_seznam[i]->item = NULL;
+            // pripravim si fragmenty
+            adresa = bootr->data_start_address + zpracovany * CLUSTER_SIZE;
+            for (k = 0; k < MFT_FRAG_COUNT; k++) {
+                // uz jsem zapsal prvni fragment
+                if (k == 1) {
+                    adresa = -1;
+                    clusteru = -1;
+                }
+
+                mft_seznam[i]->item.fragments[k]->fragment_start_address = adresa;
+                mft_seznam[i]->item.fragments[k]->fragment_count = clusteru;
+            }
+
+            // zrusim odkaz na dalsi prvek pameti
             mft_seznam[i]->dalsi = NULL;
+
+            zpracovany += clusteru;
         }
     }
 
+    // prejmenuji puvodni soubor
+    int ret = rename(output_file, strcat(output_file, ".bak"));
 
-    // nactu si cely disk do promenne
-    //char *cely_disk = nacti_cely_disk();
-    //DEBUG_PRINT("celý disk = %s \n", cely_disk);
+    if (ret == 0) {
+        printf("VYTVARIM ZALOZNI SOUBOR .bak\n");
+    }
+
 
     printf("OK\n");
 }

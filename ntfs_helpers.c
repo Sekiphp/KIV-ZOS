@@ -250,7 +250,7 @@ char* get_file_content(int file_uid) {
     if (mft_seznam[file_uid] != NULL){
         mft_itemy = mft_seznam[file_uid];
 
-        DEBUG_PRINT("stoji za zminku\n");
+        //DEBUG_PRINT("stoji za zminku\n");
 
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
