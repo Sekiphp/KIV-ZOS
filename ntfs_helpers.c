@@ -509,7 +509,7 @@ char* nacti_cely_disk() {
     fr = fopen(output_file, "rb");
     if (fr != NULL) {
         fseek(fr, bootr->data_start_address, SEEK_SET);
-        fread(cely_disk, sizeof(char), (bootr->data_start_address + bootr->disk_size), fr);
+        fread(cely_disk, 1, bootr->disk_size, fr);
 
         fclose(fr);
     }
