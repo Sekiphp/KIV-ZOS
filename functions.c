@@ -69,11 +69,11 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s), dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, dir_len);
+                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s), dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, strlen(mfti.item_name));
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
                 // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
-                if (strncmp(mfti.item_name, dir_name, dir_len) == 0) {
+                if (strncmp(mfti.item_name, dir_name, strlen(mfti.item_name)) == 0) {
                     DEBUG_PRINT("\t\tSHODA\n");
                     return mfti.uid;
                 }
