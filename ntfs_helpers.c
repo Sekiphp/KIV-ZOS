@@ -34,6 +34,8 @@ char* get_cluster_content(int32_t adresa) {
         fclose(fr);
     }
 
+    DEBUG_PRINT("strlen(ret)=%d\n", strlen(ret));
+
     return ret;
 }
 
