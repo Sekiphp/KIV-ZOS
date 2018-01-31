@@ -497,6 +497,8 @@ char* nacti_cely_disk() {
         return "";
     }
 
+    memset(cely_disk, '', bootr->disk_size);
+
     fr = fopen(output_file, "rb");
     if (fr != NULL) {
         fseek(fr, bootr->data_start_address, SEEK_SET);
