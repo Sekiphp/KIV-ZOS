@@ -487,8 +487,9 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 }
 
 char* nacti_cely_disk() {
-    char *cely_disk;
+    char *cely_disk, *pom;
     FILE *fr;
+    int adresa = bootr->data_start_address;
 
     DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
 
@@ -497,12 +498,18 @@ char* nacti_cely_disk() {
         return "";
     }
 
-    memset(cely_disk, '', bootr->disk_size);
+    //memset(cely_disk, '', bootr->disk_size);
 
     fr = fopen(output_file, "rb");
     if (fr != NULL) {
-        fseek(fr, bootr->data_start_address, SEEK_SET);
-        fread(cely_disk, sizeof(char), bootr->disk_size, fr);
+        while (adresa < CLUSTER_SIZE) {
+            fseek(fr, adresa, SEEK_SET);
+            fread(pom, sizeof(char), CLUSTER_SIZE, fr);
+
+            DEBUG_PRINT("pom=%s=\n", pom);
+
+            adresa += CLUSTER_SIZE;
+        }
 
         fclose(fr);
     }
