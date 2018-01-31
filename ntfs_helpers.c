@@ -153,7 +153,7 @@ char* get_fragment_content(struct mft_fragment fragment) {
         }
     }
 
-    ret[strlen(ret)] = '\0';
+    //ret[strlen(ret)] = '\0';
 
     return ret;
 }

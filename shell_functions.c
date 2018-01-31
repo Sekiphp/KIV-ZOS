@@ -839,7 +839,6 @@ void func_defrag(){
                     p_clusteru = -1;
                 }
                 else {
-
                         fseek(fw, adresa, SEEK_SET);
                         fwrite(cely_soubor, CLUSTER_SIZE, 1, fw);
                 }
