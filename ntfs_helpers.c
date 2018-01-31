@@ -459,7 +459,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
             mfti[i].fragments[j] = fpom[k];
 
             // vkladani textu souboru
-            printf("////%d////\n", fpom[k].fragment_count);
+            //printf("////%d////\n", fpom[k].fragment_count);
             text = set_fragment_content(fpom[k], text);
             k++;
         }
