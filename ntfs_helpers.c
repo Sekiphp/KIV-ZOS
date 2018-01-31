@@ -485,3 +485,20 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 
     return 1;
 }
+
+char* nacti_cely_disk() {
+    char *cely_disk;
+    FILE *fr;
+
+    cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *));
+
+    fr = fopen(output_file, "rb");
+    if (fr != NULL) {
+        fseek(fr, bootr->data_start_address, SEEK_SET);
+        fread(cely_disk, sizeof(char), bootr->disk_size, fr);
+
+        fclose(fr);
+    }
+
+    return cely_disk;
+}
