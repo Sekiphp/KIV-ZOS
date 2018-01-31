@@ -455,13 +455,11 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
         mfti[i].item_size = strlen(text);
 
         // kazdemu z tech prvku napushuju fragmenty co to pujde
-	DEBUG_PRINT("---%d---\n", MFT_FRAG_COUNT);
-        for (j = 0; j < pocet_fragu; j++) {
-            printf("\n\nqwertzuiop\n\n");
+        for (j = 0; j < MFT_FRAG_COUNT; j++) {
             mfti[i].fragments[j] = fpom[k];
 
             // vkladani textu souboru
-	    printf("////%d////\n", fpom[k].fragment_count);
+            printf("////%d////\n", fpom[k].fragment_count);
             text = set_fragment_content(fpom[k], text);
             k++;
         }
@@ -493,39 +491,4 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
     }
 
     return 1;
-}
-
-char* nacti_cely_disk() {
-    char *cely_disk, *pom;
-    FILE *fr;
-    int adresa = bootr->data_start_address;
-
-    DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
-
-    cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *));
-    pom = (char *) malloc(bootr->disk_size * sizeof(char *));
-    //memset(cely_disk, '', bootr->disk_size);
-
-    strcpy(cely_disk, "");
-
-    fr = fopen(output_file, "rb");
-    if (fr != NULL) {
-        while (adresa < (bootr->data_start_address + bootr->disk_size)) {
-            fseek(fr, adresa, SEEK_SET);
-            fread(pom, sizeof(char), CLUSTER_SIZE, fr);
-
-            strncat(cely_disk, pom, CLUSTER_SIZE);
-
-            //DEBUG_PRINT("pom =%s= z adresy=%d=\n", pom, adresa);
-
-            adresa += CLUSTER_SIZE;
-        }
-
-        fclose(fr);
-    }
-
-    //DEBUG_PRINT("sizeof=%d\n", sizeof(cely_disk));
-    //DEBUG_PRINT("cely_disk=%s\n", cely_disk);
-
-    return cely_disk;
 }
