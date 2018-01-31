@@ -789,7 +789,6 @@ void func_defrag(){
     int i, j, k, clusteru, zpracovany, adresa;
     int nova_bitmapa[CLUSTER_COUNT];
     FILE *fw;
-    char soubory[CLUSTER_COUNT][bootr->disk_size];
 
     // prejmenuji puvodni soubor (backup)
     char *new = (char *) malloc(100);
@@ -809,10 +808,6 @@ void func_defrag(){
 
             // nactu si obsah souboru
             char *cely_soubor = get_file_content(mft_seznam[i]->item.uid);
-            strncpy(soubory[i], cely_soubor, strlen(cely_soubor));
-            soubory[i][strlen(cely_soubor)] = '\0';
-
-            DEBUG_PRINT("--- %s\n", soubory[i]);
 
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
             DEBUG_PRINT("clusteru %d\n", clusteru);
@@ -835,6 +830,15 @@ void func_defrag(){
                 if (k == 1) {
                     adresa = -1;
                     clusteru = -1;
+                }
+                else {
+                    fw = fopen(output_file, "wb");
+                    if (fw != NULL) {
+                        fseek(fw, adresa, SEEK_SET);
+                        fwrite(cely_soubor, CLUSTER_SIZE, 1, fw);
+
+                        fclose(fw);
+                    }
                 }
 
                 mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
@@ -869,17 +873,6 @@ void func_defrag(){
                 fwrite(&mft_seznam[i]->item, sizeof(struct mft_item), 1, fw);
 
                 adresa += sizeof(struct mft_item);
-            }
-        }
-
-        /* Zapiseme data */
-        adresa = bootr->data_start_address;
-        for (i = 0; i < CLUSTER_COUNT; i++) {
-            if (mft_seznam[i] != NULL){
-                fseek(fw, adresa, SEEK_SET);
-                fwrite(soubory[i], CLUSTER_SIZE, 1, fw);
-
-                adresa += CLUSTER_SIZE;
             }
         }
 
