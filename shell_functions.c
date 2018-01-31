@@ -810,7 +810,7 @@ void func_defrag(){
             char *cely_soubor = get_file_content(mft_seznam[i]->item.uid);
 
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
-            DEBUG_PRINT("clusteru %d\n", clusteru);
+            DEBUG_PRINT("+ Pro soubor %s (%d) potrebuji clusteru %d a ma delku %d\n", mft_seznam[i]->item.item_name, mft_seznam[i]->item.uid, clusteru, strlen(cely_soubor));
 
             // zapisu si do bitmapy
             DEBUG_PRINT("zpracovany + clusteru = %d + %d = %d\n", zpracovany, clusteru, zpracovany+clusteru);
