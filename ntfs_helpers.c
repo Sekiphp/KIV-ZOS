@@ -516,7 +516,7 @@ char* nacti_cely_disk() {
             fseek(fr, adresa, SEEK_SET);
             fread(pom, sizeof(char), CLUSTER_SIZE, fr);
 
-            DEBUG_PRINT("pom=%s=\n", pom);
+            DEBUG_PRINT("pom =%s= z adresy=%d=\n", pom, adresa);
 
             adresa += CLUSTER_SIZE;
         }
