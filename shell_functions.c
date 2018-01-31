@@ -810,7 +810,7 @@ void func_defrag(){
             // nactu si obsah souboru
             char *cely_soubor = get_file_content(mft_seznam[i]->item.uid);
             strncpy(soubory[i], cely_soubor, strlen(cely_soubor));
-            soubory[i][strlen(cely_soubor)] = "\0";
+            soubory[i][strlen(cely_soubor)] = '\0';
 
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
 
@@ -853,7 +853,7 @@ void func_defrag(){
 
         /* Zapiseme startovaci bitmapu */
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
-        fwrite(nova_bitmapa, 4, cluster_count, fw);
+        fwrite(nova_bitmapa, 4, CLUSTER_COUNT, fw);
 
         /* Zapiseme MFT */
         adresa = bootr->mft_start_address;
