@@ -3,7 +3,7 @@
 
 #define MFT_FRAG_COUNT 2
 #define UID_ITEM_FREE -1
-#define CLUSTER_COUNT 20 // je i v loader.h; celkovy pocet clusteru v FS
+#define CLUSTER_COUNT 30 // je i v loader.h; celkovy pocet clusteru v FS
 
 // item muze mit 1 az X techto fragmentu
 // +---+---+---+---+---+---+---+---+
