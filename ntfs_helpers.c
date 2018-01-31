@@ -492,7 +492,10 @@ char* nacti_cely_disk() {
 
     DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
 
-    cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *));
+    if ((cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *)) == NULL){
+        printf("NENI DOSTATEK PAMETI PRO ALOKACI\n");
+        return "";
+    }
 
     fr = fopen(output_file, "rb");
     if (fr != NULL) {
