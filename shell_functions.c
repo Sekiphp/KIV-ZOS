@@ -803,7 +803,7 @@ void func_defrag(){
             //DEBUG_PRINT("%s : %s\n", mft_seznam[i]->item.item_name, cely_soubor);
 
             // vymazu MFTLIST
-            mft_seznam[i]->item = NULL;
+            //mft_seznam[i]->item = NULL;
             mft_seznam[i]->dalsi = NULL;
         }
     }
