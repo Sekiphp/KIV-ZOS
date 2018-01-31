@@ -37,6 +37,10 @@ void shell() {
                 use_file = 0;
             }
 
+            if (strlen(command) <= 2) {
+                continue;
+            }
+
             printf("%s", command);
         }
 
