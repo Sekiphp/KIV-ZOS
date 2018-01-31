@@ -791,7 +791,7 @@ void func_defrag(){
     FILE *fw;
 
     // prejmenuji puvodni soubor (backup)
-    char *puvodni = &output_file;
+    char *puvodni = output_file;
     char *new = (char *) malloc(100);
     strcpy(new, output_file);
     strcat(new, ".bak");
@@ -814,6 +814,7 @@ void func_defrag(){
             DEBUG_PRINT("output_file=%s\n", output_file);
             char *cely_soubor = get_file_content(i);
             strcpy(output_file, puvodni);
+            output_file[strlen(puvodni)] = "\0";
             DEBUG_PRINT("output_file=%s\n", output_file);
 
             DEBUG_PRINT("/%s/\n", cely_soubor);
