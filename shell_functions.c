@@ -892,6 +892,8 @@ void func_defrag(){
         fclose(fw);
     }
 
+    free((void *) new);
+    free((void *) puvodni);
 
     printf("OK\n");
 }
