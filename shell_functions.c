@@ -828,7 +828,12 @@ void func_defrag(){
     }
 
     // prejmenuji puvodni soubor
-    if (rename(output_file, strcat(output_file, ".bak")) == 0) {
+    char *new = (char *) malloc(100);
+    strcpy(new, output_file);
+    strcat(new, ".bak");
+    strcat(new, "\0");
+
+    if (rename(output_file, new) == 0) {
         printf("VYTVARIM ZALOZNI SOUBOR .bak\n");
     }
 
