@@ -813,6 +813,7 @@ void func_defrag(){
             DEBUG_PRINT("clusteru %d\n", clusteru);
 
             // zapisu si do bitmapy
+            DEBUG_PRINT("zpracovany + clusteru = %d + %d = %d\n", zpracovany, clusteru, zpracovany+clusteru);
             for (j = zpracovany; j < zpracovany + clusteru; j++) {
                 nova_bitmapa[j] = 1;
                 DEBUG_PRINT("ALOKUJI PRVEK %d V BITMAPE\n", j);
