@@ -496,30 +496,20 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
 }
 
 char* nacti_cely_disk() {
-    char *cely_disk, *pom;
+    char *cely_disk;
     FILE *fr;
-    int adresa = bootr->data_start_address;
-
-    DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
 
     if ((cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *))) == NULL){
         printf("NENI DOSTATEK PAMETI PRO ALOKACI\n");
         return "";
     }
 
-    pom = (char *) malloc(bootr->disk_size * sizeof(char *));
     //memset(cely_disk, '', bootr->disk_size);
 
     fr = fopen(output_file, "rb");
     if (fr != NULL) {
-        while (adresa < (bootr->data_start_address + bootr->disk_size)) {
-            fseek(fr, adresa, SEEK_SET);
-            fread(pom, sizeof(char), CLUSTER_SIZE, fr);
-
-            DEBUG_PRINT("pom =%s= z adresy=%d=\n", pom, adresa);
-
-            adresa += CLUSTER_SIZE;
-        }
+        fseek(fr, bootr->data_start_address, SEEK_SET);
+        fread(cely_disk, sizeof(char), (bootr->data_start_address + bootr->disk_size), fr);
 
         fclose(fr);
     }
