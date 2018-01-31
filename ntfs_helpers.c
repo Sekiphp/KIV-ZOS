@@ -34,7 +34,7 @@ char* get_cluster_content(int32_t adresa) {
         fclose(fr);
     }
 
-    DEBUG_PRINT("/%s/ -> strlen(ret)=%d\n", ret, strlen(ret));
+    //DEBUG_PRINT("/%s/ -> strlen(ret)=%d\n", ret, strlen(ret));
 
     return ret;
 }
@@ -152,8 +152,6 @@ char* get_fragment_content(struct mft_fragment fragment) {
             adresa += CLUSTER_SIZE;
         }
     }
-
-    DEBUG_PRINT("strlen(ret)=%d\n", strlen(ret));
 
     ret[strlen(ret)] = '\0';
 
@@ -289,7 +287,6 @@ char* get_file_content(int file_uid) {
         }
     }
 
-    DEBUG_PRINT("ret[strlen(ret)] = %d\n", strlen(ret));
     ret[strlen(ret)] = '\0';
 
     return ret;

@@ -299,7 +299,7 @@ void ls_printer(int uid) {
 
     // chci vypsat obsah aktualniho adresare
     char *buffer = get_file_content(uid);
-    DEBUG_PRINT("obsah bufferu je: %s (%d)\n", buffer, strlen(buffer));
+    DEBUG_PRINT("obsah bufferu je: %s (%zu)\n", buffer, strlen(buffer));
 
     printf("--- NAZEV ----- VELIKOST - UID ---\n");
 
