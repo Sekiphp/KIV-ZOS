@@ -807,7 +807,7 @@ void func_defrag(){
             // soubor stoji za zpracovani
 
             // nactu si obsah souboru
-            char *cely_soubor = get_file_content(mft_seznam[i]->item.uid);
+            char *cely_soubor = get_file_content(i);
 
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
             DEBUG_PRINT("+ Pro soubor %s (%d) potrebuji clusteru %d a ma delku %d\n", mft_seznam[i]->item.item_name, mft_seznam[i]->item.uid, clusteru, strlen(cely_soubor));
