@@ -527,6 +527,9 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     }
 }
 
+/*
+    Provede zakladni kontrolu konzistence
+*/
 void *kontrola_konzistence(void *arg) {
     sdilenaPamet *param = (sdilenaPamet *) arg;
     int ke_zpracovani;
