@@ -785,13 +785,22 @@ void func_outcp(char *cmd){
     Soubory se budou skladat pouze z jednoho fragmentu
 */
 void func_defrag(){
+    int i;
     int souboru = get_pocet_souboru();
     DEBUG_PRINT("pocet_souboru=%d\n", souboru);
 
+    for (i = 0; i < CLUSTER_COUNT; i++) {
+        if (mft_seznam[i] != NULL){
+            // soubor stoji za zpracovani
+            char *cely_soubor = get_file_content(mft_seznam[i]->item.uid);
+            DEBUG_PRINT("%s : %s\n", mft_seznam[i]->item.item_name, cely_soubor);
+        }
+    }
+
 
     // nactu si cely disk do promenne
-    char *cely_disk = nacti_cely_disk();
-    DEBUG_PRINT("celý disk = %s \n", cely_disk);
+    //char *cely_disk = nacti_cely_disk();
+    //DEBUG_PRINT("celý disk = %s \n", cely_disk);
 
     printf("OK\n");
 }
