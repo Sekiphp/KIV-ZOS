@@ -3,6 +3,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <assert.h>
+#include <math.h>
 
 #include "debugger.h"
 #include "parametr.h"
@@ -785,15 +786,25 @@ void func_outcp(char *cmd){
     Soubory se budou skladat pouze z jednoho fragmentu
 */
 void func_defrag(){
-    int i;
-    int souboru = get_pocet_souboru();
-    DEBUG_PRINT("pocet_souboru=%d\n", souboru);
+    int i, clusteru;
+    MFT_LIST *novy_mft_seznam[CLUSTER_COUNT];
+    int nova_bitmapa[CLUSTER_COUNT];
 
     for (i = 0; i < CLUSTER_COUNT; i++) {
         if (mft_seznam[i] != NULL){
             // soubor stoji za zpracovani
+
+            // nactu si obsah souboru
             char *cely_soubor = get_file_content(mft_seznam[i]->item.uid);
-            DEBUG_PRINT("%s : %s\n", mft_seznam[i]->item.item_name, cely_soubor);
+            clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
+
+            DEBUG_PRINT("%s: strlen=%d, clusteru=%d\n", mft_seznam[i]->item.item_name, strlen(cely_soubor), clusteru);
+
+            //DEBUG_PRINT("%s : %s\n", mft_seznam[i]->item.item_name, cely_soubor);
+
+            // vymazu MFTLIST
+            mft_seznam[i]->item = NULL;
+            mft_seznam[i]->dalsi = NULL;
         }
     }
 
