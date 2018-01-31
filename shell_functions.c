@@ -809,6 +809,8 @@ void func_defrag(){
             // nactu si obsah souboru
             char *cely_soubor = get_file_content(i);
 
+            DEBUG_PRINT("/%s/\n", cely_soubor);
+
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
             DEBUG_PRINT("+ Pro soubor %s (%d) potrebuji clusteru %d a ma delku %d\n", mft_seznam[i]->item.item_name, mft_seznam[i]->item.uid, clusteru, strlen(cely_soubor));
 
@@ -848,6 +850,8 @@ void func_defrag(){
                 mft_seznam[i]->item.fragments[k].fragment_count = p_clusteru;
                 DEBUG_PRINT("pripravim si fragmenty: (%d, %d)\n", adresa, p_clusteru);
             }
+
+            DEBUG_PRINT("----------------------------------------------------\n");
 
             // zrusim odkaz na dalsi prvek pameti
             mft_seznam[i]->dalsi = NULL;
