@@ -812,11 +812,14 @@ void func_defrag(){
             strncpy(soubory[i], cely_soubor, strlen(cely_soubor));
             soubory[i][strlen(cely_soubor)] = '\0';
 
+            DEBUG_PRINT("--- %s\n", soubory[i]);
+
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
 
             // zapisu si do bitmapy
             for (j = zpracovany; j < zpracovany + clusteru; j++) {
                 nova_bitmapa[j] = 1;
+                DEBUG_PRINT("ALOKUJI PRVEK %d V BITMAPE\n", j);
             }
 
             // aktualizace mfti
@@ -835,6 +838,7 @@ void func_defrag(){
 
                 mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
                 mft_seznam[i]->item.fragments[k].fragment_count = clusteru;
+                DEBUG_PRINT("pripravim si fragmenty: (%d, %d)\n", adresa, clusteru);
             }
 
             // zrusim odkaz na dalsi prvek pameti
@@ -859,6 +863,7 @@ void func_defrag(){
         adresa = bootr->mft_start_address;
         for (i = 0; i < CLUSTER_COUNT; i++) {
             if (mft_seznam[i] != NULL){
+                DEBUG_PRINT("ZAPISUJI MFTI NA ADRESU %d\n", adresa);
                 fseek(fw, adresa, SEEK_SET);
                 fwrite(&mft_seznam[i]->item, sizeof(struct mft_item), 1, fw);
 
