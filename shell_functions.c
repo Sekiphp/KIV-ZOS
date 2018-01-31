@@ -791,6 +791,7 @@ void func_defrag(){
     FILE *fw;
 
     // prejmenuji puvodni soubor (backup)
+    char *puvodni = output_file;
     char *new = (char *) malloc(100);
     strcpy(new, output_file);
     strcat(new, ".bak");
@@ -809,7 +810,9 @@ void func_defrag(){
             // soubor stoji za zpracovani
 
             // nactu si obsah souboru
+            strcpy(output_file, new);
             char *cely_soubor = get_file_content(i);
+            strcpy(output_file, puvodni);
 
             DEBUG_PRINT("/%s/\n", cely_soubor);
 
