@@ -34,6 +34,8 @@ char* get_cluster_content(int32_t adresa) {
         fclose(fr);
     }
 
+    DEBUG_PRINT("/%s/ -> strlen(ret)=%d\n", ret, strlen(ret));
+
     return ret;
 }
 
@@ -150,6 +152,10 @@ char* get_fragment_content(struct mft_fragment fragment) {
             adresa += CLUSTER_SIZE;
         }
     }
+
+    DEBUG_PRINT("strlen(ret)=%d\n", strlen(ret));
+
+    ret[strlen(ret)] = '\0';
 
     return ret;
 }
@@ -282,6 +288,9 @@ char* get_file_content(int file_uid) {
             mft_itemy = mft_itemy->dalsi;
         }
     }
+
+    DEBUG_PRINT("ret[strlen(ret)] = %d\n", strlen(ret));
+    ret[strlen(ret)] = '\0';
 
     return ret;
 }
@@ -449,10 +458,13 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
         mfti[i].item_size = strlen(text);
 
         // kazdemu z tech prvku napushuju fragmenty co to pujde
-        for (j = 0; j < MFT_FRAG_COUNT; j++) {
+	DEBUG_PRINT("---%d---\n", MFT_FRAG_COUNT);
+        for (j = 0; j < pocet_fragu; j++) {
+            printf("\n\nqwertzuiop\n\n");
             mfti[i].fragments[j] = fpom[k];
 
             // vkladani textu souboru
+	    printf("////%d////\n", fpom[k].fragment_count);
             text = set_fragment_content(fpom[k], text);
             k++;
         }
@@ -484,4 +496,39 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
     }
 
     return 1;
+}
+
+char* nacti_cely_disk() {
+    char *cely_disk, *pom;
+    FILE *fr;
+    int adresa = bootr->data_start_address;
+
+    DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
+
+    if ((cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *))) == NULL){
+        printf("NENI DOSTATEK PAMETI PRO ALOKACI\n");
+        return "";
+    }
+
+    pom = (char *) malloc(bootr->disk_size * sizeof(char *));
+    //memset(cely_disk, '', bootr->disk_size);
+
+    fr = fopen(output_file, "rb");
+    if (fr != NULL) {
+        while (adresa < bootr->disk_size) {
+            fseek(fr, adresa, SEEK_SET);
+            fread(pom, sizeof(char), CLUSTER_SIZE, fr);
+
+            DEBUG_PRINT("pom=%s=\n", pom);
+
+            adresa += CLUSTER_SIZE;
+        }
+
+        fclose(fr);
+    }
+
+    DEBUG_PRINT("sizeof=%d\n", sizeof(cely_disk));
+    DEBUG_PRINT("cely_disk=%s\n", cely_disk);
+
+    return cely_disk;
 }

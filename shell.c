@@ -14,17 +14,13 @@
 #define MAX 200
 
 /* Posloucha prikazy pro ovladani virtualniho operacniho systemu */
-void *shell(void *arg){
-    //sdilenaPamet *param = (sdilenaPamet *) arg;
+void shell() {
     FILE *fr;
     char command[MAX];
     char *p_c;
     int use_file = 0;
 
     printf("SHELL booting...\n");
-
-    //pthread_mutex_lock(param->mutex);
-    //pthread_mutex_unlock(param->mutex);
 
     /* infinite loop - cekam na prikazy */
     while(1){
@@ -103,5 +99,4 @@ void *shell(void *arg){
     }
 
     printf("SHELL ending\n");
-    return NULL;
 }
