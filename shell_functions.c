@@ -786,7 +786,7 @@ void func_outcp(char *cmd){
     Soubory se budou skladat pouze z jednoho fragmentu
 */
 void func_defrag(){
-    int i, j, k, clusteru, zpracovany, adresa;
+    int i, j, k, clusteru, p_clusteru, zpracovany, adresa;
     int nova_bitmapa[CLUSTER_COUNT];
     FILE *fw;
 
@@ -827,10 +827,12 @@ void func_defrag(){
             // pripravim si fragmenty
             adresa = bootr->data_start_address + zpracovany * CLUSTER_SIZE;
             for (k = 0; k < MFT_FRAG_COUNT; k++) {
+                p_clusteru = clusteru;
+
                 // uz jsem zapsal prvni fragment
                 if (k == 1) {
                     adresa = -1;
-                    clusteru = -1;
+                    p_clusteru = -1;
                 }
                 else {
                     fw = fopen(output_file, "wb");
@@ -843,8 +845,8 @@ void func_defrag(){
                 }
 
                 mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
-                mft_seznam[i]->item.fragments[k].fragment_count = clusteru;
-                DEBUG_PRINT("pripravim si fragmenty: (%d, %d)\n", adresa, clusteru);
+                mft_seznam[i]->item.fragments[k].fragment_count = p_clusteru;
+                DEBUG_PRINT("pripravim si fragmenty: (%d, %d)\n", adresa, p_clusteru);
             }
 
             // zrusim odkaz na dalsi prvek pameti
