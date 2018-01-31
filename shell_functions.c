@@ -791,7 +791,7 @@ void func_defrag(){
     FILE *fw;
 
     // prejmenuji puvodni soubor (backup)
-    char *puvodni = output_file;
+    char *puvodni = &output_file;
     char *new = (char *) malloc(100);
     strcpy(new, output_file);
     strcat(new, ".bak");
@@ -845,9 +845,7 @@ void func_defrag(){
                 }
                 else {
                         fseek(fw, adresa, SEEK_SET);
-                        fwrite(cely_soubor, CLUSTER_SIZE, 1, fw);
-                        cely_soubor += CLUSTER_SIZE;
-                        DEBUG_PRINT("Zbyva zapsat %d\n", strlen(cely_soubor));
+                        fwrite(cely_soubor, strlen(cely_soubor), 1, fw);
                 }
 
                 mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
