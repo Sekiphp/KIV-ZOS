@@ -502,13 +502,11 @@ char* nacti_cely_disk() {
 
     DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
 
-    if ((cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *))) == NULL){
-        printf("NENI DOSTATEK PAMETI PRO ALOKACI\n");
-        return "";
-    }
-
+    cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *));
     pom = (char *) malloc(bootr->disk_size * sizeof(char *));
     //memset(cely_disk, '', bootr->disk_size);
+
+    strcpy(cely_disk, "");
 
     fr = fopen(output_file, "rb");
     if (fr != NULL) {
@@ -516,7 +514,9 @@ char* nacti_cely_disk() {
             fseek(fr, adresa, SEEK_SET);
             fread(pom, sizeof(char), CLUSTER_SIZE, fr);
 
-            DEBUG_PRINT("pom =%s= z adresy=%d=\n", pom, adresa);
+            strncat(cely_disk, pom, CLUSTER_SIZE);
+
+            //DEBUG_PRINT("pom =%s= z adresy=%d=\n", pom, adresa);
 
             adresa += CLUSTER_SIZE;
         }
@@ -524,8 +524,8 @@ char* nacti_cely_disk() {
         fclose(fr);
     }
 
-    DEBUG_PRINT("sizeof=%d\n", sizeof(cely_disk));
-    DEBUG_PRINT("cely_disk=%s\n", cely_disk);
+    //DEBUG_PRINT("sizeof=%d\n", sizeof(cely_disk));
+    //DEBUG_PRINT("cely_disk=%s\n", cely_disk);
 
     return cely_disk;
 }
