@@ -43,10 +43,10 @@ int get_volne_uid() {
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
     int hledane, i, dir_len;
-printf("ahoj");
+    
     //for(i = 0; i < strlen(dir_name); i++)
      //   DEBUG_PRINT("--%s--\n", dir_name[i]);
-printf("cau");
+    
     char *curLine = get_file_content(uid_pwd);
 
     dir_len = strlen(dir_name);
@@ -367,6 +367,7 @@ char* read_file_from_pc(char *pc_soubor){
         fseek(fr, 0, SEEK_SET);
         fread(ret, 1, size, fr);
 
+	ret[size] = '\0';
         DEBUG_PRINT("-- nacteno z pocitace: %s\n", ret);
 
         fclose(fr);

@@ -636,6 +636,7 @@ void func_incp(char *cmd){
             // soubor k presunu z pocitace
             // overim jeho existenci
             strncpy(pc_file, cmd, strlen(cmd));
+            pc_file[strlen(cmd)] = '\0';
             f = fopen(pc_file, "r");
             if (f == NULL){
                 printf("FILE %s NOT FOUND\n", pc_file);
@@ -654,6 +655,7 @@ void func_incp(char *cmd){
                 DEBUG_PRINT("strlen(cmd) - strlen(nazev) => strlen(%s) - strlen(%s)=%d\n", cmd, nazev, delka);
                 jen_cesta = (char *) malloc(delka * sizeof(char *));
                 strncpy(jen_cesta, cmd, delka);
+                jen_cesta[delka] = '\0';
 
                 ret = parsuj_pathu(jen_cesta, 1);
             }
@@ -663,6 +665,7 @@ void func_incp(char *cmd){
 
                 jen_cesta = (char *) malloc(delka);
                 strncpy(jen_cesta, "/", 1);
+                jen_cesta[1] = '\0';               
 
                 ret = pwd;
             }

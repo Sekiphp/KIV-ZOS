@@ -449,10 +449,13 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
         mfti[i].item_size = strlen(text);
 
         // kazdemu z tech prvku napushuju fragmenty co to pujde
-        for (j = 0; j < MFT_FRAG_COUNT; j++) {
+	DEBUG_PRINT("---%d---\n", MFT_FRAG_COUNT);
+        for (j = 0; j < pocet_fragu; j++) {
+            printf("\n\nqwertzuiop\n\n");
             mfti[i].fragments[j] = fpom[k];
 
             // vkladani textu souboru
+	    printf("////%d////\n", fpom[k].fragment_count);
             text = set_fragment_content(fpom[k], text);
             k++;
         }
@@ -499,7 +502,6 @@ char* nacti_cely_disk() {
     }
 
     pom = (char *) malloc(bootr->disk_size * sizeof(char *));
-
     //memset(cely_disk, '', bootr->disk_size);
 
     fr = fopen(output_file, "rb");
