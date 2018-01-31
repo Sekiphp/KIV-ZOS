@@ -860,7 +860,7 @@ void func_defrag(){
         for (i = 0; i < CLUSTER_COUNT; i++) {
             if (mft_seznam[i] != NULL){
                 fseek(fw, adresa, SEEK_SET);
-                fwrite(mft_seznam[i]->item, sizeof(struct mft_item), 1, fw);
+                fwrite(mft_seznam[i]->item, 1, sizeof(struct mft_item), fw);
 
                 adresa += sizeof(struct mft_item);
             }
