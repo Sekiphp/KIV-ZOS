@@ -43,10 +43,10 @@ int get_volne_uid() {
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
     int hledane, i, dir_len;
-    
+
     //for(i = 0; i < strlen(dir_name); i++)
      //   DEBUG_PRINT("--%s--\n", dir_name[i]);
-    
+
     char *curLine = get_file_content(uid_pwd);
 
     dir_len = strlen(dir_name);
@@ -299,7 +299,7 @@ void ls_printer(int uid) {
 
     // chci vypsat obsah aktualniho adresare
     char *buffer = get_file_content(uid);
-    DEBUG_PRINT("obsah bufferu je: %s\n", buffer);
+    DEBUG_PRINT("obsah bufferu je: %s (%d)\n", buffer, strlen(buffer));
 
     printf("--- NAZEV ----- VELIKOST - UID ---\n");
 
