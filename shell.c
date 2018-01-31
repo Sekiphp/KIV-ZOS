@@ -92,6 +92,7 @@ void shell() {
                 printf("FILE NOT FOUND\n");
         }
         else if(strncmp(p_c, "defrag", 6) == 0){
+            printf("DEFRAG\n");
             func_defrag();
         }
         else if(strncmp(p_c, "consist", 7) == 0){
