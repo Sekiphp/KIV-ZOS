@@ -291,7 +291,9 @@ int zaloz_novou_slozku(int pwd, char *name){
     return volne_uid;
 }
 
-/* Ziskani informaci o souborech ve slozce */
+/*
+    Ziskani informaci o souborech ve slozce
+*/
 void ls_printer(int uid) {
     char *p_c;
     int i = 0;
@@ -329,6 +331,10 @@ void ls_printer(int uid) {
     printf("-- Celkem souboru: %d --\n", i);
 }
 
+/*
+    Zkontroluje jeslti je osubor prazdny
+    -> vraci pocet radek v souboru
+*/
 int is_empty_dir(int file_uid) {
     char *curLine = get_file_content(file_uid);
     int i = 0;
@@ -349,6 +355,9 @@ int is_empty_dir(int file_uid) {
     return i;
 }
 
+/*
+    Nacte cely obsah souboru z pc (externi FS)
+*/
 char* read_file_from_pc(char *pc_soubor){
     int size;
     FILE *fr;
@@ -366,8 +375,8 @@ char* read_file_from_pc(char *pc_soubor){
         // prectu soubor do promenne
         fseek(fr, 0, SEEK_SET);
         fread(ret, 1, size, fr);
+        ret[size] = '\0';
 
-	ret[size] = '\0';
         DEBUG_PRINT("-- nacteno z pocitace: %s\n", ret);
 
         fclose(fr);
@@ -567,7 +576,7 @@ void *kontrola_konzistence(void *arg) {
                 mft_itemy = mft_itemy->dalsi;
             }
 
-
+            // vypisu vysledek
             printf("Soubor %s ", mft_seznam[ke_zpracovani]->item.item_name);
             if (delka != mft_seznam[ke_zpracovani]->item.item_size) {
                 printf("NENI KONZISTENTNI (%d != %d) !!!\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
@@ -579,20 +588,4 @@ void *kontrola_konzistence(void *arg) {
     }
 
     return NULL;
-}
-
-/*
-    Vrati pocet souboru v FS
-*/
-int get_pocet_souboru() {
-    int pocet = 0;
-    int i;
-
-    for (i = 0; i < CLUSTER_COUNT; i++) {
-        if (mft_seznam[i] != NULL){
-            pocet++;
-        }
-    }
-
-    return pocet;
 }

@@ -13,6 +13,5 @@
     void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_uid, int is_dir, int odkaz);
     int get_backlink(int uid_pwd);
     void *kontrola_konzistence(void *arg);
-    int get_pocet_souboru();
 
 #endif

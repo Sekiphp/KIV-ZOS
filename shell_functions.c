@@ -718,7 +718,7 @@ void func_incp(char *cmd){
 }
 
 /*
-    Nahraje soubor
+    Nahraje soubor do PC
 */
 void func_outcp(char *cmd){
     int i, ret;

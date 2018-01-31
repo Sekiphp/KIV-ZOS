@@ -326,6 +326,7 @@ int update_filesize(int file_uid, int length){
     Pripoji na konec souboru dalsi data
     @param file_uid UID souboru
     @param append Retezec pro pripojeni nakonec souboru
+    @param dir Je slozka nebo ne
 */
 int append_file_content(int file_uid, char *append, int dir){
     int i, j, adresa, delka, mftf_adr;
@@ -404,23 +405,22 @@ int append_file_content(int file_uid, char *append, int dir){
 }
 
 /*
-    TODO
     Zmeni obsah souboru - resi nafukovani a smrstovani souboru
     @param file_uid Soubor pro editaci
     @param text Cely (novy) obsah
+    @param filename Nazev souboru
+    @param puvodni_uid Puvodni UID souboru pokud ma byt zachovano
  */
 void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid){
     DEBUG_PRINT("EDIT FILE (int file_uid=%d, char *text=%s, char *filename=%s, int puvodni_uid=%d)\n", file_uid, text, filename, puvodni_uid);
 
-    DEBUG_PRINT("------------------------- DELETE FILE -------------------------\n");
     delete_file(file_uid);
-
-    DEBUG_PRINT("------------------------- VYTVOR SOUBOR -------------------------\n");
     vytvor_soubor(pwd, filename, text, puvodni_uid, 1, 0);
-
-    DEBUG_PRINT("------------------------- END edit_file_content() -------------------------\n");
 }
 
+/*
+    Vytvori MFT info o souboru (jak na disku tak virtualne)
+*/
 int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[], int fpom_size, int is_dir) {
     int i, j, k, l, adresa_mfti;
     struct mft_item *mpom, *mff;

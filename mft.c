@@ -29,6 +29,7 @@ void pridej_prvek_mft(int uid, struct mft_item mfti) {
         mft_seznam[uid] = pom;
     }
     else {
+        // vlozime prvek nakonec
         MFT_LIST *mpom = mft_seznam[uid];
         while (mpom != NULL) {
             if (mpom->dalsi == NULL) {
@@ -38,11 +39,5 @@ void pridej_prvek_mft(int uid, struct mft_item mfti) {
 
             mpom = mpom->dalsi;
         }
-        /*
-        MFT_LIST *mpom;
-        mpom = mft_seznam[uid];
-        pom->dalsi = mpom;
-        mft_seznam[uid] = pom;
-        */
     }
 }
