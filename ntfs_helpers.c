@@ -490,6 +490,8 @@ char* nacti_cely_disk() {
     char *cely_disk;
     FILE *fr;
 
+    DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
+
     cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *));
 
     fr = fopen(output_file, "rb");
