@@ -283,6 +283,7 @@ char* get_file_content(int file_uid) {
         }
     }
 
+    DEBUG_PRINT("ret[strlen(ret)] = %d\n", strlen(ret));
     ret[strlen(ret)] = '\0';
 
     return ret;
