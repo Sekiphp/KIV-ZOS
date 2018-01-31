@@ -498,6 +498,8 @@ char* nacti_cely_disk() {
         return "";
     }
 
+    pom = (char *) malloc(bootr->disk_size * sizeof(char *));
+
     //memset(cely_disk, '', bootr->disk_size);
 
     fr = fopen(output_file, "rb");
