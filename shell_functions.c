@@ -801,6 +801,8 @@ void func_defrag(){
     }
 
     // provedu prislusne operace defragmentace
+    fw = fopen(output_file, "wb");
+    if (fw != NULL) {
     zpracovany = 0; // zpracovany cluster
     for (i = 0; i < CLUSTER_COUNT; i++) {
         if (mft_seznam[i] != NULL){
@@ -837,13 +839,9 @@ void func_defrag(){
                     p_clusteru = -1;
                 }
                 else {
-                    fw = fopen(output_file, "r+b");
-                    if (fw != NULL) {
+
                         fseek(fw, adresa, SEEK_SET);
                         fwrite(cely_soubor, CLUSTER_SIZE, 1, fw);
-
-                        fclose(fw);
-                    }
                 }
 
                 mft_seznam[i]->item.fragments[k].fragment_start_address = adresa;
@@ -858,6 +856,8 @@ void func_defrag(){
 
             zpracovany += clusteru;
         }
+    }
+    fclose(fw);
     }
 
     // vytvorim novy soubor
