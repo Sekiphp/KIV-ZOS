@@ -502,5 +502,7 @@ char* nacti_cely_disk() {
         fclose(fr);
     }
 
+    DEBUG_PRINT("cely_disk=%s\n", cely_disk);
+
     return cely_disk;
 }
