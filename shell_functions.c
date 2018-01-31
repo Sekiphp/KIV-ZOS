@@ -815,6 +815,7 @@ void func_defrag(){
             DEBUG_PRINT("--- %s\n", soubory[i]);
 
             clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
+            DEBUG_PRINT("clusteru %d\n", clusteru);
 
             // zapisu si do bitmapy
             for (j = zpracovany; j < zpracovany + clusteru; j++) {
