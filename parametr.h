@@ -7,8 +7,7 @@ extern char output_file[100];
 
 typedef struct {
     pthread_mutex_t * mutex;
-    int pokus;
-  char soubor[50];
+    int zpracovany_cluster;
 } sdilenaPamet;
 
 

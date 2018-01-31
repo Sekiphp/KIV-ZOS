@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
+#include <assert.h>
 
 #include "debugger.h"
 #include "loader.h"
@@ -42,6 +44,9 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
     int hledane, i, dir_len;
 
+    //for(i = 0; i < strlen(dir_name); i++)
+     //   DEBUG_PRINT("--%s--\n", dir_name[i]);
+
     char *curLine = get_file_content(uid_pwd);
 
     dir_len = strlen(dir_name);
@@ -64,7 +69,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                DEBUG_PRINT("\t\tHledane mfti s uid=%d (name=%s) %s, dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, dir_len);
+                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s), dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, dir_len);
 
                 // todo - isDirectory ... nelze overit unikatnost jmena
                 // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
@@ -89,6 +94,8 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
         i++;
     }
+
+    DEBUG_PRINT("RET -1\n");
 
     return -1;
 }
@@ -156,6 +163,7 @@ int parsuj_pathu(char *patha, int cd){
             // parsuji jednotlive casti cesty a norim se hloubeji a hloubeji
             p_c = strtok(path, "/");
             while( p_c != NULL ) {
+                DEBUG_PRINT("p_c=%s\n", p_c);
                 start_dir = get_uid_by_name(p_c, start_dir); // pokusim se prevest nazev na UID
 
                 if (start_dir == -1) return -1;
@@ -291,7 +299,7 @@ void ls_printer(int uid) {
 
     // chci vypsat obsah aktualniho adresare
     char *buffer = get_file_content(uid);
-    DEBUG_PRINT("obsah bufferu je: %s\n", buffer);
+    DEBUG_PRINT("obsah bufferu je: %s (%d)\n", buffer, strlen(buffer));
 
     printf("--- NAZEV ----- VELIKOST - UID ---\n");
 
@@ -359,6 +367,7 @@ char* read_file_from_pc(char *pc_soubor){
         fseek(fr, 0, SEEK_SET);
         fread(ret, 1, size, fr);
 
+	ret[size] = '\0';
         DEBUG_PRINT("-- nacteno z pocitace: %s\n", ret);
 
         fclose(fr);
@@ -422,7 +431,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fpom[i].fragment_count = -1;
     }
 
-    DEBUG_PRINT("SIZEOF(fpom[])=%d\n", sizeof(fpom));
+    DEBUG_PRINT("SIZEOF(fpom[])=%lo\n", sizeof(fpom));
 
 
     // otevru si spojeni s nasim fs
@@ -507,4 +516,67 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
         fclose(fw);
     }
+}
+
+void *kontrola_konzistence(void *arg) {
+    sdilenaPamet *param = (sdilenaPamet *) arg;
+    int ke_zpracovani;
+
+    //int r = rand() % 20;
+    //printf("Vlakno kontroly konzistence %d\n", r);
+
+    while (1) {
+        pthread_mutex_lock(param->mutex);
+            ke_zpracovani = param->zpracovany_cluster + 1;
+            param->zpracovany_cluster = ke_zpracovani;
+        pthread_mutex_unlock(param->mutex);
+
+        if (ke_zpracovani >= CLUSTER_COUNT) {
+            //DEBUG_PRINT("SKIP %d > %d\n", ke_zpracovani, CLUSTER_COUNT);
+            break;
+        }
+
+        // tady budu zpracovavat data
+        //printf("Vlakno %d: %d\n", r, ke_zpracovani);
+
+        MFT_LIST* mft_itemy;
+        struct mft_item mfti;
+        struct mft_fragment mftf;
+        int j;
+        int delka = 0;
+
+        // najdu vsechny mfti
+        if (mft_seznam[ke_zpracovani] != NULL){
+            mft_itemy = mft_seznam[ke_zpracovani];
+
+            // iteruji mfti
+            while (mft_itemy != NULL){
+                mfti = mft_itemy->item;
+
+                // najdu vsechny mftf
+                for (j = 0; j < MFT_FRAG_COUNT; j++){
+                    mftf = mfti.fragments[j];
+
+                    if (mftf.fragment_start_address != 0 && mftf.fragment_count > 0) {
+                        DEBUG_PRINT("===\n%s\n===\n", get_fragment_content(mftf));
+                        delka += strlen(get_fragment_content(mftf));
+                    }
+                }
+
+                // prehodim se na dalsi prvek
+                mft_itemy = mft_itemy->dalsi;
+            }
+
+
+            printf("Soubor %s ", mft_seznam[ke_zpracovani]->item.item_name);
+            if (delka != mft_seznam[ke_zpracovani]->item.item_size) {
+                printf("NENI KONZISTENTNI (%d != %d) !!!\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
+            }
+            else {
+                printf("JE V PORADKU (%d == %d)\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
+            }
+        }
+    }
+
+    return NULL;
 }

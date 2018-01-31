@@ -1,4 +1,4 @@
-#define DEBUG 1
+#define DEBUG 10
 
 #if defined(DEBUG) && DEBUG > 0
  #define DEBUG_PRINT(fmt, args...) fprintf(stderr, "DEBUG: %s:%d:%s(): " fmt, \

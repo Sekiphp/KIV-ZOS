@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
+#include <assert.h>
 
 #include "debugger.h"
+#include "parametr.h"
 #include "loader.h"
 #include "mft.h"
 #include "shell_functions.h"
@@ -24,12 +27,16 @@ void func_cp(char *cmd) {
     cmd = strtok(NULL, " \n");
     part1 = (char *) malloc(sizeof(strlen(cmd)));
     strcpy(part1, cmd);
+    part1[strlen(cmd)] = '\0';
+
     DEBUG_PRINT("PART 1: %s=%s\n", cmd, part1);
 
     // part 2
     cmd = strtok(NULL, " \n");
     part2 = (char *) malloc(strlen(cmd));
     strcpy(part2, cmd);
+    part2[strlen(cmd)] = '\0';
+
     DEBUG_PRINT("PART 2: %s=%s\n", cmd, part2);
 
     // part 1
@@ -38,8 +45,9 @@ void func_cp(char *cmd) {
                 nazev_zdroj++;
 
                 delka = strlen(part1) - strlen(nazev_zdroj);
-                jen_cesta_zdroj = (char *) malloc(delka - 1);
-                strncpy(jen_cesta_zdroj, part1, delka - 1);
+                jen_cesta_zdroj = (char *) malloc(delka * sizeof(char *));
+                strncpy(jen_cesta_zdroj, part1, delka);
+                jen_cesta_zdroj[delka] = '\0';
 
                 ret_zdroj = parsuj_pathu(jen_cesta_zdroj, 1);
             }
@@ -50,6 +58,7 @@ void func_cp(char *cmd) {
 
                 jen_cesta_zdroj = (char *) malloc(1);
                 strncpy(jen_cesta_zdroj, "/", 1);
+                jen_cesta_zdroj[1] = '\0';
 
                 ret_zdroj = pwd;
             }
@@ -60,7 +69,7 @@ void func_cp(char *cmd) {
             DEBUG_PRINT("-- RET ZDROJ: %d\n", ret_zdroj);
             DEBUG_PRINT("-- ZDROJ UID: %d\n\n", zdroj_uid);
 
-    if (ret_zdroj == -1) {
+    if (ret_zdroj == -1 || zdroj_uid == -1) {
         printf("FILE NOT FOUND\n");
         return;
     }
@@ -71,8 +80,9 @@ void func_cp(char *cmd) {
                 nazev_cil++;
 
                 delka = strlen(part2) - strlen(nazev_cil);
-                jen_cesta_cil = (char *) malloc(delka - 1);
-                strncpy(jen_cesta_cil, part2, delka - 1);
+                jen_cesta_cil = (char *) malloc(delka);
+                strncpy(jen_cesta_cil, part2, delka);
+                jen_cesta_cil[delka] = '\0';
 
                 ret_cil = parsuj_pathu(jen_cesta_cil, 1);
             }
@@ -83,6 +93,7 @@ void func_cp(char *cmd) {
 
                 jen_cesta_cil = (char *) malloc(1);
                 strncpy(jen_cesta_cil, "/", 1);
+                jen_cesta_cil[1] = '\0';
 
                 ret_cil = pwd;
             }
@@ -122,12 +133,14 @@ void func_mv(char *cmd){
     cmd = strtok(NULL, " \n");
     part1 = (char *) malloc(sizeof(strlen(cmd)));
     strcpy(part1, cmd);
+    part1[strlen(cmd)] = '\0';
     //printf("PART 1: %s=%s\n", cmd, part1);
 
     // part 2
     cmd = strtok(NULL, " \n");
     part2 = (char *) malloc(strlen(cmd));
     strcpy(part2, cmd);
+    part2[strlen(cmd)] = '\0';
     //printf("PART 2: %s=%s\n", cmd, part2);
 
     // part 1
@@ -136,8 +149,9 @@ void func_mv(char *cmd){
                 nazev_zdroj++;
 
                 delka = strlen(part1) - strlen(nazev_zdroj);
-                jen_cesta_zdroj = (char *) malloc(delka - 1);
-                strncpy(jen_cesta_zdroj, part1, delka - 1);
+                jen_cesta_zdroj = (char *) malloc(delka);
+                strncpy(jen_cesta_zdroj, part1, delka);
+                jen_cesta_zdroj[delka] = '\0';
 
                 ret_zdroj = parsuj_pathu(jen_cesta_zdroj, 1);
             }
@@ -148,6 +162,7 @@ void func_mv(char *cmd){
 
                 jen_cesta_zdroj = (char *) malloc(1);
                 strncpy(jen_cesta_zdroj, "/", 1);
+                jen_cesta_zdroj[1] = '\0';
 
                 ret_zdroj = pwd;
             }
@@ -165,8 +180,9 @@ void func_mv(char *cmd){
                 nazev_cil++;
 
                 delka = strlen(part2) - strlen(nazev_cil);
-                jen_cesta_cil = (char *) malloc(delka - 1);
-                strncpy(jen_cesta_cil, part2, delka - 1);
+                jen_cesta_cil = (char *) malloc(delka);
+                strncpy(jen_cesta_cil, part2, delka);
+                jen_cesta_cil[delka] = '\0';
 
                 ret_cil = parsuj_pathu(jen_cesta_cil, 1);
             }
@@ -177,6 +193,7 @@ void func_mv(char *cmd){
 
                 jen_cesta_cil = (char *) malloc(1);
                 strncpy(jen_cesta_cil, "/", 1);
+                jen_cesta_cil[1] = '\0';
 
                 ret_cil = pwd;
             }
@@ -255,24 +272,28 @@ void func_rm(char *cmd){
 
     cmd = strtok(NULL, " \n");
 
-
     // pripravim si cestu a nazev souboru pro vytvoreni
     nazev = strrchr(cmd, '/');
     if (nazev != NULL) {
         nazev++;
 
         delka = strlen(cmd) - strlen(nazev);
-        jen_cesta = (char *) malloc(delka - 1);
-        strncpy(jen_cesta, cmd, delka - 1);
+        jen_cesta = (char *) malloc(delka);
+        strncpy(jen_cesta, cmd, delka);
+        jen_cesta[delka] = '\0';
 
         ret = parsuj_pathu(jen_cesta, 1);
     }
     else {
         delka = strlen(cmd);
-        nazev = (char *) malloc(delka - 1);
-        jen_cesta = (char *) malloc(delka - 1);
+        nazev = (char *) malloc(delka);
+        jen_cesta = (char *) malloc(delka);
+
         strncpy(nazev, cmd, delka);
+        nazev[delka] = '\0';
+
         strncpy(jen_cesta, "/", 1);
+        jen_cesta[1] = '\0';
 
         ret = pwd;
     }
@@ -352,8 +373,9 @@ void func_mkdir(char *cmd){
         nazev++;
 
         delka = strlen(cmd) - strlen(nazev);
-        jen_cesta = (char *) malloc(delka - 1);
-        strncpy(jen_cesta, cmd, delka - 1);
+        jen_cesta = (char *) malloc(delka);
+        strncpy(jen_cesta, cmd, delka);
+        jen_cesta[delka] = '\0';
 
         ret = parsuj_pathu(jen_cesta, 1);
     }
@@ -364,6 +386,7 @@ void func_mkdir(char *cmd){
 
         jen_cesta = (char *) malloc(1);
         strncpy(jen_cesta, "/", 1);
+        jen_cesta[1] = '\0';
 
         ret = pwd;
     }
@@ -561,7 +584,6 @@ void func_pwd(){
 
         printf("%s\n", full_link);
     }
-    //printf("PWD = %d\n", pwd);
 }
 
 /*
@@ -628,11 +650,13 @@ void func_incp(char *cmd){
     i = 0;
 
     // postupne cteni argumentu
-    while((cmd = strtok(NULL, " \n")) != NULL){
-        if (i == 0){
+    while((cmd = strtok(NULL, " \n")) != NULL) {
+        if (i == 0) {
             // soubor k presunu z pocitace
             // overim jeho existenci
             strncpy(pc_file, cmd, strlen(cmd));
+            pc_file[strlen(cmd)] = '\0';
+
             f = fopen(pc_file, "r");
             if (f == NULL){
                 printf("FILE %s NOT FOUND\n", pc_file);
@@ -647,9 +671,12 @@ void func_incp(char *cmd){
             if (nazev != NULL) {
                 nazev++;
 
-                delka = strlen(cmd) - strlen(nazev);
-                jen_cesta = (char *) malloc(delka - 1);
-                strncpy(jen_cesta, cmd, delka - 1);
+                delka = strlen(cmd) - strlen(nazev) - 1;
+                DEBUG_PRINT("strlen(cmd) - strlen(nazev) => strlen(%s) - strlen(%s)=%d\n", cmd, nazev, delka);
+
+                jen_cesta = (char *) malloc(delka * sizeof(char *));
+                strncpy(jen_cesta, cmd, delka);
+                jen_cesta[delka] = '\0';
 
                 ret = parsuj_pathu(jen_cesta, 1);
             }
@@ -659,6 +686,7 @@ void func_incp(char *cmd){
 
                 jen_cesta = (char *) malloc(delka);
                 strncpy(jen_cesta, "/", 1);
+                jen_cesta[1] = '\0';
 
                 ret = pwd;
             }
@@ -683,6 +711,8 @@ void func_incp(char *cmd){
     DEBUG_PRINT("-- Vyparsovana cesta: %d\n", ret);
 
     vytvor_soubor(ret, nazev, read_file_from_pc(pc_file), -1, 0, 1);
+
+    free((void *) jen_cesta);
     printf("OK\n");
 }
 
@@ -702,9 +732,12 @@ void func_outcp(char *cmd){
     while((cmd = strtok(NULL, " \n")) != NULL){
         if (i == 0){
             DEBUG_PRINT("K presunu z FS\n");
+
             // soubor k presunu z FS
             jen_cesta = (char *) malloc(strlen(cmd));
             strncpy(jen_cesta, cmd, strlen(cmd));
+            jen_cesta[strlen(cmd)] = '\0';
+
             ret = parsuj_pathu(jen_cesta, 1);
 
             if (ret == -1){
@@ -722,6 +755,8 @@ void func_outcp(char *cmd){
             DEBUG_PRINT("Ulozim soubor do pc\n");
 
             strncpy(pc_file, cmd, strlen(cmd));
+            pc_file[strlen(cmd)] = '\0';
+
             fw = fopen(pc_file, "w");
             if (fw == NULL){
                 printf("FILE %s NOT FOUND\n", pc_file);
@@ -750,6 +785,9 @@ void func_outcp(char *cmd){
     Soubory se budou skladat pouze z jednoho fragmentu
 */
 void func_defrag(){
+    // nactu si cely disk do promenne
+    char *cely_disk = nacti_cely_disk();
+    DEBUG_PRINT("celý disk = %s \n", cely_disk);
 
     printf("OK\n");
 }
@@ -759,6 +797,27 @@ void func_defrag(){
     -> zkontroluje jeslti jsou soubory neposkozene (velikost souboru odpovida poctu alokovanych datovych bloku)
  */
 void func_consist(){
+    int i, rc;
+    int pocet_vlaken = 2;
+
+    pthread_t pt[pocet_vlaken];
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+    sdilenaPamet pamet;
+
+    pamet.mutex = &mutex;
+    pamet.zpracovany_cluster = -1;
+
+    // start vlaken
+    for (i = 0; i < pocet_vlaken; i++) {
+        rc = pthread_create(&pt[i], NULL, kontrola_konzistence, (void *) &pamet);
+        assert(0 == rc);
+    }
+
+    // Cekam na dokonceni vsech vlaken
+    for (i = 0; i < pocet_vlaken; i++) {
+        rc = pthread_join(pt[i], NULL);
+        assert(0 == rc);
+    }
 
     printf("OK\n");
 }

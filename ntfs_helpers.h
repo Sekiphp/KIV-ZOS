@@ -15,5 +15,6 @@
     int append_file_content(int file_uid, char *append, int dir);
     void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid);
     int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[], int fpom_size, int is_dir);
+    char* nacti_cely_disk();
 
 #endif

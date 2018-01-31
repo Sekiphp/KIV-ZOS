@@ -12,10 +12,5 @@ cd standa
 pwd
 cd ../..
 ls
-incp s1.txt /home/s1.txt
-mkdir bin
-cd ../var/www
-mkdir web1
-mkdir web2
-cp /home/s1.txt web2/index.html
-cd ..
+incp s1.txt home/s1.txt
+
