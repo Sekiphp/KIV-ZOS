@@ -786,11 +786,8 @@ void func_outcp(char *cmd){
     Soubory se budou skladat pouze z jednoho fragmentu
 */
 void func_defrag(){
-    int i, j, k, clusteru, zpracovany;
-    MFT_LIST *novy_mft_seznam[CLUSTER_COUNT];
+    int i, j, k, clusteru, zpracovany, adresa;
     int nova_bitmapa[CLUSTER_COUNT];
-    struct mft_item mfti;
-    struct mft_fragment mftf;
 
     zpracovany = 0; // zpracovany cluster
     for (i = 0; i < CLUSTER_COUNT; i++) {
@@ -831,9 +828,7 @@ void func_defrag(){
     }
 
     // prejmenuji puvodni soubor
-    int ret = rename(output_file, strcat(output_file, ".bak"));
-
-    if (ret == 0) {
+    if (rename(output_file, strcat(output_file, ".bak")) == 0) {
         printf("VYTVARIM ZALOZNI SOUBOR .bak\n");
     }
 
