@@ -151,7 +151,7 @@ char* get_fragment_content(struct mft_fragment fragment) {
         }
     }
 
-    DEBUG_PRINT("strlen(ret)=%d\n", steln(ret));
+    DEBUG_PRINT("strlen(ret)=%d\n", strlen(ret));
 
     ret[strlen(ret)] = '\0';
 
