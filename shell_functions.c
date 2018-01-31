@@ -785,6 +785,10 @@ void func_outcp(char *cmd){
     Soubory se budou skladat pouze z jednoho fragmentu
 */
 void func_defrag(){
+    int souboru = get_pocet_souboru();
+    DEBUG_PRINT("pocet_souboru=%d\n", souboru);
+
+
     // nactu si cely disk do promenne
     char *cely_disk = nacti_cely_disk();
     DEBUG_PRINT("celý disk = %s \n", cely_disk);

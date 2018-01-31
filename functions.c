@@ -580,3 +580,19 @@ void *kontrola_konzistence(void *arg) {
 
     return NULL;
 }
+
+/*
+    Vrati pocet souboru v FS
+*/
+int get_pocet_souboru() {
+    int pocet = 0;
+    int i;
+
+    for (i = 0; i < CLUSTER_COUNT; i++) {
+        if (mft_seznam[i] != NULL){
+            pocet++;
+        }
+    }
+
+    return pocet;
+}
