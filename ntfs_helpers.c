@@ -283,6 +283,8 @@ char* get_file_content(int file_uid) {
         }
     }
 
+    ret[strlen(ret)] = '\0';
+
     return ret;
 }
 
