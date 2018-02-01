@@ -734,7 +734,7 @@ void func_outcp(char *cmd){
     strncpy(jen_cesta, cmd, strlen(cmd));
     jen_cesta[strlen(cmd)] = '\0';
 
-    DEBUG_PRINT("PART 1: %s=%s\n", cmd, jen_cesta);
+    //DEBUG_PRINT("PART 1: %s=%s\n", cmd, jen_cesta);
 
     ret = parsuj_pathu(jen_cesta, 1);
 
@@ -753,7 +753,7 @@ void func_outcp(char *cmd){
     DEBUG_PRINT("Ulozim soubor do pc\n");
     cmd = strtok(NULL, " \n");
     strncpy(pc_file, cmd, strlen(cmd));
-    pc_file[strlen(cmd)] = '\0';
+    //pc_file[strlen(cmd)] = '\0';
     DEBUG_PRINT("test=%s\n", pc_file);
 
     fw = fopen(pc_file, "w");
