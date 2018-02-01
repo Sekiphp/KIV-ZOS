@@ -757,7 +757,6 @@ void func_outcp(char *jen_cesta, char *externi_soubor){
     fwrite(obsah, 1, strlen(obsah), fw);
 
     fclose(fw);
-    free((void *) jen_cesta);
 
     printf("OK\n");
 }
