@@ -754,6 +754,7 @@ void func_outcp(char *cmd){
     cmd = strtok(NULL, " \n");
     strncpy(pc_file, cmd, strlen(cmd));
     pc_file[strlen(cmd)] = '\0';
+    DEBUG_PRINT("test=%s\n", pc_file);
 
     fw = fopen(pc_file, "w");
     if (fw == NULL){
