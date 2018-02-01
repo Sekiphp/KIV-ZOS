@@ -723,7 +723,8 @@ void func_incp(char *cmd){
 void func_outcp(char *cmd){
     int ret;
     FILE *fw;
-    char *obsah, *jen_cesta, *pc_file;
+    char *obsah, *jen_cesta;
+    char pc_file[100];
 
 
     // part 1, k presunu z FS
@@ -751,7 +752,6 @@ void func_outcp(char *cmd){
     // part 2, ulozim soubor do pc
     DEBUG_PRINT("Ulozim soubor do pc\n");
     cmd = strtok(NULL, " \n");
-    pc_file = (char *) malloc(strlen(cmd));
     strncpy(pc_file, cmd, strlen(cmd));
     pc_file[strlen(cmd)] = '\0';
 
