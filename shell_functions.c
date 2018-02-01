@@ -723,7 +723,7 @@ void func_incp(char *cmd){
 void func_outcp(char *jen_cesta, char *externi_soubor){
     int ret;
     FILE *fw;
-    char *obsah, *jen_cesta, *pom;
+    char *obsah, *pom, *cmd;
     char pc_file[100];
 
     printf("!!!%s!!!\n", jen_cesta);
