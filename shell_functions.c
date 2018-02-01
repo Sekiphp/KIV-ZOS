@@ -723,30 +723,14 @@ void func_incp(char *cmd){
 void func_outcp(char *jen_cesta, char *externi_soubor){
     int ret;
     FILE *fw;
-    char *obsah, *pom, *cmd;
-    char pc_file[100];
+    char *obsah;
 
-    printf("!!!%s!!!\n", jen_cesta);
-    printf("!!!%s!!!\n", externi_soubor);
-/*
-    cmd = strtok(cmd, " \n");
-    while(cmd != NULL)
-    {
-        printf("!!!%s!!!\n", cmd);
-        cmd = strtok(NULL, " \n");
-    }
-*/
-return;
+    DEBUG_PRINT("!!!%s!!!\n", jen_cesta);
+    DEBUG_PRINT("!!!%s!!!\n", externi_soubor);
 
 
     // part 1, k presunu z FS
-    cmd = strtok(NULL, " ");
     DEBUG_PRINT("K presunu z FS\n");
-    jen_cesta = (char *) malloc(strlen(cmd));
-    strncpy(jen_cesta, cmd, strlen(cmd));
-    jen_cesta[strlen(cmd)] = '\0';
-
-    //DEBUG_PRINT("PART 1: %s=%s\n", cmd, jen_cesta);
 
     ret = parsuj_pathu(jen_cesta, 1);
 
@@ -763,14 +747,10 @@ return;
 
     // part 2, ulozim soubor do pc
     DEBUG_PRINT("Ulozim soubor do pc\n");
-    cmd = strtok(NULL, " ");
-    //strcpy(pc_file, cmd);
-    //pc_file[strlen(cmd)] = '\0';
-    //DEBUG_PRINT("test=%s\n", pc_file);
 
-    fw = fopen(cmd, "w");
+    fw = fopen(externi_soubor, "w");
     if (fw == NULL){
-        printf("FILE %s NOT FOUND\n", cmd);
+        printf("FILE %s NOT FOUND\n", externi_soubor);
         return;
     }
 
