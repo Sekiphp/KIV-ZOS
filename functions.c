@@ -42,14 +42,12 @@ int get_volne_uid() {
 */
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
-    int hledane, i, dir_len;
+    int hledane, i;
 
     //for(i = 0; i < strlen(dir_name); i++)
      //   DEBUG_PRINT("--%s--\n", dir_name[i]);
 
     char *curLine = get_file_content(uid_pwd);
-
-    dir_len = strlen(dir_name);
 
     //DEBUG_PRINT("EXISTN _%s_\n", dir_name);
     DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
@@ -69,11 +67,9 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s), dir_len=%d, NOT NULL\n", hledane, mfti.item_name, dir_name, dir_len);
+                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s) && (%zu ?= %zu), NOT NULL\n", hledane, mfti.item_name, dir_name, strlen(mfti.item_name), strlen(dir_name));
 
-                // todo - isDirectory ... nelze overit unikatnost jmena
-                // if (strncmp(mfti.item_name, dirname, cmp_len) == 0 && mfti.isDirectory == 1) {
-                if (strncmp(mfti.item_name, dir_name, dir_len) == 0) {
+                if (strncmp(mfti.item_name, dir_name, strlen(mfti.item_name)) == 0 && strlen(mfti.item_name) == strlen(dir_name)) {
                     DEBUG_PRINT("\t\tSHODA\n");
                     return mfti.uid;
                 }
@@ -291,7 +287,9 @@ int zaloz_novou_slozku(int pwd, char *name){
     return volne_uid;
 }
 
-/* Ziskani informaci o souborech ve slozce */
+/*
+    Ziskani informaci o souborech ve slozce
+*/
 void ls_printer(int uid) {
     char *p_c;
     int i = 0;
@@ -299,7 +297,7 @@ void ls_printer(int uid) {
 
     // chci vypsat obsah aktualniho adresare
     char *buffer = get_file_content(uid);
-    DEBUG_PRINT("obsah bufferu je: %s (%d)\n", buffer, strlen(buffer));
+    DEBUG_PRINT("obsah bufferu je: %s (%zu)\n", buffer, strlen(buffer));
 
     printf("--- NAZEV ----- VELIKOST - UID ---\n");
 
@@ -329,6 +327,10 @@ void ls_printer(int uid) {
     printf("-- Celkem souboru: %d --\n", i);
 }
 
+/*
+    Zkontroluje jeslti je osubor prazdny
+    -> vraci pocet radek v souboru
+*/
 int is_empty_dir(int file_uid) {
     char *curLine = get_file_content(file_uid);
     int i = 0;
@@ -349,6 +351,9 @@ int is_empty_dir(int file_uid) {
     return i;
 }
 
+/*
+    Nacte cely obsah souboru z pc (externi FS)
+*/
 char* read_file_from_pc(char *pc_soubor){
     int size;
     FILE *fr;
@@ -366,8 +371,8 @@ char* read_file_from_pc(char *pc_soubor){
         // prectu soubor do promenne
         fseek(fr, 0, SEEK_SET);
         fread(ret, 1, size, fr);
+        ret[size] = '\0';
 
-	ret[size] = '\0';
         DEBUG_PRINT("-- nacteno z pocitace: %s\n", ret);
 
         fclose(fr);
@@ -518,6 +523,9 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     }
 }
 
+/*
+    Provede zakladni kontrolu konzistence
+*/
 void *kontrola_konzistence(void *arg) {
     sdilenaPamet *param = (sdilenaPamet *) arg;
     int ke_zpracovani;
@@ -567,7 +575,7 @@ void *kontrola_konzistence(void *arg) {
                 mft_itemy = mft_itemy->dalsi;
             }
 
-
+            // vypisu vysledek
             printf("Soubor %s ", mft_seznam[ke_zpracovani]->item.item_name);
             if (delka != mft_seznam[ke_zpracovani]->item.item_size) {
                 printf("NENI KONZISTENTNI (%d != %d) !!!\n", mft_seznam[ke_zpracovani]->item.item_size, delka);
