@@ -725,13 +725,12 @@ void func_outcp(char *cmd){
     FILE *fw;
     char *obsah, *jen_cesta, *pom;
     char pc_file[100];
-    char *tokenPtr;
 
-    tokenPtr = strtok(cmd, " \n");
-    while(tokenPtr != NULL)
+    cmd = strtok(cmd, " \n");
+    while(cmd != NULL)
     {
-        printf("!!!%s!!!\n",tokenPtr);
-        tokenPtr = strtok(NULL, " ,.\n");
+        printf("!!!%s!!!\n", cmd);
+        cmd = strtok(NULL, " ,.\n");
     }
 
 return;
