@@ -729,7 +729,7 @@ void func_outcp(char *cmd){
 
     // part 1, k presunu z FS
     DEBUG_PRINT("K presunu z FS\n");
-    cmd = strtok(NULL, " \n");
+    cmd = strtok(NULL, " ");
     jen_cesta = (char *) malloc(strlen(cmd));
     strncpy(jen_cesta, cmd, strlen(cmd));
     jen_cesta[strlen(cmd)] = '\0';
