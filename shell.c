@@ -82,7 +82,7 @@ void shell() {
         }
         else if(strncmp(p_c, "outcp", 5) == 0){
             p_c = strtok(NULL, " ");
-            p_c2 = strtok(NULL, " ");
+            p_c2 = strtok(NULL, " \n");
             func_outcp(p_c, p_c2);
         }
         else if(strncmp(p_c, "load", 4) == 0){
