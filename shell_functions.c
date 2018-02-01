@@ -721,63 +721,51 @@ void func_incp(char *cmd){
     Nahraje soubor do PC
 */
 void func_outcp(char *cmd){
-    int i, ret;
+    int ret;
     FILE *fw;
-    char pc_file[100];
-    char *obsah;
-    char *jen_cesta;
+    char *obsah, *jen_cesta, *pc_file;
 
-    i = 0;
 
-    // postupne cteni argumentu
-    while((cmd = strtok(NULL, " \n")) != NULL){
-        if (i == 0){
-            DEBUG_PRINT("K presunu z FS\n");
+    // part 1, k presunu z FS
+    DEBUG_PRINT("K presunu z FS\n");
+    cmd = strtok(NULL, " \n");
+    jen_cesta = (char *) malloc(strlen(cmd));
+    strncpy(jen_cesta, cmd, strlen(cmd));
+    jen_cesta[strlen(cmd)] = '\0';
 
-            // soubor k presunu z FS
-            jen_cesta = (char *) malloc(strlen(cmd));
-            strncpy(jen_cesta, cmd, strlen(cmd));
-            jen_cesta[strlen(cmd)] = '\0';
+    DEBUG_PRINT("PART 1: %s=%s\n", cmd, part1);
 
-            ret = parsuj_pathu(jen_cesta, 1);
+    ret = parsuj_pathu(jen_cesta, 1);
 
-            if (ret == -1){
-                printf("PATH NOT FOUND\n");
-                return;
-            }
-
-            obsah = get_file_content(ret);
-
-            DEBUG_PRINT("OUT obsah: %s\n", obsah);
-            DEBUG_PRINT("RET: %d\n", ret);
-        }
-        else {
-            // ulozim do pc
-            DEBUG_PRINT("Ulozim soubor do pc\n");
-
-            strncpy(pc_file, cmd, strlen(cmd));
-            pc_file[strlen(cmd)] = '\0';
-
-            fw = fopen(pc_file, "w");
-            if (fw == NULL){
-                printf("FILE %s NOT FOUND\n", pc_file);
-                return;
-            }
-
-            fwrite(obsah, 1, strlen(obsah), fw);
-
-            fclose(fw);
-        }
-
-        i++;
-    }
-
-    if (i != 2) {
-        printf("TOO FEW ARGS\n");
+    if (ret == -1){
+        printf("PATH NOT FOUND\n");
         return;
     }
 
+    obsah = get_file_content(ret);
+
+    DEBUG_PRINT("OUT obsah: %s\n", obsah);
+    DEBUG_PRINT("RET: %d\n", ret);
+
+
+    // part 2, ulozim soubor do pc
+    DEBUG_PRINT("Ulozim soubor do pc\n");
+    cmd = strtok(NULL, " \n");
+    pc_file = (char *) malloc(strlen(cmd));
+    strncpy(pc_file, cmd, strlen(cmd));
+    pc_file[strlen(cmd)] = '\0';
+
+    fw = fopen(pc_file, "w");
+    if (fw == NULL){
+        printf("FILE %s NOT FOUND\n", pc_file);
+        return;
+    }
+
+    fwrite(obsah, 1, strlen(obsah), fw);
+
+    fclose(fw);
     free((void *) jen_cesta);
+
     printf("OK\n");
 }
 

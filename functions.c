@@ -71,7 +71,6 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
 
                 DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s) && (%d ?= %d), NOT NULL\n", hledane, mfti.item_name, dir_name, strlen(mfti.item_name), strlen(dir_name));
 
-                // todo - isDirectory ... nelze overit unikatnost jmena
                 if (strncmp(mfti.item_name, dir_name, strlen(mfti.item_name)) == 0 && strlen(mfti.item_name) == strlen(dir_name)) {
                     DEBUG_PRINT("\t\tSHODA\n");
                     return mfti.uid;
