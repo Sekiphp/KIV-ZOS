@@ -34,7 +34,7 @@ char* get_cluster_content(int32_t adresa) {
         fclose(fr);
     }
 
-    DEBUG_PRINT("/%s/ -> strlen(ret)=%d\n", ret, strlen(ret));
+    //DEBUG_PRINT("/%s/ -> strlen(ret)=%d\n", ret, strlen(ret));
 
     return ret;
 }
@@ -153,9 +153,7 @@ char* get_fragment_content(struct mft_fragment fragment) {
         }
     }
 
-    DEBUG_PRINT("strlen(ret)=%d\n", strlen(ret));
-
-    ret[strlen(ret)] = '\0';
+    //ret[strlen(ret)] = '\0';
 
     return ret;
 }
@@ -252,7 +250,7 @@ char* get_file_content(int file_uid) {
     if (mft_seznam[file_uid] != NULL){
         mft_itemy = mft_seznam[file_uid];
 
-        DEBUG_PRINT("stoji za zminku\n");
+        //DEBUG_PRINT("stoji za zminku\n");
 
         // projedeme vsechny itemy pro dane UID souboru
         // bylo by dobre si pak z tech itemu nejak sesortit fragmenty dle adres
@@ -289,8 +287,7 @@ char* get_file_content(int file_uid) {
         }
     }
 
-    DEBUG_PRINT("ret[strlen(ret)] = %d\n", strlen(ret));
-    ret[strlen(ret)] = '\0';
+    //ret[strlen(ret)] = '\0';
 
     return ret;
 }
@@ -329,6 +326,7 @@ int update_filesize(int file_uid, int length){
     Pripoji na konec souboru dalsi data
     @param file_uid UID souboru
     @param append Retezec pro pripojeni nakonec souboru
+    @param dir Je slozka nebo ne
 */
 int append_file_content(int file_uid, char *append, int dir){
     int i, j, adresa, delka, mftf_adr;
@@ -407,23 +405,22 @@ int append_file_content(int file_uid, char *append, int dir){
 }
 
 /*
-    TODO
     Zmeni obsah souboru - resi nafukovani a smrstovani souboru
     @param file_uid Soubor pro editaci
     @param text Cely (novy) obsah
+    @param filename Nazev souboru
+    @param puvodni_uid Puvodni UID souboru pokud ma byt zachovano
  */
 void edit_file_content(int file_uid, char *text, char *filename, int puvodni_uid){
     DEBUG_PRINT("EDIT FILE (int file_uid=%d, char *text=%s, char *filename=%s, int puvodni_uid=%d)\n", file_uid, text, filename, puvodni_uid);
 
-    DEBUG_PRINT("------------------------- DELETE FILE -------------------------\n");
     delete_file(file_uid);
-
-    DEBUG_PRINT("------------------------- VYTVOR SOUBOR -------------------------\n");
     vytvor_soubor(pwd, filename, text, puvodni_uid, 1, 0);
-
-    DEBUG_PRINT("------------------------- END edit_file_content() -------------------------\n");
 }
 
+/*
+    Vytvori MFT info o souboru (jak na disku tak virtualne)
+*/
 int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, struct mft_fragment fpom[], int fpom_size, int is_dir) {
     int i, j, k, l, adresa_mfti;
     struct mft_item *mpom, *mff;
@@ -458,13 +455,11 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
         mfti[i].item_size = strlen(text);
 
         // kazdemu z tech prvku napushuju fragmenty co to pujde
-	DEBUG_PRINT("---%d---\n", MFT_FRAG_COUNT);
-        for (j = 0; j < pocet_fragu; j++) {
-            printf("\n\nqwertzuiop\n\n");
+        for (j = 0; j < MFT_FRAG_COUNT; j++) {
             mfti[i].fragments[j] = fpom[k];
 
             // vkladani textu souboru
-	    printf("////%d////\n", fpom[k].fragment_count);
+            //printf("////%d////\n", fpom[k].fragment_count);
             text = set_fragment_content(fpom[k], text);
             k++;
         }
@@ -496,39 +491,4 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
     }
 
     return 1;
-}
-
-char* nacti_cely_disk() {
-    char *cely_disk, *pom;
-    FILE *fr;
-    int adresa = bootr->data_start_address;
-
-    DEBUG_PRINT("disk_size=%d\n", bootr->disk_size);
-
-    if ((cely_disk = (char *) malloc(bootr->disk_size * sizeof(char *))) == NULL){
-        printf("NENI DOSTATEK PAMETI PRO ALOKACI\n");
-        return "";
-    }
-
-    pom = (char *) malloc(bootr->disk_size * sizeof(char *));
-    //memset(cely_disk, '', bootr->disk_size);
-
-    fr = fopen(output_file, "rb");
-    if (fr != NULL) {
-        while (adresa < bootr->disk_size) {
-            fseek(fr, adresa, SEEK_SET);
-            fread(pom, sizeof(char), CLUSTER_SIZE, fr);
-
-            DEBUG_PRINT("pom=%s=\n", pom);
-
-            adresa += CLUSTER_SIZE;
-        }
-
-        fclose(fr);
-    }
-
-    DEBUG_PRINT("sizeof=%d\n", sizeof(cely_disk));
-    DEBUG_PRINT("cely_disk=%s\n", cely_disk);
-
-    return cely_disk;
 }

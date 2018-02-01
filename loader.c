@@ -75,15 +75,18 @@ void loader(char filename[]){
                 fread(mff, sizeof_mft_item, 1, fr);
                 mft_table = *mff;
 
+                /*
                 printf("\t\t\t--------------------------\n");
                 printf("\t\t\tfread cte z pozice %d \n", (bootr->mft_start_address + i * sizeof_mft_item));
+                */
 
                 if (ntfs_bitmap[i] == 0 || mft_table.uid == UID_ITEM_FREE) {
-                    printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table.uid);
+                    /* printf("\t\t\tSkip MFT bloku s UID %d\n", mft_table.uid); */
                 }
                 else {
                     pridej_prvek_mft(mft_table.uid, mft_table);
 
+                    /*
                     printf("\t\t\tUID: %d\n", mft_table.uid);
                     printf("\t\t\tIsDirectory: %d\n", mft_table.isDirectory);
                     printf("\t\t\tPoradi v MFT pri vice souborech: %d\n", mft_table.item_order);
@@ -91,6 +94,7 @@ void loader(char filename[]){
                     printf("\t\t\tJmeno polozky: %s\n", mft_table.item_name);
                     printf("\t\t\tVelikost souboru v bytech: %d\n", mft_table.item_size);
                     printf("\t\t\tVelikost pole s itemy: %lu\n", sizeof(mft_table.fragments) / sizeof(struct mft_fragment));
+                    */
 
                     if (i == 0) {
                         pwd = mft_table.uid;

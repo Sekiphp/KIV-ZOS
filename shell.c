@@ -17,7 +17,7 @@
 void shell() {
     FILE *fr;
     char command[MAX];
-    char *p_c;
+    char *p_c, *p_c2;
     int use_file = 0;
 
     printf("SHELL booting...\n");
@@ -35,6 +35,10 @@ void shell() {
             if (feof(fr) == 1) {
                 fclose(fr);
                 use_file = 0;
+            }
+
+            if (strlen(command) <= 2) {
+                continue;
             }
 
             printf("%s", command);
@@ -77,7 +81,9 @@ void shell() {
             func_incp(p_c);
         }
         else if(strncmp(p_c, "outcp", 5) == 0){
-            func_outcp(p_c);
+            p_c = strtok(NULL, " ");
+            p_c2 = strtok(NULL, " \n");
+            func_outcp(p_c, p_c2);
         }
         else if(strncmp(p_c, "load", 4) == 0){
             p_c = strtok(NULL, " \n");
