@@ -723,11 +723,22 @@ void func_incp(char *cmd){
 void func_outcp(char *cmd){
     int ret;
     FILE *fw;
-    char *obsah, *jen_cesta;
+    char *obsah, *jen_cesta, *pom;
     char pc_file[100];
+    char *tokenPtr;
+
+    tokenPtr = strtok(cmd, " \n");
+    while(tokenPtr != NULL)
+    {
+        printf("!!!%s!!!\n",tokenPtr);
+        tokenPtr = strtok(NULL, " ,.\n");
+    }
+
+return;
 
 
     // part 1, k presunu z FS
+    cmd = strtok(NULL, " ");
     DEBUG_PRINT("K presunu z FS\n");
     jen_cesta = (char *) malloc(strlen(cmd));
     strncpy(jen_cesta, cmd, strlen(cmd));
