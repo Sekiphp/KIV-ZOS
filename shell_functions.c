@@ -752,13 +752,13 @@ void func_outcp(char *cmd){
     // part 2, ulozim soubor do pc
     DEBUG_PRINT("Ulozim soubor do pc\n");
     cmd = strtok(NULL, " ");
-    strcpy(pc_file, cmd);
+    //strcpy(pc_file, cmd);
     //pc_file[strlen(cmd)] = '\0';
-    DEBUG_PRINT("test=%s\n", pc_file);
+    //DEBUG_PRINT("test=%s\n", pc_file);
 
-    fw = fopen(pc_file, "w");
+    fw = fopen(cmd, "w");
     if (fw == NULL){
-        printf("FILE %s NOT FOUND\n", pc_file);
+        printf("FILE %s NOT FOUND\n", cmd);
         return;
     }
 
