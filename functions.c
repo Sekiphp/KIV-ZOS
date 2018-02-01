@@ -42,14 +42,12 @@ int get_volne_uid() {
 */
 int get_uid_by_name(char *dir_name, int uid_pwd){
     struct mft_item mfti;
-    int hledane, i, dir_len;
+    int hledane, i;
 
     //for(i = 0; i < strlen(dir_name); i++)
      //   DEBUG_PRINT("--%s--\n", dir_name[i]);
 
     char *curLine = get_file_content(uid_pwd);
-
-    dir_len = strlen(dir_name);
 
     //DEBUG_PRINT("EXISTN _%s_\n", dir_name);
     DEBUG_PRINT("\tObsah clusteru: %s \n----------\n", curLine);
@@ -69,7 +67,7 @@ int get_uid_by_name(char *dir_name, int uid_pwd){
             if (hledane < CLUSTER_COUNT && mft_seznam[hledane] != NULL){
                 mfti = mft_seznam[hledane]->item;
 
-                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s) && (%d ?= %d), NOT NULL\n", hledane, mfti.item_name, dir_name, strlen(mfti.item_name), strlen(dir_name));
+                DEBUG_PRINT("\tHledane mfti s uid=%d (%s ?= %s) && (%zu ?= %zu), NOT NULL\n", hledane, mfti.item_name, dir_name, strlen(mfti.item_name), strlen(dir_name));
 
                 if (strncmp(mfti.item_name, dir_name, strlen(mfti.item_name)) == 0 && strlen(mfti.item_name) == strlen(dir_name)) {
                     DEBUG_PRINT("\t\tSHODA\n");

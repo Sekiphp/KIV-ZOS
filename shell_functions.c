@@ -733,7 +733,7 @@ void func_outcp(char *cmd){
     strncpy(jen_cesta, cmd, strlen(cmd));
     jen_cesta[strlen(cmd)] = '\0';
 
-    DEBUG_PRINT("PART 1: %s=%s\n", cmd, part1);
+    DEBUG_PRINT("PART 1: %s=%s\n", cmd, jen_cesta);
 
     ret = parsuj_pathu(jen_cesta, 1);
 
@@ -808,7 +808,7 @@ void func_defrag(){
                 //DEBUG_PRINT("/%s/\n", cely_soubor);
 
                 clusteru = ceil((double) strlen(cely_soubor) / CLUSTER_SIZE);
-                DEBUG_PRINT("+ Pro soubor %s (%d) potrebuji clusteru %d a ma delku %d\n", mft_seznam[i]->item.item_name, mft_seznam[i]->item.uid, clusteru, strlen(cely_soubor));
+                DEBUG_PRINT("+ Pro soubor %s (%d) potrebuji clusteru %d a ma delku %zu\n", mft_seznam[i]->item.item_name, mft_seznam[i]->item.uid, clusteru, strlen(cely_soubor));
 
                 // zapisu si do bitmapy
                 DEBUG_PRINT("zpracovany + clusteru = %d + %d = %d\n", zpracovany, clusteru, zpracovany+clusteru);
