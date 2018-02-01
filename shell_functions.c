@@ -720,19 +720,22 @@ void func_incp(char *cmd){
 /*
     Nahraje soubor do PC
 */
-void func_outcp(char *cmd){
+void func_outcp(char *jen_cesta, char *externi_soubor){
     int ret;
     FILE *fw;
     char *obsah, *jen_cesta, *pom;
     char pc_file[100];
 
+    printf("!!!%s!!!\n", jen_cesta);
+    printf("!!!%s!!!\n", externi_soubor);
+/*
     cmd = strtok(cmd, " \n");
     while(cmd != NULL)
     {
         printf("!!!%s!!!\n", cmd);
-        cmd = strtok(NULL, " ,.\n");
+        cmd = strtok(NULL, " \n");
     }
-
+*/
 return;
 
 

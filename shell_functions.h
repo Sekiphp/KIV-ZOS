@@ -13,7 +13,7 @@
     void func_pwd();
     void func_info(char *cmd);
     void func_incp(char *cmd);
-    void func_outcp(char *cmd);
+    void func_outcp(char *jen_cesta, char *externi_soubor);
     void func_defrag();
     void func_consist();
 
