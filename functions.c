@@ -433,6 +433,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     for (i = 0; i < potreba_clusteru; i++) {
         fpom[i].fragment_start_address = -1;
         fpom[i].fragment_count = -1;
+
+        DEBUG_PRINT("** OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
     }
 
     DEBUG_PRINT("SIZEOF(fpom[])=%lo\n", sizeof(fpom));
