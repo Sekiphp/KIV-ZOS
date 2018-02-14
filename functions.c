@@ -435,11 +435,10 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fpom[i].fragment_start_address = -1;
         fpom[i].fragment_count = -1;
 
-        DEBUG_PRINT("** OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
+        DEBUG_PRINT("Plnim mftf vychozimi hodnotami (start=%d, count=%d)\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
     }
 
     DEBUG_PRINT("SIZEOF(fpom[])=%lo\n", sizeof(fpom));
-
 
     // otevru si spojeni s nasim fs
     fw = fopen(output_file, "r+b");
@@ -452,6 +451,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         for (j = 0; j < potreba_clusteru; j++) {
             //printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
             if (volne_clustery[j+1] == volne_clustery[j]+1) {
+                DEBUG_PRINT("tady jsem 1\n");
+
                 spoj_len = spoj_len + 1;
 
                 if (spoj_len == 2){
@@ -460,6 +461,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                 }
             }
             else {
+                DEBUG_PRINT("tady jsem 2\n");
+
                 // nasobic pojitosti
                 if (spoj_len != 1) {
                     nasobic = starter;
