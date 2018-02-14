@@ -460,7 +460,8 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
             mfti[i].fragments[j] = fpom[k];
 
             // vkladani textu souboru
-            //printf("////%d////\n", fpom[k].fragment_count);
+            DEBUG_PRINT("Budu volat set fragment set_fragment_content(%d, text)\n", fpom[k].fragment_count);
+
             text = set_fragment_content(fpom[k], text);
             k++;
         }
@@ -479,7 +480,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
             fseek(fw, adresa_mfti, SEEK_SET);
             fread(mff, sizeof_mft_item, 1, fw);
 
-            DEBUG_PRINT("if (%d == %d) or (%s == '')\n", mff->uid, UID_ITEM_FREE, mff->item_name);
+            DEBUG_PRINT("if (%d == %d) or ('%s' == '')\n", mff->uid, UID_ITEM_FREE, mff->item_name);
             if (mff->uid == UID_ITEM_FREE || strcmp(mff->item_name, "") == 0) {
                 DEBUG_PRINT("-- MFTI chci zapsat na adresu %d\n", adresa_mfti);
 

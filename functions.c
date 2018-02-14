@@ -499,11 +499,6 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             ntfs_bitmap[volne_clustery[j]] = 1;
         }
 
-        DEBUG_PRINT("----- PREDE ODESLANIM DO FCE\n");
-        for (j = 0; j < potreba_clusteru; j++){
-            DEBUG_PRINT("+ predOVERUJI start=%d, count=%d\n", fpom[j].fragment_start_address, fpom[j].fragment_count);
-        }
-
         // aktualizuji bitmapu v souboru
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
         fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
