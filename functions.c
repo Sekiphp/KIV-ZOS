@@ -430,7 +430,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     struct mft_fragment fpom[potreba_clusteru];
 
     // vynulovani
-    for (i = 0; i < potreba_clusteru; i++) {
+    int nulak = (potreba_clusteru < MFT_FRAG_COUNT) ? MFT_FRAG_COUNT : potreba_clusteru;
+    for (i = 0; i < nulak; i++) {
         fpom[i].fragment_start_address = -1;
         fpom[i].fragment_count = -1;
 
