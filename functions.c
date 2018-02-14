@@ -238,8 +238,8 @@ int zaloz_novou_slozku(int pwd, char *name){
                 mfti.fragments[0] = mftf;
 
                 // dalsi fragmenty z budou jen prazdne (pro poradek)
-                mftf.fragment_start_address = 0;
-                mftf.fragment_count = 0;
+                mftf.fragment_start_address = -1;
+                mftf.fragment_count = -1;
 
                 // zacinam od jednicky
                 for (j = 1; j < MFT_FRAG_COUNT; j++){
@@ -431,8 +431,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
     // vynulovani
     for (i = 0; i < potreba_clusteru; i++) {
-        fpom[i].fragment_start_address = 0;
-        fpom[i].fragment_count = 0;
+        fpom[i].fragment_start_address = -1;
+        fpom[i].fragment_count = -1;
     }
 
     DEBUG_PRINT("SIZEOF(fpom[])=%lo\n", sizeof(fpom));
