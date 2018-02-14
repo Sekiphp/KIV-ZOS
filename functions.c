@@ -449,13 +449,13 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         l = 0;
         k = 0;
         for (j = 0; j < potreba_clusteru; j++) {
-            DEBUG_PRINT("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
+            DEBUG_PRINT("%d: spojity: %d ?= %d\n", j, volne_clustery[j+1], volne_clustery[j]+1);
             if (volne_clustery[j+1] == volne_clustery[j]+1) {
                 DEBUG_PRINT("tady jsem 1\n");
 
-                spoj_len = spoj_len + 1;
+                spoj_len++;
 
-                if (spoj_len == 2){
+                if (spoj_len == 2) {
                     starter = volne_clustery[j];
                     //printf("\t starter = %d\n", starter);
                 }
