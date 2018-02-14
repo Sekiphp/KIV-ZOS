@@ -1,8 +1,8 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-    #define CLUSTER_COUNT 200 // je i v mft.h; celkovy pocet clusteru v FS
-    #define CLUSTER_SIZE 100
+    #define CLUSTER_COUNT 10000 // je i v mft.h; celkovy pocet clusteru v FS
+    #define CLUSTER_SIZE 2048
 
     int ntfs_bitmap[CLUSTER_COUNT];
     int32_t pwd;

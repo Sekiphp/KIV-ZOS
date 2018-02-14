@@ -38,9 +38,9 @@ int main(int argc, char *argv[]){
     loader(argv[1]);
 
     // kontrola nacteni
-    for(i = 0; i < CLUSTER_COUNT; i++){
+  /*  for(i = 0; i < CLUSTER_COUNT; i++){
         printf("ntfs_bitmap[%d]=%d\n", i, ntfs_bitmap[i]);
-    }
+    }*/
 
     // prikazovy interpret
     shell();
