@@ -503,6 +503,9 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
         fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
+    for (i = 0; i < MFT_FRAG_COUNT; i++) {
+        DEBUG_PRINT("-- OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
+    }
         if (vytvor_soubor_v_mft(fw, volne_uid, filename, text, fpom, sizeof(fpom), is_dir) == -1) {
             printf("ERROR\n");
         }
