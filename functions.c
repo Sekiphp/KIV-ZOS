@@ -468,6 +468,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                     nasobic = volne_clustery[j];
                 }
 
+                DEBUG_PRINT("%d + %d * %d", bootr->data_start_address, nasobic, CLUSTER_SIZE);
                 fpom[k].fragment_start_address = bootr->data_start_address + nasobic * CLUSTER_SIZE; // adresa do VFS do clusteru
                 fpom[k].fragment_count = spoj_len;
 
