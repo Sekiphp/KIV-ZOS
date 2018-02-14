@@ -460,7 +460,7 @@ int vytvor_soubor_v_mft(FILE *fw, int volne_uid, char *filename, char *text, str
             mfti[i].fragments[j] = fpom[k];
 
             // vkladani textu souboru
-            DEBUG_PRINT("Budu volat set fragment set_fragment_content(%d, text)\n", fpom[k].fragment_count);
+            DEBUG_PRINT("Budu volat set fragment set_fragment_content(%d, strlen(text)=%d)\n", fpom[k].fragment_count, strlen(text));
 
             text = set_fragment_content(fpom[k], text);
             k++;
