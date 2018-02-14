@@ -449,7 +449,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         l = 0;
         k = 0;
         for (j = 0; j < potreba_clusteru; j++) {
-            //printf("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
+            DEBUG_PRINT("%d: spojity: %d ?= %d\n", i, volne_clustery[j+1], volne_clustery[j]+1);
             if (volne_clustery[j+1] == volne_clustery[j]+1) {
                 DEBUG_PRINT("tady jsem 1\n");
 
@@ -495,11 +495,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             k++;
         }
 
+        // aktualizuji bitmapu virtualne
         for (j = 0; j < potreba_clusteru; j++) {
-            // debug fragmentu
-            DEBUG_PRINT("FRAGMENT (start=%d, pocet=%d)\n", fpom[j].fragment_start_address, fpom[j].fragment_count);
-
-            // aktualizuji bitmapu virtualne
             ntfs_bitmap[volne_clustery[j]] = 1;
         }
 
@@ -507,9 +504,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         fseek(fw, bootr->bitmap_start_address, SEEK_SET);
         fwrite(ntfs_bitmap, 4, CLUSTER_COUNT, fw);
 
-    for (i = 0; i < MFT_FRAG_COUNT; i++) {
-        DEBUG_PRINT("-- OVERUJI start=%d, count=%d\n", fpom[i].fragment_start_address, fpom[i].fragment_count);
-    }
+        // vytvorim referenci na soubor v MFT
         if (vytvor_soubor_v_mft(fw, volne_uid, filename, text, fpom, sizeof(fpom), is_dir) == -1) {
             printf("ERROR\n");
         }
