@@ -463,12 +463,12 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             else {
                 DEBUG_PRINT("tady jsem 2\n");
 
-                // nasobic pojitosti
+                // nasobic spojitosti
                 if (spoj_len != 1) {
                     nasobic = starter;
                 }
                 else {
-                    DEBUG_PRINT("nasobic = volne_clustery[%d])\n", j);
+                    DEBUG_PRINT("nasobic = volne_clustery[%d] = %d)\n", j, volne_clustery[j]);
                     nasobic = volne_clustery[j];
                 }
 
