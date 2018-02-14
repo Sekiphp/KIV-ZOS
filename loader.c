@@ -181,8 +181,8 @@ void zaloz_soubor(int cluster_size, int cluster_count, char filename[]){
         // dalsi fragmenty z budou jen prazdne (pro poradek)
         // zacinam od jednicky
         for (i = 1; i < MFT_FRAG_COUNT; i++){
-            mfti->fragments[i].fragment_start_address = -1;
-            mfti->fragments[i].fragment_count = -1;
+            mfti->fragments[i].fragment_start_address = 0;
+            mfti->fragments[i].fragment_count = 0;
         }
 
         fwrite(mfti, sizeof(struct mft_item), 1, fw);
