@@ -412,7 +412,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
         if (ntfs_bitmap[i] == 0) {
             // volna
             volne_clustery[j] = i;
-            DEBUG_PRINT("-- Volny cluster: %d\n", i);
+            DEBUG_PRINT("-- Volny cluster: volne_clustery[j=%d] = %d\n", j, i);
             j++;
         }
 
