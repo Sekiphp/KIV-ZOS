@@ -394,12 +394,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     size = strlen(text);
 
     // volne UID pro soubor
-    if (puvodni_uid == -1) {
-        volne_uid = get_volne_uid();
-    }
-    else {
-        volne_uid = puvodni_uid;
-    }
+    volne_uid = (puvodni_uid == -1) ? get_volne_uid() : puvodni_uid;
 
     // kolik budu potrebovat najit clusteru
     potreba_clusteru = size / CLUSTER_SIZE + 1;
@@ -407,6 +402,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
 
     DEBUG_PRINT("-- Je potreba %d volnych clusteru\n", potreba_clusteru);
 
+    // zjistim indexy volnych clusteru
     j = 0;
     for (i = 0; i < CLUSTER_COUNT; i++) {
         if (ntfs_bitmap[i] == 0) {
@@ -427,10 +423,9 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     }
 
     // pomocne pole na fragmenty - prinejhorsim jich bude jako clusteru
-    struct mft_fragment fpom[potreba_clusteru];
-
-    // vynulovani
     int nulak = (potreba_clusteru < MFT_FRAG_COUNT) ? MFT_FRAG_COUNT : potreba_clusteru;
+    struct mft_fragment fpom[nulak];
+
     for (i = 0; i < nulak; i++) {
         fpom[i].fragment_start_address = -1;
         fpom[i].fragment_count = -1;
