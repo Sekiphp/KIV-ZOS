@@ -465,7 +465,7 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                     nasobic = starter;
                 }
                 else {
-                    DEBUG_PRINT("nasobic = volne_clustery[%j])\n", j);
+                    DEBUG_PRINT("nasobic = volne_clustery[%d])\n", j);
                     nasobic = volne_clustery[j];
                 }
 
