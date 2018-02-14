@@ -389,7 +389,6 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
     int i, j, k, l, size, potreba_clusteru, volne_uid, spoj_len, starter, nasobic;
     FILE *fw;
     char pom[20];
-    struct mft_fragment mftf;
 
     // delka textu
     size = strlen(text);
@@ -466,9 +465,8 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
                     nasobic = volne_clustery[j];
                 }
 
-                mftf.fragment_start_address = bootr->data_start_address + nasobic * CLUSTER_SIZE; // adresa do VFS do clusteru
-                mftf.fragment_count = spoj_len;
-                fpom[k] = mftf;
+                fpom[k].fragment_start_address = bootr->data_start_address + nasobic * CLUSTER_SIZE; // adresa do VFS do clusteru
+                fpom[k].fragment_count = spoj_len;
 
                 l++;
                 k++;
@@ -482,11 +480,9 @@ void vytvor_soubor(int cilova_slozka, char *filename, char *text, int puvodni_ui
             //printf("Muzu zpracovat spojity blok, ktery zacina na %d a je dlouhy %d\n", starter, spoj_len);
             DEBUG_PRINT("3) f(%d, %d)\n", starter, spoj_len);
 
-            mftf.fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
-            mftf.fragment_count = spoj_len;
-            fpom[k] = mftf;
+            fpom[k].fragment_start_address = bootr->data_start_address + starter * CLUSTER_SIZE; // adresa do VFS do clusteru
+            fpom[k].fragment_count = spoj_len;
 
-            //mfti.fragments[l] = mftf;
             l++;
             k++;
         }
